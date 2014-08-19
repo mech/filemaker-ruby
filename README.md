@@ -1,5 +1,7 @@
 # Filemaker
 
+[![Build Status](https://travis-ci.org/mech/filemaker-ruby.svg?branch=master)](https://travis-ci.org/mech/filemaker-ruby)
+
 A Ruby wrapper to FileMaker XML API.
 
 ## Installation
