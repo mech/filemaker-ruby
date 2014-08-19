@@ -1,0 +1,34 @@
+<?xml version ="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE fmresultset
+  PUBLIC '-//FMI//DTD fmresultset//EN'
+  'https://58.185.193.190:443/fmi/xml/fmresultset.dtd'>
+<fmresultset version="1.0" xmlns="http://www.filemaker.com/xml/fmresultset">
+  <error code="0"/>
+  <product build="04/08/2014" name="FileMaker Web Publishing Engine" version="13.0.2.290"/>
+  <datasource database="DBNAMES" date-format="" layout="" table="" time-format="" timestamp-format="" total-count="14"/>
+  <metadata>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="DATABASE_NAME" not-empty="yes" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+  </metadata>
+  <resultset count="4" fetch-size="14">
+    <record mod-id="0" record-id="0">
+      <field name="DATABASE_NAME">
+        <data>Billing</data>
+      </field>
+    </record>
+    <record mod-id="0" record-id="0">
+      <field name="DATABASE_NAME">
+        <data>Candidates</data>
+      </field>
+    </record>
+    <record mod-id="0" record-id="0">
+      <field name="DATABASE_NAME">
+        <data>Employee</data>
+      </field>
+    </record>
+    <record mod-id="0" record-id="0">
+      <field name="DATABASE_NAME">
+        <data>Jobs</data>
+      </field>
+    </record>
+  </resultset>
+</fmresultset>

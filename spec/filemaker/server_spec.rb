@@ -3,12 +3,12 @@ describe Filemaker::Server do
   context 'initializing a server' do
     it 'provides a host, account_name, and password' do
       server = Filemaker::Server.new do |config|
-        config.host         = 'localhost'
+        config.host         = 'http://host'
         config.account_name = 'account_name'
         config.password     = 'password'
       end
 
-      expect(server.host).to eq 'localhost'
+      expect(server.host).to eq 'http://host'
       expect(server.account_name).to eq 'account_name'
       expect(server.password).to eq 'password'
       expect(server.connection).to be_a Faraday::Connection
@@ -24,7 +24,7 @@ describe Filemaker::Server do
       end.to raise_error ArgumentError
 
       expect do
-        Filemaker::Server.new { |config| config.host = 'localhost' }
+        Filemaker::Server.new { |config| config.host = 'http://host' }
       end.to raise_error ArgumentError
     end
   end
@@ -32,7 +32,7 @@ describe Filemaker::Server do
   context 'initializing a server with SSL' do
     it 'indicates secured connection' do
       server = Filemaker::Server.new do |config|
-        config.host         = 'localhost'
+        config.host         = 'https://host'
         config.account_name = 'account_name'
         config.password     = 'password'
         config.ssl          = { verify: false }
@@ -53,6 +53,24 @@ describe Filemaker::Server do
       expect(server.databases['candidate']).to be_a Filemaker::Database
       expect(server.database['candidate']).to eq server.databases['candidate']
       expect(server.db['candidate']).to eq server.databases['candidate']
+    end
+
+    it 'is fun' do
+      server = Filemaker::Server.new do |config|
+        config.host         = 'https://host'
+        config.account_name = 'account_name'
+        config.password     = 'password'
+        config.ssl          = { verify: false }
+      end
+
+      server.connection.builder.use Faraday::Adapter::Test do |stub|
+        stub.get '/fmi/xml/fmresultset.xml?-dbnames=' do
+          [200, {}, import_xml_as_string('dbnames.xml')]
+        end
+      end
+
+      response = server.db.all
+      puts response
     end
   end
 
