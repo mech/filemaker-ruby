@@ -1,0 +1,10 @@
+AllCops:
+  Exclude:
+    - .bundle/**
+    - filemaker.gemspec
+
+Documentation:
+  Enabled: false
+
+BracesAroundHashParameters:
+  Enabled: false
