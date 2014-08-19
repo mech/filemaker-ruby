@@ -17,11 +17,11 @@ Ensure you have Web Publishing Engine (XML Publishing) enabled. Please turn on S
 Configuration for initializing a server:
 
 * `host`
-* `ssl` - default to `true` for maximum protection even if you are using FileMaker's unsigned certificate. You can also pass a hash which will be forwarded to Faraday directly like `ssl: { client_cert: '', client_key: '', ca_file: '', ca_path: '/path/to/certs', cert_store: '' }`. See [Setting up SSL certificates](https://github.com/lostisland/faraday/wiki/Setting-up-SSL-certificates)
+* `ssl` - `verify: false` if you are using FileMaker's unsigned certificate. You can also pass a hash which will be forwarded to Faraday directly like `ssl: { client_cert: '', client_key: '', ca_file: '', ca_path: '/path/to/certs', cert_store: '' }`. See [Setting up SSL certificates](https://github.com/lostisland/faraday/wiki/Setting-up-SSL-certificates)
 * `account` - Please use `ENV` variable like `ENV['FILEMAKER_ACCOUNT']`
 * `password` - Please use `ENV` variable like `ENV['FILEMAKER_PASSWORD']`
 
-```
+```ruby
 server = Filemaker::Server.new do |config|
   config.host     = 'localhost'
   config.account  = ENV['FILEMAKER_ACCOUNT']
@@ -29,8 +29,7 @@ server = Filemaker::Server.new do |config|
   config.ssl      = { verify: false }
 end
 
-server.databases                       # Using -dbnames
-server.databases.clear!                # Clear cache
+server.databases.all                   # Using -dbnames
 server.database['candidates'].layouts  # Using -layoutnames and -db=candidates
 
 api = server.db['candidates'].lay['profile']
@@ -54,13 +53,11 @@ Once you are able to grab the `api`, you are golden and can make request to read
 
 Most API will be smart enough to reject invalid query parameters if passed in incorrectly.
 
-## Filemaker::Errors
-
 ## Using Filemaker::Layout
 
 If you want ActiveModel-like access with a decent query DSL like `where`, `find`, `all`, you can include `Filemaker::Layout` to your model. Your Rails form will work as well as JSON serialization.
 
-```
+```ruby
 class Job
   include Filemaker::Layout
 
@@ -80,7 +77,7 @@ class Job
 end
 ```
 
-```
+```yml
 # filemaker.yml
 
 development:
@@ -95,7 +92,7 @@ development:
 
 We welcome pull request with specs.
 
-1. Fork it ( https://github.com/mech/filemaker/fork )
+1. Fork it ( https://github.com/mech/filemaker-ruby/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
