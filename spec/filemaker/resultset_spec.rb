@@ -22,8 +22,23 @@ describe Filemaker::Resultset do
       expect(resultset.total_count).to eq 5000
     end
 
+    it 'date-format is %m/%d/%Y for MM/dd/yyyy' do
+      expect(resultset.date_format).to eq '%m/%d/%Y'
+    end
+
+    it 'time-format is %H:%M:%S for HH:mm::ss' do
+      expect(resultset.time_format).to eq '%H:%M:%S'
+    end
+
+    it 'timestamp-format is %m/%d/%Y %H:%M:%S for MM/dd/yyyy HH:mm::ss' do
+      expect(resultset.timestamp_format).to eq '%m/%d/%Y %H:%M:%S'
+    end
+  end
+
+  describe 'build metadata' do
     it 'has 5 fields' do
       expect(resultset.fields.size).to eq 5
+      expect(resultset.fields.keys).to eq ['PortalID', 'Year', 'Salary', 'Insurance Amount', 'Document']
     end
 
     it 'PortalID represented as Field object' do
@@ -35,16 +50,14 @@ describe Filemaker::Resultset do
       expect(resultset.fields['PortalID'].required).to eq true
     end
 
-    it 'date-format is %m/%d/%Y for MM/dd/yyyy' do
-      expect(resultset.date_format).to eq '%m/%d/%Y'
+    it 'has 2 portals' do
+      expect(resultset.portal_fields.size).to eq 2
     end
+  end
 
-    it 'time-format is %H:%M:%S for HH:mm::ss' do
-      expect(resultset.time_format).to eq '%H:%M:%S'
-    end
-
-    it 'timestamp-format is %m/%d/%Y %H:%M:%S for MM/dd/yyyy HH:mm::ss' do
-      expect(resultset.timestamp_format).to eq '%m/%d/%Y %H:%M:%S'
+  describe 'build records' do
+    it 'has 2 records' do
+      expect(resultset.list.size).to eq 2
     end
   end
 

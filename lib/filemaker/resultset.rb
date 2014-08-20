@@ -86,10 +86,25 @@ module Filemaker
         @fields[definition['name']] = Metadata::Field.new(definition, self)
       end
 
-      metadata.xpath('relatedset-definition')
+      metadata.xpath('relatedset-definition').each do |relatedset|
+        table_name  = relatedset.attribute('table').value
+        fields      = {}
+
+        relatedset.xpath('field-definition').each do |definition|
+          name = definition['name'].gsub("#{table_name}::", '')
+          fields[name] = Metadata::Field.new(definition, self)
+        end
+
+        @portal_fields[table_name] = fields
+      end
     end
 
     def build_records(records)
+      records.each do |record|
+        # record is Nokogiri::XML::Element
+        # list << Filemaker::Record.new(record, self)
+        list << record
+      end
     end
 
     def convert_date_time_format(format)
@@ -100,14 +115,6 @@ module Filemaker
         .gsub('HH', '%H')
         .gsub('mm', '%M')
         .gsub('ss', '%S')
-    end
-
-    def formatter
-      {
-        date_format: @date_format,
-        time_format: @time_format,
-        timestamp_format: @timestamp_format
-      }
     end
   end
 end

@@ -16,6 +16,11 @@ describe Filemaker::Metadata::Field do
       expect(field.coerce('')).to be_nil
     end
 
+    it 'converts to empty string for empty string' do
+      allow(field).to receive(:data_type).and_return 'text'
+      expect(field.coerce('   ')).to be_nil
+    end
+
     it 'converts text to String' do
       allow(field).to receive(:data_type).and_return 'text'
       expect(field.coerce('some text value')).to be_a String

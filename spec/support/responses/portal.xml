@@ -12,11 +12,11 @@
     <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="Salary" not-empty="no" numeric-only="no" result="number" time-of-day="no" type="calculation"/>
     <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="Insurance Amount" not-empty="no" numeric-only="no" result="number" time-of-day="no" type="normal"/>
     <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="Document" not-empty="no" numeric-only="no" result="container" time-of-day="no" type="normal"/>
-    <relatedset-definition table="PORTAL_DB">
-      <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="PORTAL_DB::Last day" not-empty="no" numeric-only="no" result="date" time-of-day="no" type="normal"/>
+    <relatedset-definition table="PORTAL_1">
+      <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="PORTAL_1::Last day" not-empty="no" numeric-only="no" result="date" time-of-day="no" type="normal"/>
     </relatedset-definition>
-    <relatedset-definition table="PORTAL_DB">
-      <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="PORTAL_DB::Expired" not-empty="no" numeric-only="no" result="date" time-of-day="no" type="normal"/>
+    <relatedset-definition table="PORTAL_2">
+      <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="PORTAL_2::Expired" not-empty="no" numeric-only="no" result="date" time-of-day="no" type="normal"/>
     </relatedset-definition>
   </metadata>
   <resultset count="2" fetch-size="2">
@@ -36,26 +36,26 @@
       <field name="Document">
         <data>/fmi/xml/cnt/1234jpg?-db=PORTAL_DB&amp;-lay=portal_form&amp;-recid=2&amp;-field=Document(1)</data>
       </field>
-      <relatedset count="2" table="PORTAL_DB">
+      <relatedset count="2" table="PORTAL_1">
         <record mod-id="24" record-id="12192">
-          <field name="PORTAL_DB::Last day">
+          <field name="PORTAL_1::Last day">
             <data/>
           </field>
         </record>
         <record mod-id="21" record-id="12191">
-          <field name="PORTAL_DB::Last day">
+          <field name="PORTAL_1::Last day">
             <data/>
           </field>
         </record>
       </relatedset>
-      <relatedset count="2" table="PORTAL_DB">
+      <relatedset count="2" table="PORTAL_2">
         <record mod-id="24" record-id="12192">
-          <field name="PORTAL_DB::Expired">
+          <field name="PORTAL_2::Expired">
             <data>10/31/2014</data>
           </field>
         </record>
         <record mod-id="21" record-id="12191">
-          <field name="PORTAL_DB::Expired">
+          <field name="PORTAL_2::Expired">
             <data/>
           </field>
         </record>
@@ -77,26 +77,26 @@
       <field name="Document">
         <data>/fmi/xml/cnt/1235jpg?-db=PORTAL_DB&amp;-lay=portal_form&amp;-recid=2&amp;-field=Document(1)</data>
       </field>
-      <relatedset count="2" table="PORTAL_DB">
+      <relatedset count="2" table="PORTAL_1">
         <record mod-id="24" record-id="12192">
-          <field name="PORTAL_DB::Last day">
+          <field name="PORTAL_1::Last day">
             <data>9/30/2014</data>
           </field>
         </record>
         <record mod-id="21" record-id="12191">
-          <field name="PORTAL_DB::Last day">
+          <field name="PORTAL_1::Last day">
             <data/>
           </field>
         </record>
       </relatedset>
-      <relatedset count="2" table="PORTAL_DB">
+      <relatedset count="2" table="PORTAL_2">
         <record mod-id="24" record-id="12192">
-          <field name="PORTAL_DB::Expired">
+          <field name="PORTAL_2::Expired">
             <data>10/31/2014</data>
           </field>
         </record>
         <record mod-id="21" record-id="12191">
-          <field name="PORTAL_DB::Expired">
+          <field name="PORTAL_2::Expired">
             <data/>
           </field>
         </record>
