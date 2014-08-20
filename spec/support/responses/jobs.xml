@@ -1,0 +1,199 @@
+<?xml version ="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE fmresultset
+  PUBLIC '-//FMI//DTD fmresultset//EN'
+  'https://host/fmi/xml/fmresultset.dtd'>
+<fmresultset version="1.0" xmlns="http://www.filemaker.com/xml/fmresultset">
+  <error code="0"/>
+  <product build="04/08/2014" name="FileMaker Web Publishing Engine" version="13.0.2.290"/>
+  <datasource database="jobs" date-format="MM/dd/yyyy" layout="jobs" table="jobs" time-format="HH:mm:ss" timestamp-format="MM/dd/yyyy HH:mm:ss" total-count="10000"/>
+  <metadata>
+    <field-definition auto-enter="yes" four-digit-year="no" global="no" max-repeat="1" name="status" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="yes" four-digit-year="no" global="no" max-repeat="1" name="JDID" not-empty="yes" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="JobTitle Web" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="experience &amp; qualification" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="location" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="Salary" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="JD Cat" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="JobType" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="yes" four-digit-year="no" global="no" max-repeat="1" name="modify date" not-empty="no" numeric-only="no" result="date" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="Longitude" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="Latitude" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+  </metadata>
+  <resultset count="111" fetch-size="5">
+    <record mod-id="202" record-id="7294">
+      <field name="status">
+        <data>open</data>
+      </field>
+      <field name="JDID">
+        <data>JID1122</data>
+      </field>
+      <field name="JobTitle Web">
+        <data>Software &amp; Support Engineer (1 year Direct Contract)</data>
+      </field>
+      <field name="experience &amp; qualification">
+        <data>Looking for a highly motivated and independent developer to work on an internal software product.</data>
+      </field>
+      <field name="location">
+        <data>Queen Street (Near Bugis MRT)</data>
+      </field>
+      <field name="Salary">
+        <data>Negotiable</data>
+      </field>
+      <field name="JD Cat">
+        <data>IT &amp; Telecommunications</data>
+      </field>
+      <field name="JobType">
+        <data>Permanent</data>
+      </field>
+      <field name="modify date">
+        <data>08/12/2014</data>
+      </field>
+      <field name="Longitude">
+        <data/>
+      </field>
+      <field name="Latitude">
+        <data/>
+      </field>
+    </record>
+    <record mod-id="437" record-id="8266">
+      <field name="status">
+        <data>open</data>
+      </field>
+      <field name="JDID">
+        <data>JID2233</data>
+      </field>
+      <field name="JobTitle Web">
+        <data>Recruiter</data>
+      </field>
+      <field name="experience &amp; qualification">
+        <data>Understanding who your client is.</data>
+      </field>
+      <field name="location">
+        <data>Queen Street (Opp Bugis MRT)</data>
+      </field>
+      <field name="Salary">
+        <data>Negotiable</data>
+      </field>
+      <field name="JD Cat">
+        <data>Administrative &amp; Related</data>
+      </field>
+      <field name="JobType">
+        <data>Permanent</data>
+      </field>
+      <field name="modify date">
+        <data>07/04/2014</data>
+      </field>
+      <field name="Longitude">
+        <data/>
+      </field>
+      <field name="Latitude">
+        <data/>
+      </field>
+    </record>
+    <record mod-id="186" record-id="13074">
+      <field name="status">
+        <data>open</data>
+      </field>
+      <field name="JDID">
+        <data>JID4433</data>
+      </field>
+      <field name="JobTitle Web">
+        <data>Project Manager (Dotnet)</data>
+      </field>
+      <field name="experience &amp; qualification">
+        <data>Our client is a leading infocommunications technology service provider.</data>
+      </field>
+      <field name="location">
+        <data>Central</data>
+      </field>
+      <field name="Salary">
+        <data>6000 - 7000</data>
+      </field>
+      <field name="JD Cat">
+        <data>IT &amp; Telecommunications</data>
+      </field>
+      <field name="JobType">
+        <data>Permanent</data>
+      </field>
+      <field name="modify date">
+        <data>07/25/2014</data>
+      </field>
+      <field name="Longitude">
+        <data/>
+      </field>
+      <field name="Latitude">
+        <data/>
+      </field>
+    </record>
+    <record mod-id="548" record-id="14008">
+      <field name="status">
+        <data>open</data>
+      </field>
+      <field name="JDID">
+        <data>JID7766</data>
+      </field>
+      <field name="JobTitle Web">
+        <data>Project Manager</data>
+      </field>
+      <field name="experience &amp; qualification">
+        <data>You will be responsible for project and resource scheduling.</data>
+      </field>
+      <field name="location">
+        <data>Ang Mo Kio</data>
+      </field>
+      <field name="Salary">
+        <data>Negotiable</data>
+      </field>
+      <field name="JD Cat">
+        <data>IT &amp; Telecommunications</data>
+      </field>
+      <field name="JobType">
+        <data>Permanent</data>
+      </field>
+      <field name="modify date">
+        <data>07/25/2014</data>
+      </field>
+      <field name="Longitude">
+        <data/>
+      </field>
+      <field name="Latitude">
+        <data/>
+      </field>
+    </record>
+    <record mod-id="145" record-id="15448">
+      <field name="status">
+        <data>open</data>
+      </field>
+      <field name="JDID">
+        <data>JID8877</data>
+      </field>
+      <field name="JobTitle Web">
+        <data>SAP Consultants</data>
+      </field>
+      <field name="experience &amp; qualification">
+        <data>Analyse business requirements, design and implement full solutions.</data>
+      </field>
+      <field name="location">
+        <data>Ang Mo Kio</data>
+      </field>
+      <field name="Salary">
+        <data>3000 - 5500</data>
+      </field>
+      <field name="JD Cat">
+        <data>IT &amp; Telecommunications</data>
+      </field>
+      <field name="JobType">
+        <data>Contract</data>
+      </field>
+      <field name="modify date">
+        <data>08/14/2014</data>
+      </field>
+      <field name="Longitude">
+        <data/>
+      </field>
+      <field name="Latitude">
+        <data/>
+      </field>
+    </record>
+  </resultset>
+</fmresultset>

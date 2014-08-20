@@ -1,0 +1,106 @@
+<?xml version ="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE fmresultset
+  PUBLIC '-//FMI//DTD fmresultset//EN'
+  'https://host/fmi/xml/fmresultset.dtd'>
+<fmresultset version="1.0" xmlns="http://www.filemaker.com/xml/fmresultset">
+  <error code="0"/>
+  <product build="04/08/2014" name="FileMaker Web Publishing Engine" version="13.0.2.290"/>
+  <datasource database="PORTAL_DB" date-format="MM/dd/yyyy" layout="PORTAL" table="PORTAL" time-format="HH:mm:ss" timestamp-format="MM/dd/yyyy HH:mm:ss" total-count="5000"/>
+  <metadata>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="PortalID" not-empty="yes" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="Year" not-empty="no" numeric-only="no" result="number" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="Salary" not-empty="no" numeric-only="no" result="number" time-of-day="no" type="calculation"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="Insurance Amount" not-empty="no" numeric-only="no" result="number" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="Document" not-empty="no" numeric-only="no" result="container" time-of-day="no" type="normal"/>
+    <relatedset-definition table="PORTAL_DB">
+      <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="PORTAL_DB::Last day" not-empty="no" numeric-only="no" result="date" time-of-day="no" type="normal"/>
+    </relatedset-definition>
+    <relatedset-definition table="PORTAL_DB">
+      <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="PORTAL_DB::Expired" not-empty="no" numeric-only="no" result="date" time-of-day="no" type="normal"/>
+    </relatedset-definition>
+  </metadata>
+  <resultset count="2" fetch-size="2">
+    <record mod-id="2" record-id="1">
+      <field name="PortalID">
+        <data>1234</data>
+      </field>
+      <field name="Year">
+        <data>2013</data>
+      </field>
+      <field name="Salary">
+        <data>6000</data>
+      </field>
+      <field name="Insurance Amount">
+        <data>38.50</data>
+      </field>
+      <field name="Document">
+        <data>/fmi/xml/cnt/1234jpg?-db=PORTAL_DB&amp;-lay=portal_form&amp;-recid=2&amp;-field=Document(1)</data>
+      </field>
+      <relatedset count="2" table="PORTAL_DB">
+        <record mod-id="24" record-id="12192">
+          <field name="PORTAL_DB::Last day">
+            <data/>
+          </field>
+        </record>
+        <record mod-id="21" record-id="12191">
+          <field name="PORTAL_DB::Last day">
+            <data/>
+          </field>
+        </record>
+      </relatedset>
+      <relatedset count="2" table="PORTAL_DB">
+        <record mod-id="24" record-id="12192">
+          <field name="PORTAL_DB::Expired">
+            <data>10/31/2014</data>
+          </field>
+        </record>
+        <record mod-id="21" record-id="12191">
+          <field name="PORTAL_DB::Expired">
+            <data/>
+          </field>
+        </record>
+      </relatedset>
+    </record>
+    <record mod-id="2" record-id="2">
+      <field name="PortalID">
+        <data>1235</data>
+      </field>
+      <field name="Year">
+        <data>2014</data>
+      </field>
+      <field name="Salary">
+        <data>5400</data>
+      </field>
+      <field name="Insurance Amount">
+        <data>38.50</data>
+      </field>
+      <field name="Document">
+        <data>/fmi/xml/cnt/1235jpg?-db=PORTAL_DB&amp;-lay=portal_form&amp;-recid=2&amp;-field=Document(1)</data>
+      </field>
+      <relatedset count="2" table="PORTAL_DB">
+        <record mod-id="24" record-id="12192">
+          <field name="PORTAL_DB::Last day">
+            <data>9/30/2014</data>
+          </field>
+        </record>
+        <record mod-id="21" record-id="12191">
+          <field name="PORTAL_DB::Last day">
+            <data/>
+          </field>
+        </record>
+      </relatedset>
+      <relatedset count="2" table="PORTAL_DB">
+        <record mod-id="24" record-id="12192">
+          <field name="PORTAL_DB::Expired">
+            <data>10/31/2014</data>
+          </field>
+        </record>
+        <record mod-id="21" record-id="12191">
+          <field name="PORTAL_DB::Expired">
+            <data/>
+          </field>
+        </record>
+      </relatedset>
+    </record>
+  </resultset>
+</fmresultset>

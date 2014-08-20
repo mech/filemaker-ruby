@@ -71,7 +71,7 @@ module Filemaker
         faraday.headers[:user_agent] = \
           "filemaker-ruby-#{Filemaker::VERSION}".freeze
         faraday.basic_auth @config.account_name, @config.password
-        faraday.use XmlResponseHandler
+        # faraday.use XmlResponseHandler
       end
     end
   end
@@ -91,5 +91,7 @@ class XmlResponseHandler < Faraday::Response::Middleware
       meta: doc.xpath('/fmresultset/metadata'),
       resultset: doc.xpath('/fmresultset/resultset')
     }
+
+    # Handle error here quickly!
   end
 end

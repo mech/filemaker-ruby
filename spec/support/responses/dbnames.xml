@@ -1,7 +1,7 @@
 <?xml version ="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE fmresultset
   PUBLIC '-//FMI//DTD fmresultset//EN'
-  'https://58.185.193.190:443/fmi/xml/fmresultset.dtd'>
+  'https://host/fmi/xml/fmresultset.dtd'>
 <fmresultset version="1.0" xmlns="http://www.filemaker.com/xml/fmresultset">
   <error code="0"/>
   <product build="04/08/2014" name="FileMaker Web Publishing Engine" version="13.0.2.290"/>

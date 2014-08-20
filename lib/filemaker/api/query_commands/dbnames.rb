@@ -6,6 +6,8 @@ module Filemaker
       def dbnames
         response = @server.perform_request(:get, { '-dbnames' => '' })
         response.body[:resultset].xpath('record/field/data').map(&:text)
+
+        # Filemaker::Resultset.new(@server, response.body)
       end
     end
   end
