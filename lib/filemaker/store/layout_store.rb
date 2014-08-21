@@ -1,20 +1,21 @@
 module Filemaker
   module Store
-    class DatabaseStore < Hash
-      def initialize(server)
+    class LayoutStore < Hash
+      def initialize(server, database)
         @server = server
+        @database = database
       end
 
       def [](name)
-        super || self[name] = Filemaker::Database.new(name, @server)
+        super || self[name] = Filemaker::Layout.new(name, @server, @database)
       end
 
       def all
-        params = { '-dbnames' => '' }
+        params = { '-layoutnames' => '', '-db' => @database.name }
         response = @server.perform_request(:get, params)
         resultset = Filemaker::Resultset.new(@server, response.body)
         resultset.map do |record|
-          record['DATABASE_NAME']
+          record['LAYOUT_NAME']
         end
       end
     end

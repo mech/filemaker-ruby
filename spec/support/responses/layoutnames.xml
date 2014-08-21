@@ -1,0 +1,39 @@
+<?xml version ="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE fmresultset
+  PUBLIC '-//FMI//DTD fmresultset//EN'
+  'http://host/fmi/xml/fmresultset.dtd'>
+<fmresultset version="1.0" xmlns="http://www.filemaker.com/xml/fmresultset">
+  <error code="0"/>
+  <product build="04/08/2014" name="FileMaker Web Publishing Engine" version="13.0.2.290"/>
+  <datasource database="candidates" date-format="" layout="" table="" time-format="" timestamp-format="" total-count="5"/>
+  <metadata>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="LAYOUT_NAME" not-empty="yes" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+  </metadata>
+  <resultset count="5" fetch-size="5">
+    <record mod-id="128" record-id="79">
+      <field name="LAYOUT_NAME">
+        <data>Dashboard</data>
+      </field>
+    </record>
+    <record mod-id="4" record-id="109">
+      <field name="LAYOUT_NAME">
+        <data>Calender</data>
+      </field>
+    </record>
+    <record mod-id="38" record-id="111">
+      <field name="LAYOUT_NAME">
+        <data>Profile</data>
+      </field>
+    </record>
+    <record mod-id="15" record-id="115">
+      <field name="LAYOUT_NAME">
+        <data>Resume</data>
+      </field>
+    </record>
+    <record mod-id="7" record-id="114">
+      <field name="LAYOUT_NAME">
+        <data>Job Application</data>
+      </field>
+    </record>
+  </resultset>
+</fmresultset>

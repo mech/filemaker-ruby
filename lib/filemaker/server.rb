@@ -71,27 +71,7 @@ module Filemaker
         faraday.headers[:user_agent] = \
           "filemaker-ruby-#{Filemaker::VERSION}".freeze
         faraday.basic_auth @config.account_name, @config.password
-        # faraday.use XmlResponseHandler
       end
     end
-  end
-end
-
-class XmlResponseHandler < Faraday::Response::Middleware
-  require 'nokogiri'
-
-  # Parse the incoming XML and return a Resultset array
-  def parse(body)
-    doc = Nokogiri::XML(body)
-    doc.remove_namespaces!
-
-    {
-      error_code: doc.xpath('/fmresultset/error'),
-      datasource: doc.xpath('/fmresultset/datasource'),
-      meta: doc.xpath('/fmresultset/metadata'),
-      resultset: doc.xpath('/fmresultset/resultset')
-    }
-
-    # Handle error here quickly!
   end
 end
