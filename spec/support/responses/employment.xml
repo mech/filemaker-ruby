@@ -1,0 +1,55 @@
+<?xml version ="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE fmresultset
+  PUBLIC '-//FMI//DTD fmresultset//EN'
+  'http://host/fmi/xml/fmresultset.dtd'>
+<fmresultset version="1.0" xmlns="http://www.filemaker.com/xml/fmresultset">
+  <error code="0"/>
+  <product build="04/08/2014" name="FileMaker Web Publishing Engine" version="13.0.2.290"/>
+  <datasource database="master sales records " date-format="MM/dd/yyyy" layout="Employment_detail" table="master Sales Records" time-format="HH:mm:ss" timestamp-format="MM/dd/yyyy HH:mm:ss" total-count="1000"/>
+  <metadata>
+    <field-definition auto-enter="yes" four-digit-year="no" global="no" max-repeat="1" name="SRID" not-empty="yes" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="CAID" not-empty="yes" numeric-only="no" result="number" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="Commencement" not-empty="no" numeric-only="no" result="date" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="ChargesSalary::Charges" not-empty="no" numeric-only="no" result="number" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="ChargesSalary::Pay Kind" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="yes" four-digit-year="no" global="no" max-characters="35" max-repeat="1" name="CANDIDATE" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="yes" four-digit-year="no" global="no" max-repeat="1" name="modify date" not-empty="no" numeric-only="no" result="date" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="jobs::Domains" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="jobs::Team" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="candidates::web_db" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+  </metadata>
+  <resultset count="1" fetch-size="1">
+    <record mod-id="123" record-id="456">
+      <field name="SRID">
+        <data>S1122</data>
+      </field>
+      <field name="CAID">
+        <data>3344</data>
+      </field>
+      <field name="Commencement">
+        <data>09/01/2007</data>
+      </field>
+      <field name="ChargesSalary::Charges">
+        <data>50</data>
+      </field>
+      <field name="ChargesSalary::Pay Kind">
+        <data>hourly</data>
+      </field>
+      <field name="CANDIDATE">
+        <data>Bob Martin</data>
+      </field>
+      <field name="modify date">
+        <data>03/24/2014</data>
+      </field>
+      <field name="jobs::Domains">
+        <data>SWE</data>
+      </field>
+      <field name="jobs::Team">
+        <data/>
+      </field>
+      <field name="candidates::web_db">
+        <data>yes</data>
+      </field>
+    </record>
+  </resultset>
+</fmresultset>

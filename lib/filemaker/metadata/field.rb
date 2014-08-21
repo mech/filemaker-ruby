@@ -34,14 +34,10 @@ module Filemaker
       end
 
       def coerce(value)
-        # Have to check if Nokogiri give empty string or nil
         value = value.to_s.strip
-
         return nil if value.empty?
 
         case data_type
-        when 'text'
-          value
         when 'number'
           BigDecimal.new(value)
         when 'date'
@@ -53,14 +49,16 @@ module Filemaker
         when 'container'
           URI.parse("#{@resultset.server.host}#{value}")
         else
-          nil
+          value
         end
       end
 
       private
 
+      # 'yes' != 'no' => true
+      # 'no'  != 'no' => false
       def convert_to_boolean(value)
-        value == 'no' ? false : true
+        value != 'no'
       end
     end
   end

@@ -38,7 +38,8 @@ describe Filemaker::Resultset do
   describe 'build metadata' do
     it 'has 5 fields' do
       expect(resultset.fields.size).to eq 5
-      expect(resultset.fields.keys).to eq ['PortalID', 'Year', 'Salary', 'Insurance Amount', 'Document']
+      expect(resultset.fields.keys).to eq \
+        ['PortalID', 'Year', 'Salary', 'Insurance Amount', 'Document']
     end
 
     it 'PortalID represented as Field object' do

@@ -39,11 +39,9 @@ module Filemaker
       @portal_fields = {}
       @server = server
 
-      doc = Nokogiri::XML(xml)
-      doc.remove_namespaces!
+      doc = Nokogiri::XML(xml).remove_namespaces!
 
       error_code = doc.xpath('/fmresultset/error').attribute('code').value.to_i
-
       raise_potential_error!(error_code)
 
       datasource = doc.xpath('/fmresultset/datasource')
@@ -51,15 +49,10 @@ module Filemaker
       resultset  = doc.xpath('/fmresultset/resultset')
       records    = resultset.xpath('record')
 
-      @date_format = convert_date_time_format(
-        datasource.attribute('date-format').value
-      )
-      @time_format = convert_date_time_format(
-        datasource.attribute('time-format').value
-      )
-      @timestamp_format = convert_date_time_format(
-        datasource.attribute('timestamp-format').value
-      )
+      @date_format = convert_format(datasource.attribute('date-format').value)
+      @time_format = convert_format(datasource.attribute('time-format').value)
+      @timestamp_format = \
+        convert_format(datasource.attribute('timestamp-format').value)
 
       @count = resultset.attribute('count').value.to_i
       @total_count = datasource.attribute('total-count').value.to_i
@@ -87,11 +80,13 @@ module Filemaker
       end
 
       metadata.xpath('relatedset-definition').each do |relatedset|
-        table_name  = relatedset.attribute('table').value
-        fields      = {}
+        table_name = relatedset.attribute('table').value
+        fields     = {}
 
         relatedset.xpath('field-definition').each do |definition|
-          name = definition['name'].gsub("#{table_name}::", '')
+          # Right now, I do not want to mess with the field name
+          # name = definition['name'].gsub("#{table_name}::", '')
+          name = definition['name']
           fields[name] = Metadata::Field.new(definition, self)
         end
 
@@ -107,7 +102,7 @@ module Filemaker
       end
     end
 
-    def convert_date_time_format(format)
+    def convert_format(format)
       format
         .gsub('MM', '%m')
         .gsub('dd', '%d')

@@ -8,3 +8,6 @@ Documentation:
 
 BracesAroundHashParameters:
   Enabled: false
+
+MethodLength:
+  Enabled: false
