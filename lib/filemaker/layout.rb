@@ -1,5 +1,7 @@
 module Filemaker
   class Layout
+    include Api
+
     # @return [String] layout name
     attr_reader :name
 

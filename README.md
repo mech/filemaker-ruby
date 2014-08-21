@@ -55,13 +55,13 @@ Once you are able to grab the `api`, you are golden and can make request to read
 
 Most API will be smart enough to reject invalid query parameters if passed in incorrectly.
 
-## Using Filemaker::Layout
+## Using Filemaker::Model
 
-If you want ActiveModel-like access with a decent query DSL like `where`, `find`, `all`, you can include `Filemaker::Layout` to your model. Your Rails form will work as well as JSON serialization.
+If you want ActiveModel-like access with a decent query DSL like `where`, `find`, `all`, you can include `Filemaker::Model` to your model. Your Rails form will work as well as JSON serialization.
 
 ```ruby
 class Job
-  include Filemaker::Layout
+  include Filemaker::Model
 
   server :default # Taken from filemaker.yml config file
   database :jobs
