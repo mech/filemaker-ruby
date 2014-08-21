@@ -97,8 +97,7 @@ module Filemaker
     def build_records(records)
       records.each do |record|
         # record is Nokogiri::XML::Element
-        # list << Filemaker::Record.new(record, self)
-        list << record
+        list << Filemaker::Record.new(record, self)
       end
     end
 

@@ -5,9 +5,10 @@ module Filemaker
       # server. Based on permission, the list may not be complete.
       def dbnames
         response = @server.perform_request(:get, { '-dbnames' => '' })
-        response.body[:resultset].xpath('record/field/data').map(&:text)
-
-        # Filemaker::Resultset.new(@server, response.body)
+        resultset = Filemaker::Resultset.new(@server, response.body)
+        resultset.map do |record|
+          record['DATABASE_NAME']
+        end
       end
     end
   end
