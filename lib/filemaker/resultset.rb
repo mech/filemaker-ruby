@@ -32,12 +32,18 @@ module Filemaker
     # @return [Filemaker::Server] the server
     attr_reader :server
 
+    # @return [Hash] the request params
+    attr_reader :params
+
+    # @param xml [Filemaker::Server] server
     # @param xml [String] the XML string from response
-    def initialize(server, xml)
+    # @param xml [Hash] the request params used to construct request
+    def initialize(server, xml, params = nil)
       @list = []
       @fields = {}
       @portal_fields = {}
       @server = server
+      @params = params # Useful for debugging
 
       doc = Nokogiri::XML(xml).remove_namespaces!
 

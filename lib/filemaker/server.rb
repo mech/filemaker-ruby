@@ -1,32 +1,8 @@
 require 'faraday'
 require 'typhoeus/adapters/faraday'
+require 'filemaker/configuration'
 
 module Filemaker
-  # @api private
-  class Configuration < Struct.new(
-      :host,
-      :account_name,
-      :password,
-      :ssl,
-      :log_curl,
-      :log_metric
-    )
-
-    def not_configurable?
-      host_missing? || account_name_missing? || password_missing?
-    end
-
-    %w(host account_name password).each do |name|
-      define_method "#{name}_missing?" do
-        (send(name.to_sym) || '').empty?
-      end
-    end
-
-    def connection_options
-      ssl.is_a?(Hash) ? { ssl: ssl } : {}
-    end
-  end
-
   class Server
     extend Forwardable
 
@@ -38,7 +14,8 @@ module Filemaker
     alias_method :database, :databases
     alias_method :db, :databases
 
-    def_delegators :@config, :host, :account_name, :password, :ssl
+    def_delegators :@config, :host, :url, :ssl, :endpoint
+    def_delegators :@config, :account_name, :password
 
     def initialize(options = {})
       @config = Configuration.new
@@ -51,9 +28,31 @@ module Filemaker
 
     # @api private
     # Mostly used by Filemaker::Api
-    # TODO: There must be tracing. CURL etc. Or performance metrics?
-    def perform_request(method, params = nil)
-      @connection.__send__(method, '/fmi/xml/fmresultset.xml', params)
+    # TODO: There must be tracing/instrumentation. CURL etc.
+    # Or performance metrics?
+    # Also we want to pass in timeout option so we can ignore timeout for really
+    # long requests
+    #
+    # @return [Array] Faraday::Response and request params Hash
+    def perform_request(method, action, args, options = {})
+      params = (args || {})
+        .merge(expand_options(options))
+        .merge({ action => '' })
+
+      log_action(params)
+
+      # yield params if block_given?
+      response = @connection.__send__(method, endpoint, params)
+
+      case response.status
+      when 200 then [response, params]
+      when 401 then fail Error::AuthenticationError, 'Auth failed.'
+      when 0   then fail Error::CommunicationError, 'Empty response.'
+      when 404 then fail Error::CommunicationError, 'HTTP 404 Not Found'
+      else
+        msg = "Unknown response status = #{response.status}"
+        fail Error::CommunicationError, msg
+      end
     end
 
     def handler_names
@@ -65,13 +64,50 @@ module Filemaker
     def get_connection(options = {})
       faraday_options = @config.connection_options.merge(options)
 
-      Faraday.new(@config.host, faraday_options) do |faraday|
+      Faraday.new(@config.url, faraday_options) do |faraday|
         faraday.request :url_encoded
         faraday.adapter :typhoeus
         faraday.headers[:user_agent] = \
           "filemaker-ruby-#{Filemaker::VERSION}".freeze
         faraday.basic_auth @config.account_name, @config.password
       end
+    end
+
+    def expand_options(options)
+      options
+    end
+
+    def log_action(params)
+      case @config.log
+      when :simple    then log_simple(params)
+      when :curl      then log_curl(params)
+      when :curl_auth then log_curl(params, true)
+      else
+        return
+      end
+    end
+
+    def log_curl(params, has_auth = false)
+      full_url = "#{url}#{endpoint}?#{log_params(params)}"
+      curl_ssl_option, auth = '', ''
+
+      curl_ssl_option = ' -k' if ssl.is_a?(Hash) && !ssl.fetch(:verify) { true }
+
+      auth = " -H 'Authorization: #{@connection.headers['Authorization']}'" if \
+        has_auth
+
+      warn 'Pretty print like so: `curl XXX | xmllint --format -`'
+      warn "curl -XGET '#{full_url}'#{curl_ssl_option} -i#{auth}"
+    end
+
+    def log_simple(params)
+      warn "#{endpoint}?#{log_params(params)}"
+    end
+
+    def log_params(params)
+      params.map do |key, value|
+        "#{CGI.escape(key.to_s)}=#{CGI.escape(value.to_s)}"
+      end.join('&')
     end
   end
 end

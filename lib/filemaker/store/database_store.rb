@@ -10,8 +10,7 @@ module Filemaker
       end
 
       def all
-        params = { '-dbnames' => '' }
-        response = @server.perform_request(:get, params)
+        response, _params = @server.perform_request(:post, '-dbnames', nil)
         resultset = Filemaker::Resultset.new(@server, response.body)
         resultset.map do |record|
           record['DATABASE_NAME']

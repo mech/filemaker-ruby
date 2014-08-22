@@ -16,17 +16,12 @@ describe Filemaker::Store::DatabaseStore do
   describe 'all' do
     it 'returns all databases' do
       server = Filemaker::Server.new do |config|
-        config.host         = 'https://host'
+        config.host         = 'host'
         config.account_name = 'account_name'
         config.password     = 'password'
-        config.ssl          = { verify: false }
       end
 
-      server.connection.builder.use Faraday::Adapter::Test do |stub|
-        stub.get '/fmi/xml/fmresultset.xml?-dbnames=' do
-          [200, {}, import_xml_as_string('dbnames.xml')]
-        end
-      end
+      fake_post_response(server, nil, 'dbnames.xml')
 
       expected_result = %w(Billing Candidates Employee Jobs)
 

@@ -11,3 +11,6 @@ BracesAroundHashParameters:
 
 MethodLength:
   Enabled: false
+
+LineLength:
+  Max: 80

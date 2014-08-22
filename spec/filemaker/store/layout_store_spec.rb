@@ -16,17 +16,12 @@ describe Filemaker::Store::LayoutStore do
   describe 'all' do
     it 'returns all layouts for a database' do
       server = Filemaker::Server.new do |config|
-        config.host         = 'https://host'
+        config.host         = 'host'
         config.account_name = 'account_name'
         config.password     = 'password'
-        config.ssl          = { verify: false }
       end
 
-      server.connection.builder.use Faraday::Adapter::Test do |stub|
-        stub.get '/fmi/xml/fmresultset.xml?-db=candidates&-layoutnames=' do
-          [200, {}, import_xml_as_string('layoutnames.xml')]
-        end
-      end
+      fake_post_response(server, nil, 'layoutnames.xml')
 
       expect(server.db['candidates'].layouts.all).to eq \
         ['Dashboard', 'Calender', 'Profile', 'Resume', 'Job Application']

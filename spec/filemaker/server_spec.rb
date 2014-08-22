@@ -3,12 +3,13 @@ describe Filemaker::Server do
   context 'initializing a server' do
     it 'provides a host, account_name, and password' do
       server = Filemaker::Server.new do |config|
-        config.host         = 'http://host'
+        config.host         = 'host'
         config.account_name = 'account_name'
         config.password     = 'password'
       end
 
-      expect(server.host).to eq 'http://host'
+      expect(server.host).to eq 'host'
+      expect(server.url).to eq 'http://host'
       expect(server.account_name).to eq 'account_name'
       expect(server.password).to eq 'password'
       expect(server.connection).to be_a Faraday::Connection
@@ -18,13 +19,24 @@ describe Filemaker::Server do
         eq 'Basic YWNjb3VudF9uYW1lOnBhc3N3b3Jk'
     end
 
+    it 'specifically ask for no SSL' do
+      server = Filemaker::Server.new do |config|
+        config.host         = 'host'
+        config.account_name = 'account_name'
+        config.password     = 'password'
+        config.ssl          = false
+      end
+
+      expect(server.url).to eq 'http://host'
+    end
+
     it 'did not provide host, account_name, and password' do
       expect do
         Filemaker::Server.new
       end.to raise_error ArgumentError
 
       expect do
-        Filemaker::Server.new { |config| config.host = 'http://host' }
+        Filemaker::Server.new { |config| config.host = 'host' }
       end.to raise_error ArgumentError
     end
   end
@@ -32,12 +44,13 @@ describe Filemaker::Server do
   context 'initializing a server with SSL' do
     it 'indicates secured connection' do
       server = Filemaker::Server.new do |config|
-        config.host         = 'https://host'
+        config.host         = 'host'
         config.account_name = 'account_name'
         config.password     = 'password'
         config.ssl          = { verify: false }
       end
 
+      expect(server.url).to eq 'https://host'
       expect(server.connection.ssl[:verify]).to be false
     end
   end
@@ -45,7 +58,7 @@ describe Filemaker::Server do
   describe 'databases is a store to track encountered -db' do
     it 'stores database object and can be accessed with db and database' do
       server = Filemaker::Server.new do |config|
-        config.host         = 'localhost'
+        config.host         = 'host'
         config.account_name = 'account_name'
         config.password     = 'password'
       end
@@ -53,6 +66,40 @@ describe Filemaker::Server do
       expect(server.databases['candidate']).to be_a Filemaker::Database
       expect(server.database['candidate']).to eq server.databases['candidate']
       expect(server.db['candidate']).to eq server.databases['candidate']
+    end
+  end
+
+  context 'HTTP errors' do
+    before do
+      @server = Filemaker::Server.new do |config|
+        config.host         = 'host'
+        config.account_name = 'account_name'
+        config.password     = 'password'
+      end
+    end
+
+    it 'raises Filemaker::Error::CommunicationError if status = 0' do
+      fake_error(@server, nil, 0)
+
+      expect do
+        @server.databases.all
+      end.to raise_error Filemaker::Error::CommunicationError
+    end
+
+    it 'raises Filemaker::Error::CommunicationError if status = 404' do
+      fake_error(@server, nil, 404)
+
+      expect do
+        @server.databases.all
+      end.to raise_error Filemaker::Error::CommunicationError
+    end
+
+    it 'raises Filemaker::Error::AuthenticationError if status = 401' do
+      fake_error(@server, nil, 401)
+
+      expect do
+        @server.databases.all
+      end.to raise_error Filemaker::Error::AuthenticationError
     end
   end
 

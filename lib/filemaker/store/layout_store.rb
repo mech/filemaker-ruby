@@ -11,8 +11,8 @@ module Filemaker
       end
 
       def all
-        params = { '-layoutnames' => '', '-db' => @database.name }
-        response = @server.perform_request(:get, params)
+        args = { '-db' => @database.name }
+        response, _params = @server.perform_request(:post, '-layoutnames', args)
         resultset = Filemaker::Resultset.new(@server, response.body)
         resultset.map do |record|
           record['LAYOUT_NAME']
