@@ -74,7 +74,38 @@ module Filemaker
     end
 
     def expand_options(options)
-      options
+      expanded = {}
+      options.each do |key, value|
+        case key
+        when :max
+          expanded['-max'] = value
+        when :skip
+          expanded['-skip'] = value
+        when :sortfield
+          if value.is_a? Array
+            msg = 'Too many sortfield, limit=9'
+            fail(Filemaker::Error::ParameterError, msg) if value.size > 9
+            value.each_index do |index|
+              expanded["-sortfield.#{index + 1}"] = value[index]
+            end
+          else
+            expanded['-sortfield.1'] = value
+          end
+        when :sortorder
+          if value.is_a? Array
+            # Use :sortfield as single source of truth for array size
+            msg = 'Too many sortorder, limit=9'
+            fail(Filemaker::Error::ParameterError, msg) if value.size > 9
+            options[:sortfield].each_index do |index|
+              expanded["-sortorder.#{index + 1}"] = value[index] || 'ascend'
+            end
+          else
+            expanded['-sortorder.1'] = value
+          end
+        end
+      end
+
+      expanded
     end
 
     def log_action(params)

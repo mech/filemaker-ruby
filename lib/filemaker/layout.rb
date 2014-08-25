@@ -28,5 +28,11 @@ module Filemaker
 
       Filemaker::Resultset.new(server, response.body, params)
     end
+
+    private
+
+    def valid_options(options, *keys)
+      options.keys.each { |key| options.delete(key) unless keys.include?(key) }
+    end
   end
 end
