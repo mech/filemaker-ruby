@@ -35,9 +35,12 @@ module Filemaker
     #
     # @return [Array] Faraday::Response and request params Hash
     def perform_request(method, action, args, options = {})
-      params = (args || {})
+      params = serialize_args(args)
         .merge(expand_options(options))
         .merge({ action => '' })
+
+      # Serialize the params for submission
+      params = params.stringify_keys
 
       log_action(params)
 
@@ -71,6 +74,22 @@ module Filemaker
           "filemaker-ruby-#{Filemaker::VERSION}".freeze
         faraday.basic_auth @config.account_name, @config.password
       end
+    end
+
+    def serialize_args(args)
+      return {} if args.nil?
+
+      args.each do |key, value|
+        case value
+        when Date     then args[key] = value.strftime('%m/%d/%Y')
+        when DateTime then args[key] = value.strftime('%m/%d/%Y %H:%M:%S')
+        when Time     then args[key] = value.strftime('%H:%M')
+        else
+          args[key] = value.to_s
+        end
+      end
+
+      args
     end
 
     def expand_options(options)

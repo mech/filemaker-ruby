@@ -1,4 +1,5 @@
 require 'filemaker/version'
+require 'filemaker/core_ext/hash'
 require 'filemaker/server'
 require 'filemaker/api'
 require 'filemaker/database'

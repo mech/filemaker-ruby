@@ -35,11 +35,13 @@ describe Filemaker::Record do
 
   it 'Salary should be an array of BigDecimal' do
     expect(@record['Salary']).to be_an Array
-    expect(@record['Salary']).to eq [BigDecimal.new(5000), BigDecimal.new(6000)]
+    expect(@record['SALARY']).to eq [BigDecimal.new(5000), BigDecimal.new(6000)]
   end
 
   it 'has 2 portals' do
     expect(@record.portals.size).to eq 2
+    # Test for case insentive hash!
+    expect(@record.portals[:PORTAL_1]).to eq @record.portals['portal_1']
   end
 
 end

@@ -2,6 +2,7 @@ module Filemaker
   module Api
     module QueryCommands
       # Find a random record.
+      #
       # If data cannot be coerced, it will crash!
       # Acceptable params are:
       # -script

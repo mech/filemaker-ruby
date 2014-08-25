@@ -1,14 +1,17 @@
 module Filemaker
   module Api
     module QueryCommands
-      # Find all records.
-      # Sorting may be slow for huge records.
+      # Find record(s).
       #
-      # Acceptable params are:
       # -max
       # -skip
       # -sortfield.[1-9]
       # -sortorder.[1-9]
+      # -fieldname
+      # -fieldname.op
+      # -lop
+      # -recid
+      # -lay.response
       # -script
       # -script.param
       # -script.prefind
@@ -16,18 +19,27 @@ module Filemaker
       # -script.presort
       # -script.presort.param
       # -relatedsets.filter
+      # -relatedsets.max
       #
-      def findall(options = {})
+      def find(id_or_hash, options = {})
         valid_options(options,
                       :max,
                       :skip,
                       :sortfield,
                       :sortorder,
+                      :lop,
+                      :lay_response,
                       :script,
                       :script_prefind,
-                      :relatedsets_filter)
+                      :script_presort,
+                      :relatedsets_filter,
+                      :relatedsets_max)
 
-        perform_request('-findall', {}, options)
+        if id_or_hash.is_a? Hash
+          perform_request('-find', id_or_hash, options)
+        else
+          perform_request('-find', { '-recid' => id_or_hash.to_s }, options)
+        end
       end
     end
   end

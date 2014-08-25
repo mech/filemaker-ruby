@@ -35,6 +35,9 @@ module Filemaker
     # @return [Hash] the request params
     attr_reader :params
 
+    # @return [String] the raw XML for inspection
+    attr_reader :xml
+
     # @param xml [Filemaker::Server] server
     # @param xml [String] the XML string from response
     # @param xml [Hash] the request params used to construct request
@@ -44,6 +47,7 @@ module Filemaker
       @portal_fields = {}
       @server = server
       @params = params # Useful for debugging
+      @xml = xml
 
       doc = Nokogiri::XML(xml).remove_namespaces!
 
@@ -77,7 +81,7 @@ module Filemaker
     def raise_potential_error!(error_code)
       return if error_code.zero?
 
-      fail
+      Filemaker::Error.raise_error_by_code(error_code)
     end
 
     def build_metadata(metadata)
@@ -87,16 +91,16 @@ module Filemaker
 
       metadata.xpath('relatedset-definition').each do |relatedset|
         table_name = relatedset.attribute('table').value
-        fields     = {}
+        p_fields     = {}
 
         relatedset.xpath('field-definition').each do |definition|
           # Right now, I do not want to mess with the field name
           # name = definition['name'].gsub("#{table_name}::", '')
           name = definition['name']
-          fields[name] = Metadata::Field.new(definition, self)
+          p_fields[name] = Metadata::Field.new(definition, self)
         end
 
-        @portal_fields[table_name] = fields
+        @portal_fields[table_name] = p_fields
       end
     end
 

@@ -64,8 +64,8 @@ describe Filemaker::Layout do
       it 'will not accept more than 9 sortfields' do
         expect do
           @layout.findall(
-            sortfield: %w(f1 f2 f3 f4 f5 f6 f7, f8, f9, f10),
-            sortorder: %w(o1 o2 o3 o4 o5 o6 o7, o8, o9)
+            sortfield: %w(f1 f2 f3 f4 f5 f6 f7 f8 f9 f10),
+            sortorder: %w(o1 o2 o3 o4 o5 o6 o7 o8 o9)
           )
         end.to raise_error Filemaker::Error::ParameterError
       end
@@ -73,10 +73,29 @@ describe Filemaker::Layout do
       it 'will not accept more than 9 sortorders' do
         expect do
           @layout.findall(
-            sortfield: %w(f1 f2 f3 f4 f5 f6 f7, f8, f9),
-            sortorder: %w(o1 o2 o3 o4 o5 o6 o7, o8, o9, o10)
+            sortfield: %w(f1 f2 f3 f4 f5 f6 f7 f8 f9),
+            sortorder: %w(o1 o2 o3 o4 o5 o6 o7 o8 o9 o10)
           )
         end.to raise_error Filemaker::Error::ParameterError
+      end
+    end
+
+    describe 'find' do
+      it 'finds a single record using -recid' do
+        resultset = @layout.find(1)
+        expect(resultset.params).to have_key('-find')
+        expect(resultset.params['-db']).to eq 'candidates'
+        expect(resultset.params['-lay']).to eq 'Profile'
+        expect(resultset.params['-find']).to eq ''
+        expect(resultset.params['-recid']).to eq '1'
+      end
+
+      it 'finds some records with criteria' do
+        resultset = @layout.find({ name: 'Bob', day: Date.parse('25/8/2014') }, max: 1)
+
+        expect(resultset.params['name']).to eq 'Bob'
+        expect(resultset.params['day']).to eq '08/25/2014'
+        expect(resultset.params['-max']).to eq 1
       end
     end
   end

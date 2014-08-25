@@ -1,5 +1,5 @@
 module Filemaker
-  class Record < Hash
+  class Record < HashWithIndifferentAndCaseInsensitiveAccess
     # @return [String] modification ID
     attr_reader :mod_id
 
@@ -12,7 +12,7 @@ module Filemaker
     def initialize(record, resultset, portal_table_name = nil)
       @mod_id    = record['mod-id']
       @record_id = record['record-id']
-      @portals   = {}
+      @portals   = HashWithIndifferentAndCaseInsensitiveAccess.new
 
       record.xpath('field').each do |field|
         # `field` is Nokogiri::XML::Element

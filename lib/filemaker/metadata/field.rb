@@ -42,6 +42,7 @@ module Filemaker
           BigDecimal.new(value)
         when 'date'
           Date.strptime(value, @resultset.date_format)
+          # Date.strptime(Date.parse(value).strftime(@resultset.date_format), @resultset.date_format)
         when 'time'
           DateTime.strptime("1/1/-4712 #{value}", @resultset.timestamp_format)
         when 'timestamp'
@@ -51,6 +52,9 @@ module Filemaker
         else
           value
         end
+      rescue Exception => e
+        msg = "Could not coerce #{value} due to #{e.message}"
+        raise Filemaker::Error::CoerceError, msg
       end
 
       private
