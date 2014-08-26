@@ -11,10 +11,14 @@ module Filemaker
     alias_method :layout, :layouts
     alias_method :lay, :layouts
 
+    # @return [Filemaker::Store::ScriptStore] the script store
+    attr_reader :scripts
+
     def initialize(name, server)
       @name = name
       @server = server
       @layouts = Store::LayoutStore.new(server, self)
+      @scripts = Store::ScriptStore.new(server, self)
     end
 
     # A very convenient way to access some layout from this database
