@@ -164,6 +164,94 @@ describe Filemaker::Error do
         Filemaker::Error.raise_error_by_code(400)
       end.to raise_error Filemaker::Error::FindCriteriaEmptyError
     end
+
+    it 'raises NoRecordsFoundError for 401' do
+      expect do
+        Filemaker::Error.raise_error_by_code(401)
+      end.to raise_error Filemaker::Error::NoRecordsFoundError
+    end
+  end
+
+  context '500 to 599 errors' do
+    it 'raises DateValidationError for 500' do
+      expect do
+        Filemaker::Error.raise_error_by_code(500)
+      end.to raise_error Filemaker::Error::DateValidationError
+    end
+
+    it 'raises TimeValidationError for 501' do
+      expect do
+        Filemaker::Error.raise_error_by_code(501)
+      end.to raise_error Filemaker::Error::TimeValidationError
+    end
+
+    it 'raises NumberValidationError for 502' do
+      expect do
+        Filemaker::Error.raise_error_by_code(502)
+      end.to raise_error Filemaker::Error::NumberValidationError
+    end
+
+    it 'raises RangeValidationError for 503' do
+      expect do
+        Filemaker::Error.raise_error_by_code(503)
+      end.to raise_error Filemaker::Error::RangeValidationError
+    end
+
+    it 'raises UniquenessValidationError for 504' do
+      expect do
+        Filemaker::Error.raise_error_by_code(504)
+      end.to raise_error Filemaker::Error::UniquenessValidationError
+    end
+
+    it 'raises ExistingValidationError for 505' do
+      expect do
+        Filemaker::Error.raise_error_by_code(505)
+      end.to raise_error Filemaker::Error::ExistingValidationError
+    end
+
+    it 'raises ValueListValidationError for 506' do
+      expect do
+        Filemaker::Error.raise_error_by_code(506)
+      end.to raise_error Filemaker::Error::ValueListValidationError
+    end
+
+    it 'raises CalculationValidationError for 507' do
+      expect do
+        Filemaker::Error.raise_error_by_code(507)
+      end.to raise_error Filemaker::Error::CalculationValidationError
+    end
+
+    it 'raises InvalidFindModeValueValidationError for 508' do
+      expect do
+        Filemaker::Error.raise_error_by_code(508)
+      end.to raise_error Filemaker::Error::InvalidFindModeValueValidationError
+    end
+
+    it 'raises MaximumCharactersValidationError for 511' do
+      expect do
+        Filemaker::Error.raise_error_by_code(511)
+      end.to raise_error Filemaker::Error::MaximumCharactersValidationError
+    end
+  end
+
+  context '800 to 899 errors' do
+    it 'raises UnableToCreateFileError for 800' do
+      expect do
+        Filemaker::Error.raise_error_by_code(800)
+      end.to raise_error Filemaker::Error::UnableToCreateFileError
+    end
+
+    it 'raises UnableToCreateTempFileError for 801' do
+      expect do
+        Filemaker::Error.raise_error_by_code(801)
+      end.to raise_error Filemaker::Error::UnableToCreateTempFileError
+    end
+
+    it 'raises UnableToOpenFileError for 802' do
+      expect do
+        Filemaker::Error.raise_error_by_code(802)
+      end.to raise_error Filemaker::Error::UnableToOpenFileError
+    end
   end
 
 end

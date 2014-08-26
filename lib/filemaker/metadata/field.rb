@@ -41,6 +41,8 @@ module Filemaker
         when 'number'
           BigDecimal.new(value)
         when 'date'
+          # date_format likely will be '%m/%d/%Y', but if we got '19/8/2014',
+          # then `strptime` will raise invalid date error
           Date.strptime(value, @resultset.date_format)
           # Date.strptime(Date.parse(value).strftime(@resultset.date_format), @resultset.date_format)
         when 'time'

@@ -2,6 +2,7 @@ AllCops:
   Exclude:
     - .bundle/**
     - filemaker.gemspec
+    - lib/filemaker/error.rb
 
 Documentation:
   Enabled: false
