@@ -47,9 +47,9 @@ module Filemaker
       @portal_fields = {}
       @server = server
       @params = params # Useful for debugging
-      @xml = xml
 
       doc = Nokogiri::XML(xml).remove_namespaces!
+      @xml = doc.to_xml(indent: 2) # Just want to pretty print it
 
       error_code = doc.xpath('/fmresultset/error').attribute('code').value.to_i
       raise_potential_error!(error_code)

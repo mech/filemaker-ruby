@@ -166,5 +166,13 @@ describe Filemaker::Layout do
         expect(resultset.params['-recid']).to eq '123'
       end
     end
+
+    describe 'view' do
+      it 'retrieves layout information with zero record' do
+        resultset = @layout.view
+        expect(resultset.params).to have_key('-view')
+        expect(resultset.params['-view']).to eq ''
+      end
+    end
   end
 end
