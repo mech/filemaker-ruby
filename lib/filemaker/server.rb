@@ -121,6 +121,12 @@ module Filemaker
           else
             expanded['-sortorder.1'] = value
           end
+        when :lay_response
+          expanded['-lay.response'] = value
+        when :lop
+          expanded['-lop'] = value
+        when :modid
+          expanded['-modid'] = value
         end
       end
 

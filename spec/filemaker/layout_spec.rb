@@ -98,6 +98,16 @@ describe Filemaker::Layout do
         expect(resultset.params['day']).to eq '08/25/2014'
         expect(resultset.params['-max']).to eq 1
       end
+
+      it 'switches layout for response' do
+        resultset = @layout.find({}, lay_response: 'my_layout')
+        expect(resultset.params['-lay.response']).to eq 'my_layout'
+      end
+
+      it 'OR the query' do
+        resultset = @layout.find({}, lop: 'or')
+        expect(resultset.params['-lop']).to eq 'or'
+      end
     end
   end
 end
