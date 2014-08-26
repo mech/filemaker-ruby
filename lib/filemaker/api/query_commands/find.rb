@@ -38,7 +38,7 @@ module Filemaker
         if id_or_hash.is_a? Hash
           perform_request('-find', id_or_hash, options)
         else
-          perform_request('-find', { '-recid' => id_or_hash.to_s }, options)
+          perform_request('-find', { '-recid' => id_or_hash }, options)
         end
       end
     end
