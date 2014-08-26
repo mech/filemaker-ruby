@@ -120,5 +120,29 @@ describe Filemaker::Layout do
         expect(resultset.params['-recid']).to eq '1'
       end
     end
+
+    describe 'edit' do
+      it 'edits a record' do
+        resultset = @layout.edit(123, { first_name: 'Bob' }, modid: 55)
+        expect(resultset.params).to have_key('-edit')
+        expect(resultset.params['-db']).to eq 'candidates'
+        expect(resultset.params['-lay']).to eq 'Profile'
+        expect(resultset.params['-edit']).to eq ''
+        expect(resultset.params['-recid']).to eq '123'
+        expect(resultset.params['first_name']).to eq 'Bob'
+        expect(resultset.params['-modid']).to eq 55
+      end
+
+      it 'filters layout relatedset and returns all portal records' do
+        resultset = @layout.edit(123, { first_name: 'Bob' }, relatedsets_filter: 'layout', relatedsets_max: 'all')
+        expect(resultset.params['-relatedsets.filter']).to eq 'layout'
+        expect(resultset.params['-relatedsets.max']).to eq 'all'
+      end
+
+      it 'deletes a portal record using -edit' do
+        resultset = @layout.edit(123, {}, delete_related: 'jobtable.20')
+        expect(resultset.params['-delete.related']).to eq 'jobtable.20'
+      end
+    end
   end
 end

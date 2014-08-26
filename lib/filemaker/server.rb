@@ -127,6 +127,12 @@ module Filemaker
           expanded['-lop'] = value
         when :modid
           expanded['-modid'] = value
+        when :relatedsets_filter
+          expanded['-relatedsets.filter'] = value
+        when :relatedsets_max
+          expanded['-relatedsets.max'] = value
+        when :delete_related
+          expanded['-delete.related'] = value
         end
       end
 
