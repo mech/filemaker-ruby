@@ -134,7 +134,9 @@ describe Filemaker::Layout do
       end
 
       it 'filters layout relatedset and returns all portal records' do
-        resultset = @layout.edit(123, { first_name: 'Bob' }, relatedsets_filter: 'layout', relatedsets_max: 'all')
+        args = { first_name: 'Bob' }
+        options = { relatedsets_filter: 'layout', relatedsets_max: 'all' }
+        resultset = @layout.edit(123, args, options)
         expect(resultset.params['-relatedsets.filter']).to eq 'layout'
         expect(resultset.params['-relatedsets.max']).to eq 'all'
       end
