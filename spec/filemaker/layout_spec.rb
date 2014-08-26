@@ -109,5 +109,16 @@ describe Filemaker::Layout do
         expect(resultset.params['-lop']).to eq 'or'
       end
     end
+
+    describe 'delete' do
+      it 'deletes a record' do
+        resultset = @layout.delete(1)
+        expect(resultset.params).to have_key('-delete')
+        expect(resultset.params['-db']).to eq 'candidates'
+        expect(resultset.params['-lay']).to eq 'Profile'
+        expect(resultset.params['-delete']).to eq ''
+        expect(resultset.params['-recid']).to eq '1'
+      end
+    end
   end
 end
