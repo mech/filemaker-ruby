@@ -1,20 +1,21 @@
 module Filemaker
   module Api
     module QueryCommands
-      # Add new record.
+      # Duplicate record.
       #
+      # -recid
       # -script
       # -script.param
       # -relatedsets.filter
       # -relatedsets.max
       #
-      def new(values, options = {})
+      def dup(id, options = {})
         valid_options(options,
                       :script,
                       :relatedsets_filter,
                       :relatedsets_max)
 
-        perform_request('-new', values, options)
+        perform_request('-dup', { '-recid' => id }, options)
       end
     end
   end

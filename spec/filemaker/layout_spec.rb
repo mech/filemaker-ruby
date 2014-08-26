@@ -43,8 +43,6 @@ describe Filemaker::Layout do
         expect(resultset.params['-db']).to eq 'candidates'
         expect(resultset.params['-lay']).to eq 'Profile'
         expect(resultset.params['-findall']).to eq ''
-
-        puts resultset.params
       end
 
       it 'allows -max, -skip' do
@@ -155,6 +153,17 @@ describe Filemaker::Layout do
         expect(resultset.params['-lay']).to eq 'Profile'
         expect(resultset.params['-new']).to eq ''
         expect(resultset.params['first_name']).to eq 'Bob'
+      end
+    end
+
+    describe 'dup' do
+      it 'duplicates a record' do
+        resultset = @layout.dup(123)
+        expect(resultset.params).to have_key('-dup')
+        expect(resultset.params['-db']).to eq 'candidates'
+        expect(resultset.params['-lay']).to eq 'Profile'
+        expect(resultset.params['-dup']).to eq ''
+        expect(resultset.params['-recid']).to eq '123'
       end
     end
   end
