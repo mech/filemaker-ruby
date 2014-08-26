@@ -146,5 +146,16 @@ describe Filemaker::Layout do
         expect(resultset.params['-delete.related']).to eq 'jobtable.20'
       end
     end
+
+    describe 'new' do
+      it 'adds a new record' do
+        resultset = @layout.new({ first_name: 'Bob' })
+        expect(resultset.params).to have_key('-new')
+        expect(resultset.params['-db']).to eq 'candidates'
+        expect(resultset.params['-lay']).to eq 'Profile'
+        expect(resultset.params['-new']).to eq ''
+        expect(resultset.params['first_name']).to eq 'Bob'
+      end
+    end
   end
 end
