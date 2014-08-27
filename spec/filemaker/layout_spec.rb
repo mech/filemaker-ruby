@@ -174,5 +174,21 @@ describe Filemaker::Layout do
         expect(resultset.params['-view']).to eq ''
       end
     end
+
+    describe 'query' do
+      it 'transform {a: [1,2]} to (q0);(q1)' do
+        resultset = @layout.query(status: %w(open closed))
+        expect(resultset.params['-query']).to eq '(q0);(q1)'
+      end
+
+      it 'transforms [{a:1, b:2}, {c:3}, {d:4}, {e:5, "-omit": true}] to \
+        (q0,q1);(q2);(q3);!(q4)' do
+
+        resultset = @layout.query(
+          [{ a: 1, b: 2 }, { c: 3 }, { d: 4 }, { e: 5, '-omit' => true }]
+        )
+        expect(resultset.params['-query']).to eq '(q0,q1);(q2);(q3);!(q4)'
+      end
+    end
   end
 end

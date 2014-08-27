@@ -46,7 +46,7 @@ Once you are able to grab the `api`, you are golden and can make request to read
 
 ## Using the API
 
-`Filemaker::Api::QueryCommand` is the main modules to use the API.
+`Filemaker::Api::QueryCommands` is the main modules to use the API.
 
 * `api.find()` for `-find`
 * `api.findany()` for `-findany`
