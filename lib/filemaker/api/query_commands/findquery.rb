@@ -6,14 +6,14 @@ module Filemaker
       # query(status: 'open', title: 'web') => (q0,q1)
       # query(status: %w(open closed))      => (q0);(q1)
       #
-      def query(array_hash)
+      def query(array_hash, options = {})
         compound_find = CompoundFind.new(array_hash)
 
         query_hash = compound_find.key_values.merge(
           '-query' => compound_find.key_maps_string
         )
 
-        findquery(query_hash)
+        findquery(query_hash, options)
       end
 
       # Raw -findquery if you want to construct your own.
@@ -65,7 +65,8 @@ module Filemaker
           len = q_tag_array.length
           result = q_tag_array.flatten.combination(len).select do |c|
             q_tag_array.all? { |a| (a & c).size > 0 }
-          end.each { |c| c.unshift('-omit') if omit }
+          end
+          result = result.each { |c| c.unshift('-omit') if omit }
           @key_maps.concat result
         end
 

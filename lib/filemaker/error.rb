@@ -35,6 +35,7 @@ module Filemaker
     class ScriptMissingError < MissingError; end
     class LayoutMissingError < MissingError; end
     class TableMissingError < MissingError; end
+    class InvalidFieldError < StandardError; end
 
     class SecurityError < FilemakerError; end
     class RecordAccessDeniedError < SecurityError; end

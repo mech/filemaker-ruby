@@ -9,10 +9,13 @@ module Filemaker
     # @return [Hash] additional nested records
     attr_reader :portals
 
+    attr_reader :dirty
+
     def initialize(record, resultset, portal_table_name = nil)
       @mod_id    = record['mod-id']
       @record_id = record['record-id']
       @portals   = HashWithIndifferentAndCaseInsensitiveAccess.new
+      @dirty     = {} # Keep track of field modification
 
       record.xpath('field').each do |field|
         # `field` is Nokogiri::XML::Element
@@ -36,6 +39,21 @@ module Filemaker
       end
 
       build_portals(record.xpath('relatedset'), resultset)
+
+      @ready = true
+    end
+
+    def [](key)
+      fail(Filemaker::Error::InvalidFieldError, "Invalid field: #{key}") \
+        unless key?(key)
+      super
+    end
+
+    def []=(key, value)
+      return super unless @ready
+      fail(Filemaker::Error::InvalidFieldError, "Invalid field: #{key}") \
+        unless key?(key)
+      @dirty[key] = value
     end
 
     private
@@ -59,6 +77,13 @@ module Filemaker
     def normalize_data(datum)
       return nil if datum.empty?
       (datum.size == 1) ? datum.first : datum
+    end
+
+    def method_missing(symbol, *args, &block)
+      method = symbol.to_s
+      return self[method] if key?(method)
+      return @dirty[$`] = args.first if method =~ /(=)$/ && key?($`)
+      super
     end
   end
 end

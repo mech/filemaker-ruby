@@ -43,8 +43,23 @@ module Filemaker
         when 'date'
           # date_format likely will be '%m/%d/%Y', but if we got '19/8/2014',
           # then `strptime` will raise invalid date error
-          Date.strptime(value, @resultset.date_format)
-          # Date.strptime(Date.parse(value).strftime(@resultset.date_format), @resultset.date_format)
+          # Sometimes we can get '27/11 /1981' also :(
+          begin
+            Date.strptime(value, @resultset.date_format)
+          rescue
+            # We could be getting back these date:
+            # '17.12.95', '19/05/99', '27/11 /1981'
+            # '1959-07-03' will be beyong us, so consider returning nil
+            value = value.gsub(/-|\./, '/')
+            split = value.split('/').map(&:strip)
+            split[2] = "19#{split[2]}" if split[2].size == 2
+            value = split.join('/')
+
+            Date.strptime(
+              Date.parse(value)
+                .strftime(@resultset.date_format), @resultset.date_format
+            )
+          end
         when 'time'
           DateTime.strptime("1/1/-4712 #{value}", @resultset.timestamp_format)
         when 'timestamp'
@@ -54,9 +69,10 @@ module Filemaker
         else
           value
         end
-      rescue Exception => e
-        msg = "Could not coerce #{value} due to #{e.message}"
-        raise Filemaker::Error::CoerceError, msg
+      rescue
+        warn "Could not coerce #{value}. Return nil instead."
+        nil
+        # raise Filemaker::Error::CoerceError, msg
       end
 
       private

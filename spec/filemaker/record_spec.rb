@@ -40,8 +40,19 @@ describe Filemaker::Record do
 
   it 'has 2 portals' do
     expect(@record.portals.size).to eq 2
-    # Test for case insentive hash!
+    # Test for case insensitive hash!
     expect(@record.portals[:PORTAL_1]).to eq @record.portals['portal_1']
+  end
+
+  it 'key access as plain method' do
+    expect(@record.portalid).to eq '1234'
+  end
+
+  context 'dirty checking' do
+    it 'tracks changes if you modify any value' do
+      @record.year = 2014
+      expect(@record.dirty).to eq({ 'year' => 2014 })
+    end
   end
 
 end
