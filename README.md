@@ -94,6 +94,14 @@ development:
 
 ## Query DSL
 
+## Credits
+
+This project is heavily inspired by the following Filemaker Ruby effort and several other ORM gems.
+
+* [Original Rfm](https://github.com/lardawge/rfm)
+* [ginjo/rfm](https://github.com/ginjo/rfm)
+* [Mongoid](https://github.com/mongoid/mongoid)
+
 ## Contributing
 
 We welcome pull request with specs.

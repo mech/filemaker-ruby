@@ -134,6 +134,27 @@ module Filemaker
           expanded['-relatedsets.max'] = value
         when :delete_related
           expanded['-delete.related'] = value
+        when :script
+          if value.is_a? Array
+            expanded['-script'] = value[0]
+            expanded['-script.param'] = value[1]
+          else
+            expanded['-script'] = value
+          end
+        when :script_prefind
+          if value.is_a? Array
+            expanded['-script.prefind'] = value[0]
+            expanded['-script.prefind.param'] = value[1]
+          else
+            expanded['-script.prefind'] = value
+          end
+        when :script_presort
+          if value.is_a? Array
+            expanded['-script.presort'] = value[0]
+            expanded['-script.presort.param'] = value[1]
+          else
+            expanded['-script.presort'] = value
+          end
         end
       end
 

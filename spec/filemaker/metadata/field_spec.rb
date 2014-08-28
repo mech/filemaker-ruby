@@ -16,12 +16,12 @@ describe Filemaker::Metadata::Field do
       expect(field.coerce('')).to be_nil
     end
 
-    it 'converts to empty string for empty string' do
+    it 'converts to nil for space string' do
       allow(field).to receive(:data_type).and_return 'text'
       expect(field.coerce('   ')).to be_nil
     end
 
-    it 'converts to empty string for empty string' do
+    it 'converts to nil for nil' do
       allow(field).to receive(:data_type).and_return 'text'
       expect(field.coerce(nil)).to be_nil
     end

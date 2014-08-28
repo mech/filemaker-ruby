@@ -190,5 +190,40 @@ describe Filemaker::Layout do
         expect(resultset.params['-query']).to eq '(q0,q1);(q2);(q3);!(q4)'
       end
     end
+
+    context 'script, prefind, and presort' do
+      it 'can do -script' do
+        resultset = @layout.find(1, script: 'Remove Duplicates')
+        expect(resultset.params['-script']).to eq 'Remove Duplicates'
+      end
+
+      it 'can do -script.param' do
+        resultset = @layout.find(1, script: ['Remove Duplicates', 'reverse'])
+        expect(resultset.params['-script']).to eq 'Remove Duplicates'
+        expect(resultset.params['-script.param']).to eq 'reverse'
+      end
+
+      it 'can do -script.prefind' do
+        resultset = @layout.find(1, script_prefind: 'Unique')
+        expect(resultset.params['-script.prefind']).to eq 'Unique'
+      end
+
+      it 'can do -script.prefind.param' do
+        resultset = @layout.find(1, script_prefind: %w(Unique yes))
+        expect(resultset.params['-script.prefind']).to eq 'Unique'
+        expect(resultset.params['-script.prefind.param']).to eq 'yes'
+      end
+
+      it 'can do -script.presort' do
+        resultset = @layout.find(1, script_presort: 'Order')
+        expect(resultset.params['-script.presort']).to eq 'Order'
+      end
+
+      it 'can do -script.presort.param' do
+        resultset = @layout.find(1, script_presort: %w(Order ascend))
+        expect(resultset.params['-script.presort']).to eq 'Order'
+        expect(resultset.params['-script.presort.param']).to eq 'ascend'
+      end
+    end
   end
 end
