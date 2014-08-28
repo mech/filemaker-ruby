@@ -52,6 +52,7 @@ module Filemaker
       when 401 then fail Error::AuthenticationError, 'Auth failed.'
       when 0   then fail Error::CommunicationError, 'Empty response.'
       when 404 then fail Error::CommunicationError, 'HTTP 404 Not Found'
+      when 302 then fail Error::CommunicationError, 'Redirect not supported'
       else
         msg = "Unknown response status = #{response.status}"
         fail Error::CommunicationError, msg
