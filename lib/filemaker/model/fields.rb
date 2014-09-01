@@ -34,10 +34,6 @@ module Filemaker
         fields.values.map(&:fm_name)
       end
 
-      def to_a
-        [self]
-      end
-
       module ClassMethods
         def attribute_names
           fields.keys
@@ -45,6 +41,7 @@ module Filemaker
 
         %w(string date datetime money integer number).each do |type|
           define_method(type) do |*args|
+            # TODO: It will be good if we can accept lambda also
             options = args.last.is_a?(Hash) ? args.pop : {}
             field_names = args
 
@@ -62,8 +59,10 @@ module Filemaker
         def create_accessors(name)
           define_method(name) { attributes[name] }
           define_method("#{name}=") do |value|
-            # Make use of fields[name] to do coercion
             attributes[name] = fields[name].coerce(value)
+          end
+          define_method("#{name}?") do
+            attributes[name] == true || attributes[name].present?
           end
         end
       end

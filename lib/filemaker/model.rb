@@ -1,16 +1,45 @@
 module Filemaker
-  # Give ActiveModel-like behaviors for easy Rails integration.
   module Model
     extend ActiveSupport::Concern
+    include ActiveModel::Model # Love ActionPack
+    include ActiveModel::Serializers::JSON
+    include ActiveModel::Serializers::Xml
     include Fields
+
+    attr_reader :new_record
 
     included do
       class_attribute :db, :lay
     end
 
     def initialize(attrs = nil)
-      @attributes ||= {}
+      @new_record = true
+      @attributes = {}
       apply_defaults
+      process_attributes(attrs)
+    end
+
+    def new_record?
+      @new_record
+    end
+
+    def persisted?
+      !new_record?
+    end
+
+    def to_a
+      [self]
+    end
+
+    private
+
+    def process_attributes(attrs)
+      attrs ||= {}
+      return if attrs.empty?
+
+      attrs.each_pair do |key, value|
+        public_send("#{key}=", value) if respond_to?("#{key}=")
+      end
     end
 
     module ClassMethods
