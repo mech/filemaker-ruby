@@ -71,8 +71,9 @@ class Job
   database :jobs
   layout :job
 
-  string :title, :requirements
+  string   :title, :requirements
   datetime :created_at, :published_at
+  money    :salary
 
   validates :title, presence: true
 
@@ -94,6 +95,18 @@ development:
 
 ## Query DSL
 
+```
+Query.where(gender: 'male', age: '< 50')      # AND
+Query.in(nationality: %w(Singapore Malaysia)) # AND
+Query.or(nationality: %w(Singapore Malaysia)) # OR
+
+Query.where(gender: 'male').not(age: '=40')   # Negation
+Query.not(name: 'Lee', age: '< 40')           # NOT - AND
+Query.not({name: 'Lee'}, {age: '< 40'})       # NOT - OR
+Query.not_in(nationality: %w(USA UK))
+Query.not_or(nationality: %w(USA UK))
+```
+
 ## Credits
 
 This project is heavily inspired by the following Filemaker Ruby effort and several other ORM gems.
@@ -101,6 +114,7 @@ This project is heavily inspired by the following Filemaker Ruby effort and seve
 * [Rfm](https://github.com/lardawge/rfm)
 * [ginjo/rfm](https://github.com/ginjo/rfm)
 * [mongoid](https://github.com/mongoid/mongoid)
+* [origin](https://github.com/mongoid/origin)
 * [elasticsearch-ruby](https://github.com/elasticsearch/elasticsearch-ruby)
 
 ## Contributing

@@ -11,3 +11,13 @@ require 'filemaker/record'
 require 'filemaker/layout'
 require 'filemaker/script'
 require 'filemaker/error'
+
+require 'active_support'
+require 'active_support/core_ext'
+require 'active_model'
+
+require 'filemaker/model/field'
+require 'filemaker/model/fields'
+require 'filemaker/model'
+
+require 'filemaker/railtie' if defined?(Rails)

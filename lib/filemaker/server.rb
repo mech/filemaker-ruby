@@ -39,8 +39,8 @@ module Filemaker
         .merge(expand_options(options))
         .merge({ action => '' })
 
-      # Serialize the params for submission
-      params = params.stringify_keys
+      # Serialize the params for submission??
+      params.stringify_keys!
 
       log_action(params)
 
