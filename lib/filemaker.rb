@@ -16,8 +16,20 @@ require 'active_support'
 require 'active_support/core_ext'
 require 'active_model'
 
-require 'filemaker/model/field'
-require 'filemaker/model/fields'
+require 'filemaker/model/criteria'
 require 'filemaker/model'
+
+module Filemaker
+  module_function
+
+  # def load!(path_to_yaml)
+  #   registry[:default] = Filemaker::Server.new do |config|
+  #   end
+  # end
+
+  # def registry
+  #   @registry ||= {}
+  # end
+end
 
 require 'filemaker/railtie' if defined?(Rails)

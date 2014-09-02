@@ -1,3 +1,5 @@
+require 'filemaker/model/field'
+
 module Filemaker
   module Model
     module Fields
@@ -32,6 +34,11 @@ module Filemaker
 
       def fm_names
         fields.values.map(&:fm_name)
+      end
+
+      def find_fm_name_by_name(name)
+        field = fields.values.find { |f| f.name == name.to_sym }
+        field.fm_name if field
       end
 
       module ClassMethods

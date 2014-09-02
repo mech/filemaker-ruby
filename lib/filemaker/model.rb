@@ -1,10 +1,9 @@
+require 'filemaker/model/components'
+
 module Filemaker
   module Model
     extend ActiveSupport::Concern
-    include ActiveModel::Model # Love ActionPack
-    include ActiveModel::Serializers::JSON
-    include ActiveModel::Serializers::Xml
-    include Fields
+    include Components
 
     attr_reader :new_record
 
@@ -20,7 +19,7 @@ module Filemaker
     end
 
     def new_record?
-      @new_record
+      new_record
     end
 
     def persisted?

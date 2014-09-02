@@ -13,7 +13,7 @@ module Filemaker
 
     %w(host account_name password).each do |name|
       define_method "#{name}_missing?" do
-        (send(name.to_sym) || '').empty?
+        (public_send(name.to_sym) || '').empty?
       end
     end
 

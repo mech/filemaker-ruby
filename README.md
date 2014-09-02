@@ -96,16 +96,40 @@ development:
 ## Query DSL
 
 ```
-Query.where(gender: 'male', age: '< 50')      # AND
-Query.in(nationality: %w(Singapore Malaysia)) # AND
-Query.or(nationality: %w(Singapore Malaysia)) # OR
+# Using -find
 
-Query.where(gender: 'male').not(age: '=40')   # Negation
-Query.not(name: 'Lee', age: '< 40')           # NOT - AND
-Query.not({name: 'Lee'}, {age: '< 40'})       # NOT - OR
-Query.not_in(nationality: %w(USA UK))
-Query.not_or(nationality: %w(USA UK))
+Model.where(gender: 'male', age: '< 50')      # Default -lop=and
+Model.where(gender: 'male').or(age: '< 50')   # -lop=or
+Model.where(gender: 'male').not(age: '=40')   # age.op=neq  
+Model.where('salary.gt' => 4000)              # Operator
+
+Model.where(gender: 'male').or(name: 'Lee').not(age: '=40') 
+
+# Using -findquery (OR broadens the found set and AND narrows it)
+
+# (q0);(q1)
+# (Singapore) OR (Malaysia)
+Model.in(nationality: %w(Singapore Malaysia))
+
+# (q0,q2);(q1,q2)
+# (Singapore AND male) OR (Malaysia AND male)
+Model.in(nationality: %w(Singapore Malaysia), gender: 'male')
+
+# !(q0);!(q1)
+# NOT(Singapore) OR NOT(Malaysia)
+Model.not_in(nationality: %w(Singapore Malaysia))
+
+# !(q0,q1)
+Model.not(name: 'Lee', age: '< 40')
+
+# !(q0);!(q1)
+Model.not({name: 'Lee'}, {age: '< 40'})
+
+# (q0);(q1);!(q2,q3)
+Model.in(nationality: %w(Singapore Malaysia)).not(name: 'Lee', age: '< 40')
 ```
+
+- [ ] Please test the above query with real data to ensure correctness!
 
 ## Credits
 

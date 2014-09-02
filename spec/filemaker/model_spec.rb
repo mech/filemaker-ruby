@@ -1,23 +1,12 @@
 describe Filemaker::Model do
 
-  class MyModel
-    include Filemaker::Model
-
-    database :candidates
-    layout :profile
-
-    string :name, :email, default: 'UNTITLED'
-    money :salary
-    string :candidate_id, fm_name: 'CA ID'
-    date :created_at
-    datetime :updated_at, fm_name: 'ModifiedDate'
-  end
-
   let(:model) { MyModel.new }
 
   it 'sets up -db and -lay' do
     expect(MyModel.db).to eq :candidates
     expect(MyModel.lay).to eq :profile
+    expect(model.db).to eq :candidates
+    expect(model.lay).to eq :profile
   end
 
   it 'is a new record' do
@@ -31,7 +20,7 @@ describe Filemaker::Model do
 
   it 'stores the real FileMaker name under fm_name' do
     expect(model.fm_names).to eq \
-      ['name', 'email', 'salary', 'CA ID', 'created_at', 'ModifiedDate']
+      ['name', 'email', 'CA ID', 'created_at', 'ModifiedDate', 'salary']
   end
 
   it 'salary is BigDecimal' do
@@ -57,6 +46,11 @@ describe Filemaker::Model do
       expect(model.name).to eq 'Bob'
       expect(model.email).to eq 'bob@cern.org'
     end
+
+    # it 'is fun', :focus do
+    #   Filemaker.load!('hey')
+    #   puts Filemaker.registry
+    # end
   end
 
 end

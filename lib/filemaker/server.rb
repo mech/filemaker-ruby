@@ -20,7 +20,7 @@ module Filemaker
     def initialize(options = {})
       @config = Configuration.new
       yield @config if block_given?
-      fail ArgumentError if @config.not_configurable?
+      fail ArgumentError, 'Missing config block' if @config.not_configurable?
 
       @databases = Store::DatabaseStore.new(self)
       @connection = get_connection(options)
@@ -45,7 +45,7 @@ module Filemaker
       log_action(params)
 
       # yield params if block_given?
-      response = @connection.__send__(method, endpoint, params)
+      response = @connection.public_send(method, endpoint, params)
 
       case response.status
       when 200 then [response, params]

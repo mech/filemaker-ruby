@@ -82,3 +82,16 @@ RSpec.configure do |config|
   end
 
 end
+
+class MyModel
+  include Filemaker::Model
+
+  database :candidates
+  layout :profile
+
+  string :name, :email, default: 'UNTITLED'
+  string :candidate_id, fm_name: 'CA ID'
+  date :created_at
+  datetime :updated_at, fm_name: 'ModifiedDate'
+  money :salary
+end
