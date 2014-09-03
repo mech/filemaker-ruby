@@ -2,7 +2,9 @@ module Filemaker
   module Model
     module Optional
       # Number of records to skip. For pagination.
+      #
       # @param [Integer] value The number to skip.
+      #
       # @return [Filemaker::Model::Criteria]
       def skip(value)
         return self if value.nil?
@@ -11,7 +13,9 @@ module Filemaker
       end
 
       # Limit the number of records returned.
+      #
       # @param [Integer] value The number of records to return.
+      #
       # @return [Filemaker::Model::Criteria]
       def limit(value)
         return self if value.nil?
@@ -19,11 +23,14 @@ module Filemaker
         self
       end
 
-      # Order the records.
+      # Order the records. Model field name will be converted to real FileMaker
+      # field name.
+      #
       # @example Sort is position aware!
       #   criteria.order('name desc, email')
       #
       # @param [String] value The sorting string
+      #
       # @return [Filemaker::Model::Criteria]
       def order(value)
         return self if value.nil?
@@ -35,13 +42,13 @@ module Filemaker
           field, order = spec.split(' ')
           order = 'asc' unless order
 
-          fm_name = klass.find_fm_name_by_name(field)
+          field = model.field_by_name(field)
 
-          if fm_name
+          if field
             order = 'ascend' if order.downcase == 'asc'
             order = 'descend' if order.downcase == 'desc'
 
-            sortfield << fm_name
+            sortfield << field.fm_name
             sortorder << order
           end
         end

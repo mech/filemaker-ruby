@@ -5,7 +5,11 @@ module Filemaker
     extend ActiveSupport::Concern
     include Components
 
+    # @return [Boolean] indicates if this is a new fresh record
     attr_reader :new_record
+
+    # @return [Filemaker::Layout] the raw API for you to make low-level call
+    attr_reader :api
 
     included do
       class_attribute :db, :lay

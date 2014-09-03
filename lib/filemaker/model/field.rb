@@ -10,6 +10,7 @@ module Filemaker
         @fm_name = (options.fetch(:fm_name) { name }).to_s
       end
 
+      # From FileMaker to Ruby
       def coerce(value)
         return nil if value.nil?
 
@@ -18,13 +19,13 @@ module Filemaker
         elsif @type == Integer
           value.to_i
         elsif @type == BigDecimal
-          BigDecimal.new(value)
+          BigDecimal.new(value.to_s)
         elsif @type == Date
           return value if value.is_a? Date
-          Date.parse(value)
+          Date.parse(value.to_s)
         elsif @type == DateTime
           return value if value.is_a? DateTime
-          DateTime.parse(value)
+          DateTime.parse(value.to_s)
         else
           value
         end

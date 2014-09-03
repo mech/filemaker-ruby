@@ -91,7 +91,6 @@ describe Filemaker::Layout do
       it 'finds some records with criteria' do
         args = { name: 'Bob', day: Date.parse('25/8/2014') }
         resultset = @layout.find(args, max: 1)
-
         expect(resultset.params['name']).to eq 'Bob'
         expect(resultset.params['day']).to eq '08/25/2014'
         expect(resultset.params['-max']).to eq 1

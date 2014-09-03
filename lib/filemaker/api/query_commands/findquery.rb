@@ -18,6 +18,18 @@ module Filemaker
 
       # Raw -findquery if you want to construct your own.
       def findquery(query_hash, options = {})
+        valid_options(options,
+                      :max,
+                      :skip,
+                      :sortfield,
+                      :sortorder,
+                      :lay_response,
+                      :script,
+                      :script_prefind,
+                      :script_presort,
+                      :relatedsets_filter,
+                      :relatedsets_max)
+
         perform_request('-findquery', query_hash, options)
       end
 

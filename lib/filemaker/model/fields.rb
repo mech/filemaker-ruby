@@ -36,9 +36,12 @@ module Filemaker
         fields.values.map(&:fm_name)
       end
 
-      def find_fm_name_by_name(name)
-        field = fields.values.find { |f| f.name == name.to_sym }
-        field.fm_name if field
+      # Find FileMaker's real name given either the attribute name or the real
+      # FileMaker name.
+      def field_by_name(name)
+        fields.values.find do |f|
+          f.name == name.to_sym || f.fm_name == name.to_s
+        end
       end
 
       module ClassMethods

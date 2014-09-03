@@ -71,8 +71,10 @@ class Job
   database :jobs
   layout :job
 
+  string   :job_id, fm_name: 'JobOrderID', id: true
   string   :title, :requirements
-  datetime :created_at, :published_at
+  datetime :created_at
+  datetime :published_at, fm_name: 'ModifiedDate'
   money    :salary
 
   validates :title, presence: true
@@ -95,21 +97,44 @@ development:
 
 ## Query DSL
 
-```
-# Using -find
+### Using -find
 
+```ruby
 Model.where(gender: 'male', age: '< 50')      # Default -lop=and
 Model.where(gender: 'male').or(age: '< 50')   # -lop=or
-Model.where(gender: 'male').not(age: '=40')   # age.op=neq  
-Model.where('salary.gt' => 4000)              # Operator
+Model.where(gender: 'male').not(age: 40)   # age.op=neq  
 
-Model.where(gender: 'male').or(name: 'Lee').not(age: '=40') 
+# Supply a block to configure additional options like -script, -script.prefind, -lay.response, etc
+Model.where(gender: 'male').or(age: '< 50') do |option|
+  option[:script] = ['RemoveDuplicates', 20]
+end
 
-# Using -findquery (OR broadens the found set and AND narrows it)
+Model.where(gender: 'male').or(name: 'Lee').not(age: '=40')
 
+# Comparison operator
+
+Model.equals(candidate_id: '123')         # { candidate_id: '=123' }
+Model.contains(name: 'Chong')             # { name: '*Chong*' }
+Model.begins_with(salary: '2000...4000')  # ??
+Model.ends_with(name: 'Yong')             # { name: '*Yong' }
+Model.gt(age: 20)
+Model.gte(age: 20)
+Model.lt(age: 20)
+Model.lte(age: 20)
+Model.not(name: 'Bob')
+```
+
+### Using -findquery
+
+OR broadens the found set and AND narrows it
+
+```ruby
 # (q0);(q1)
 # (Singapore) OR (Malaysia)
 Model.in(nationality: %w(Singapore Malaysia))
+
+# (q0);(q1);(q2);(q3)
+Model.in({ nationality: %w(Singapore Malaysia) }, { age: [20, 30] })
 
 # (q0,q2);(q1,q2)
 # (Singapore AND male) OR (Malaysia AND male)
@@ -120,16 +145,19 @@ Model.in(nationality: %w(Singapore Malaysia), gender: 'male')
 Model.not_in(nationality: %w(Singapore Malaysia))
 
 # !(q0,q1)
-Model.not(name: 'Lee', age: '< 40')
+Model.not_in(name: 'Lee', age: '< 40')
 
 # !(q0);!(q1)
-Model.not({name: 'Lee'}, {age: '< 40'})
+# Must be within an array of hashes
+Model.not_in([{ name: 'Lee' }, { age: '< 40' }])
 
 # (q0);(q1);!(q2,q3)
-Model.in(nationality: %w(Singapore Malaysia)).not(name: 'Lee', age: '< 40')
+Model.in(nationality: %w(Singapore Malaysia)).not_in(name: 'Lee', age: '< 40')
 ```
 
 - [ ] Please test the above query with real data to ensure correctness!
+- [ ] Please test the comparison operators with keyword as well as applied to value.
+- [ ] Test serialization of BigDecimal and other types.
 
 ## Credits
 

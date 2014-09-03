@@ -69,6 +69,9 @@ module Filemaker
     class UnableToCreateTempFileError < FileError; end
     class UnableToOpenFileError < FileError; end
 
+    class QueryError < StandardError; end
+    class MixedClauseError < QueryError; end
+
     def self.raise_error_by_code(code)
       msg = error_message_by_code(code)
       error_class = find_error_class_by_code(code)
