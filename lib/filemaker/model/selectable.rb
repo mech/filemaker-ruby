@@ -148,7 +148,8 @@ module Filemaker
 
             accepted_fields[field.fm_name] = temp
           else
-            accepted_fields[field.fm_name] = coerce ? field.coerce(value) : value
+            accepted_fields[field.fm_name] = \
+              coerce ? field.coerce(value) : value
           end
         end
 

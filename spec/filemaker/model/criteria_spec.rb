@@ -231,6 +231,12 @@ describe Filemaker::Model::Criteria do
         compound_find = cf.new(criteria.selector)
         expect(compound_find.key_maps_string).to eq '!(q0);!(q1,q2)'
       end
+
+      it 'using in and not_in at the same time' do
+        criteria.in(name: %w(Bob Lee)).not_in(age: 20, email: 'A')
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq '(q0);(q1);!(q2,q3)'
+      end
     end
   end
 
