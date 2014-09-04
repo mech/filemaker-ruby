@@ -41,18 +41,18 @@ module Filemaker
         sort_spec = value.split(',').map(&:strip)
 
         sort_spec.each do |spec|
-          field, order = spec.split(' ')
-          order = 'asc' unless order
+          fieldname, direction = spec.split(' ')
+          direction = 'asc' unless direction
 
-          field = model.field_by_name(field)
+          field = model.field_by_name(fieldname)
 
           next unless field
 
-          order = 'ascend' if order.downcase == 'asc'
-          order = 'descend' if order.downcase == 'desc'
+          direction = 'ascend' if direction.downcase == 'asc'
+          direction = 'descend' if direction.downcase == 'desc'
 
           sortfield << field.fm_name
-          sortorder << order
+          sortorder << direction
         end
 
         unless sortfield.empty?
