@@ -157,6 +157,63 @@ describe Filemaker::Model::Criteria do
           [{ 'name' => 'Bob' }, { 'passage of time' => 20, 'email' => 'A' }]
       end
     end
+
+    describe 'not_in' do
+      it '{a: [1, 2]} to !(q0);!(q1)' do
+        criteria.not_in(name: %w(Bob Lee))
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq '!(q0);!(q1)'
+      end
+
+      it '{a: [1, 2], b: [3, 4]} to !(q0,q2);!(q0,q3);!(q1,q2);!(q1,q3)' do
+        criteria.not_in(name: %w(Bob Lee), age: ['20', 30])
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq \
+          '!(q0,q2);!(q0,q3);!(q1,q2);!(q1,q3)'
+      end
+
+      it '{a: [1, 2], b: 3} to !(q0,q2);!(q1,q2)' do
+        criteria.not_in(name: %w(Bob Lee), age: '30')
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq '!(q0,q2);!(q1,q2)'
+      end
+
+      it '{a: 1, b: 2} to !(q0,q1)' do
+        criteria.not_in(name: 'Bob', age: 30)
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq '!(q0,q1)'
+      end
+
+      it '{a: 1, b: [2, 3]} to !(q0,q1);!(q0,q2)' do
+        criteria.not_in(name: 'Bob', age: [20, 30])
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq '!(q0,q1);!(q0,q2)'
+      end
+
+      it '[{a: [1, 2]}, {b: [1, 2]}] to !(q0);!(q1);!(q2);!(q3)' do
+        criteria.not_in([{ name: %w(Bob Lee) }, { age: [20, 30] }])
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq '!(q0);!(q1);!(q2);!(q3)'
+      end
+
+      it '[{a: 1}, {b: 2}] to !(q0);!(q1)' do
+        criteria.not_in([{ name: 'Bob' }, { age: 20 }])
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq '!(q0);!(q1)'
+      end
+
+      it '[{a: 1}, {b: [1, 2]}] to !(q0);!(q1);!(q2)' do
+        criteria.not_in([{ name: 'Bob' }, { age: [20, 30] }])
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq '!(q0);!(q1);!(q2)'
+      end
+
+      it '[{a: 1}, {b: 1, c: 2}] to !(q0);!(q1,q2)' do
+        criteria.not_in([{ name: 'Bob' }, { age: 20, email: 'A' }])
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq '!(q0);!(q1,q2)'
+      end
+    end
   end
 
   context 'optional' do

@@ -62,7 +62,17 @@ module Filemaker
       alias_method :not, :neq
 
       # Find records based on FileMaker's compound find syntax.
-      def in(criterion)
+      #
+      # @example Find using a single hash
+      #   Model.in(nationality: %w(Singapore Malaysia))
+      #
+      # @example Find using an array of hashes
+      #   Model.in([{nationality: %w(Singapore Malaysia)}, {age: [20, 30]}])
+      #
+      # @param [Hash, Array]
+      #
+      # @return [Filemaker::Model::Criteria]
+      def in(criterion, negating = false)
         fail Filemaker::Error::MixedClauseError,
              "Can't mix 'in' with 'where'." if chains.include?(:where)
         chains.push(:in)
@@ -70,11 +80,17 @@ module Filemaker
 
         become_array(criterion).each do |hash|
           accepted_hash = with_model_fields(hash)
+          accepted_hash.merge!('-omit' => true) if negating
           @selector << accepted_hash
         end
 
         yield options if block_given?
         self
+      end
+
+      # Simply append '-omit' => true to all criteria
+      def not_in(criterion)
+        self.in(criterion, true)
       end
 
       # Used with `where` to specify how the queries are combined. Default is
