@@ -40,17 +40,27 @@ module Filemaker
       end
 
       %w(eq cn bw ew gt gte lt lte neq).each do |operator|
-        define_method operator do |criterion|
+        define_method(operator) do |criterion, &block|
           fail Filemaker::Error::MixedClauseError,
                "Can't mix 'where' with 'in'." if chains.include?(:in)
           chains.push(operator.to_sym)
           @selector ||= {}
-          criterion = with_model_fields(criterion)
+
+          if operator == 'bw'
+            criterion = with_model_fields(criterion, false)
+          else
+            criterion = with_model_fields(criterion)
+          end
+
           criterion.each_key do |key|
             selector["#{key}.op"] = operator
           end
 
           selector.merge!(criterion)
+
+          # Inside define_method, we cannot have yield or block_given?, so we
+          # just use &block
+          block.call(options) if block
           self
         end
       end
@@ -120,7 +130,7 @@ module Filemaker
       # is an array. Without the test and expectation setup, debugging the
       # output will take far longer to realise. This reinforce the belief that
       # TDD is in fact a valuable thing to do.
-      def with_model_fields(criterion)
+      def with_model_fields(criterion, coerce = true)
         accepted_fields = {}
 
         criterion.each_pair do |key, value|
@@ -133,12 +143,12 @@ module Filemaker
           if value.is_a? Array
             temp = []
             value.each do |v|
-              temp << field.coerce(v)
+              temp << (coerce ? field.coerce(v) : v)
             end
 
             accepted_fields[field.fm_name] = temp
           else
-            accepted_fields[field.fm_name] = field.coerce(value)
+            accepted_fields[field.fm_name] = coerce ? field.coerce(value) : value
           end
         end
 

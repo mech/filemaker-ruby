@@ -86,6 +86,7 @@ module Filemaker
         when DateTime then args[key] = value.strftime('%m/%d/%Y %H:%M:%S')
         when Time     then args[key] = value.strftime('%H:%M')
         else
+          # Especially for range operator (...), we want to output as String
           args[key] = value.to_s
         end
       end

@@ -68,10 +68,28 @@ describe Filemaker::Model::Criteria do
       end
 
       describe 'not' do
-        it 'append neq operator on the field name' do
+        it 'appends neq operator on the field name' do
           criteria.not(salary: 50)
           expect(criteria.selector['salary']).to eq 50
           expect(criteria.selector['salary.op']).to eq 'neq'
+        end
+      end
+
+      describe 'cn' do
+        it 'appends cn operator on the field name' do
+          criteria.cn(name: 'Chong') do |options|
+            options[:script] = 'Remove Duplicates'
+          end
+
+          expect(criteria.selector['name']).to eq 'Chong'
+          expect(criteria.selector['name.op']).to eq 'cn'
+        end
+      end
+
+      describe 'bw' do
+        it 'can do range operation ...' do
+          criteria.bw(salary: '3000...4500')
+          expect(criteria.selector['salary']).to eq '3000...4500'
         end
       end
 
