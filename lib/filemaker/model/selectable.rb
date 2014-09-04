@@ -124,7 +124,7 @@ module Filemaker
         accepted_fields = {}
 
         criterion.each_pair do |key, value|
-          field = model.field_by_name(key)
+          field = model.find_field_by_name(key)
 
           next unless field
 

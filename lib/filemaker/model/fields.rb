@@ -38,7 +38,7 @@ module Filemaker
 
       # Find FileMaker's real name given either the attribute name or the real
       # FileMaker name.
-      def field_by_name(name)
+      def find_field_by_name(name)
         fields.values.find do |f|
           f.name == name.to_sym || f.fm_name == name.to_s
         end

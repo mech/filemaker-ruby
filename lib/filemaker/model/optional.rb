@@ -44,7 +44,7 @@ module Filemaker
           fieldname, direction = spec.split(' ')
           direction = 'asc' unless direction
 
-          field = model.field_by_name(fieldname)
+          field = model.find_field_by_name(fieldname)
 
           next unless field
 
