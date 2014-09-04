@@ -9,6 +9,7 @@ module Filemaker
       def skip(value)
         return self if value.nil?
         options[:skip] = value.to_i
+        yield options if block_given?
         self
       end
 
@@ -20,6 +21,7 @@ module Filemaker
       def limit(value)
         return self if value.nil?
         options[:max] = value.to_i
+        yield options if block_given?
         self
       end
 
@@ -44,19 +46,21 @@ module Filemaker
 
           field = model.field_by_name(field)
 
-          if field
-            order = 'ascend' if order.downcase == 'asc'
-            order = 'descend' if order.downcase == 'desc'
+          next unless field
 
-            sortfield << field.fm_name
-            sortorder << order
-          end
+          order = 'ascend' if order.downcase == 'asc'
+          order = 'descend' if order.downcase == 'desc'
+
+          sortfield << field.fm_name
+          sortorder << order
         end
 
         unless sortfield.empty?
           options[:sortfield] = sortfield
           options[:sortorder] = sortorder
         end
+
+        yield options if block_given?
 
         self
       end

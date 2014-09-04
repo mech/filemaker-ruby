@@ -20,7 +20,15 @@ describe Filemaker::Model do
 
   it 'stores the real FileMaker name under fm_name' do
     expect(model.fm_names).to eq \
-      ['name', 'email', 'CA ID', 'created_at', 'ModifiedDate', 'salary', 'passage of time']
+      [
+        'name',
+        'email',
+        'CA ID',
+        'created_at',
+        'ModifiedDate',
+        'salary',
+        'passage of time'
+      ]
   end
 
   it 'salary is BigDecimal' do

@@ -51,6 +51,10 @@ module Filemaker
           translate_key_maps
         end
 
+        def to_s
+          "#{key_values}, #{key_maps_string}"
+        end
+
         private
 
         def build_key_values(hash)

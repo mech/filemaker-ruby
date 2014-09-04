@@ -32,7 +32,7 @@ module Filemaker
         return where(criterion) if criterion.is_a? Hash
 
         # Find using model ID (may not be the -recid)
-        id = criterion.gsub(/\A=*/, '=') # Always append '=' for ID
+        _id = criterion.gsub(/\A=*/, '=') # Always append '=' for ID
 
         # If we are finding with ID, we just limit to one and return
         # immediately.
@@ -46,7 +46,7 @@ module Filemaker
           chains.push(operator.to_sym)
           @selector ||= {}
           criterion = with_model_fields(criterion)
-          criterion.each_pair do |key, value|
+          criterion.each_key do |key|
             selector["#{key}.op"] = operator
           end
 
@@ -99,15 +99,31 @@ module Filemaker
       private
 
       # Filter out any fields that do not match model's fields.
+      #
+      # A testing story to tell: when working on `in` query, we have value that
+      # is an array. Without the test and expectation setup, debugging the
+      # output will take far longer to realise. This reinforce the belief that
+      # TDD is in fact a valuable thing to do.
       def with_model_fields(criterion)
         accepted_fields = {}
 
         criterion.each_pair do |key, value|
           field = model.field_by_name(key)
 
+          next unless field
+
           # We do not serialize at this point, as we are still in Ruby-land.
           # Filemaker::Server will help us serialize into FileMaker format.
-          accepted_fields[field.fm_name] = field.coerce(value) if field
+          if value.is_a? Array
+            temp = []
+            value.each do |v|
+              temp << field.coerce(v)
+            end
+
+            accepted_fields[field.fm_name] = temp
+          else
+            accepted_fields[field.fm_name] = field.coerce(value)
+          end
         end
 
         accepted_fields

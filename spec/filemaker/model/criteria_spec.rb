@@ -2,6 +2,7 @@ describe Filemaker::Model::Criteria do
 
   let(:model) { MyModel.new }
   let(:criteria) { Filemaker::Model::Criteria.new(model) }
+  let(:cf) { Filemaker::Api::QueryCommands::CompoundFind }
 
   context 'selectable' do
     describe 'where' do
@@ -75,6 +76,86 @@ describe Filemaker::Model::Criteria do
       end
 
       # TODO: Do more operator tests
+    end
+
+    describe 'in' do
+      it 'raises MixedClauseError if mixed with -find' do
+        expect do
+          criteria.where(name: 'Bob').in(status: %w(pending subscribed))
+        end.to raise_error Filemaker::Error::MixedClauseError
+      end
+
+      it '{a: [1, 2]} to (q0);(q1)' do
+        criteria.in(name: %w(Bob Lee))
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq '(q0);(q1)'
+        expect(criteria.selector).to eq [{ 'name' => %w(Bob Lee) }]
+      end
+
+      it '{a: [1, 2], b: [3, 4]} to (q0,q2);(q0,q3);(q1,q2);(q1,q3)' do
+        criteria.in(name: %w(Bob Lee), age: ['20', 30])
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq \
+          '(q0,q2);(q0,q3);(q1,q2);(q1,q3)'
+        expect(criteria.selector).to eq \
+          [{ 'name' => %w(Bob Lee), 'passage of time' =>  [20, 30] }]
+      end
+
+      it '{a: [1, 2], b: 3} to (q0,q2);(q1,q2)' do
+        criteria.in(name: %w(Bob Lee), age: '30')
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq '(q0,q2);(q1,q2)'
+        expect(criteria.selector).to eq \
+          [{ 'name' => %w(Bob Lee), 'passage of time' => 30 }]
+      end
+
+      it '{a: 1, b: 2} to (q0,q1)' do
+        criteria.in(name: 'Bob', age: 30)
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq '(q0,q1)'
+        expect(criteria.selector).to eq \
+          [{ 'name' => 'Bob', 'passage of time' => 30 }]
+      end
+
+      it '{a: 1, b: [2, 3]} to (q0,q1);(q0,q2)' do
+        criteria.in(name: 'Bob', age: [20, 30])
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq '(q0,q1);(q0,q2)'
+        expect(criteria.selector).to eq \
+          [{ 'name' => 'Bob', 'passage of time' => [20, 30] }]
+      end
+
+      it '[{a: [1, 2]}, {b: [1, 2]}] to (q0);(q1);(q2);(q3)' do
+        criteria.in([{ name: %w(Bob Lee) }, { age: [20, 30] }])
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq '(q0);(q1);(q2);(q3)'
+        expect(criteria.selector).to eq \
+          [{ 'name' => %w(Bob Lee) }, { 'passage of time' => [20, 30] }]
+      end
+
+      it '[{a: 1}, {b: 2}] to (q0);(q1)' do
+        criteria.in([{ name: 'Bob' }, { age: 20 }])
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq '(q0);(q1)'
+        expect(criteria.selector).to eq \
+          [{ 'name' => 'Bob' }, { 'passage of time' => 20 }]
+      end
+
+      it '[{a: 1}, {b: [1, 2]}] to (q0);(q1);(q2)' do
+        criteria.in([{ name: 'Bob' }, { age: [20, 30] }])
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq '(q0);(q1);(q2)'
+        expect(criteria.selector).to eq \
+          [{ 'name' => 'Bob' }, { 'passage of time' => [20, 30] }]
+      end
+
+      it '[{a: 1}, {b: 1, c: 2}] to (q0);(q1,q2)' do
+        criteria.in([{ name: 'Bob' }, { age: 20, email: 'A' }])
+        compound_find = cf.new(criteria.selector)
+        expect(compound_find.key_maps_string).to eq '(q0);(q1,q2)'
+        expect(criteria.selector).to eq \
+          [{ 'name' => 'Bob' }, { 'passage of time' => 20, 'email' => 'A' }]
+      end
     end
   end
 
