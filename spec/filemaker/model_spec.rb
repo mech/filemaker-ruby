@@ -54,11 +54,6 @@ describe Filemaker::Model do
       expect(model.name).to eq 'Bob'
       expect(model.email).to eq 'bob@cern.org'
     end
-
-    # it 'is fun', :focus do
-    #   Filemaker.load!('hey')
-    #   puts Filemaker.registry
-    # end
   end
 
 end

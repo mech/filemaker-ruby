@@ -1,0 +1,13 @@
+development:
+  default:
+    host: host.com
+    account_name: FILEMAKER_ACCOUNT_NAME
+    password: FILEMAKER_PASSWORD
+    ssl: true
+    log: :curl
+
+  read_slave:
+    host: host.com
+    account_name: FILEMAKER_ACCOUNT_NAME
+    password: FILEMAKER_PASSWORD
+    ssl: { verify: false }

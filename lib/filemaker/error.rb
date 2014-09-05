@@ -4,6 +4,7 @@ module Filemaker
     class AuthenticationError < StandardError; end
     class ParameterError < StandardError; end
     class CoerceError < StandardError; end
+    class ConfigurationError < StandardError; end
 
     class FilemakerError < StandardError
       attr_reader :code

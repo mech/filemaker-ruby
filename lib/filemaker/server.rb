@@ -162,6 +162,7 @@ module Filemaker
       expanded
     end
 
+    # TODO: Should we convert it to string so 'cURL' will work also?
     def log_action(params)
       case @config.log
       when :simple    then log_simple(params)

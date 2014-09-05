@@ -27,11 +27,11 @@ Configuration for initializing a server:
 
 ```ruby
 server = Filemaker::Server.new do |config|
-  config.host     = 'localhost'
-  config.account  = ENV['FILEMAKER_ACCOUNT']
-  config.password = ENV['FILEMAKER_PASSWORD']
-  config.ssl      = { verify: false }
-  config.log      = :curl
+  config.host         = 'localhost'
+  config.account_name = ENV['FILEMAKER_ACCOUNT_NAME']
+  config.password     = ENV['FILEMAKER_PASSWORD']
+  config.ssl          = { verify: false }
+  config.log          = :curl
 end
 
 server.databases.all                   # Using -dbnames
@@ -67,9 +67,12 @@ If you want ActiveModel-like access with a decent query DSL like `where`, `find`
 class Job
   include Filemaker::Model
 
-  server :default # Taken from filemaker.yml config file
   database :jobs
   layout :job
+
+  # Taken from filemaker.yml config file, default to :default
+  # Only use registry if you have multiple FileMaker server you want to connect
+  registry :read_slave
 
   string   :job_id, fm_name: 'JobOrderID', id: true
   string   :title, :requirements
@@ -79,10 +82,7 @@ class Job
 
   validates :title, presence: true
 
-  def as_json(options = {})
-    options[:except] ||= [:created_at]
-    super(options)
-  end
+  has_many :applicants
 end
 ```
 
@@ -92,7 +92,19 @@ end
 development:
   default:
     host: localhost
+    account_name: ENV['FILEMAKER_ACCOUNT_NAME']
+    password: ENV['FILEMAKER_PASSWORD']
     ssl: true
+    log: :curl
+
+  read_slave:
+    host: ...
+    ssl: { verify: false }
+
+production:
+  default:
+    host: example.com
+    ssl: { ca_path: '/secret/path' }
 ```
 
 ## Query DSL
@@ -102,7 +114,7 @@ development:
 ```ruby
 Model.where(gender: 'male', age: '< 50')      # Default -lop=and
 Model.where(gender: 'male').or(age: '< 50')   # -lop=or
-Model.where(gender: 'male').not(age: 40)   # age.op=neq  
+Model.where(gender: 'male').not(age: 40)   # age.op=neq
 
 # Supply a block to configure additional options like -script, -script.prefind, -lay.response, etc
 Model.where(gender: 'male').or(age: '< 50') do |option|
