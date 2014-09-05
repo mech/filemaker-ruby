@@ -12,7 +12,7 @@ module Filemaker
     attr_reader :api
 
     included do
-      class_attribute :db, :lay
+      class_attribute :db, :lay, :registry_name
     end
 
     def initialize(attrs = nil)
@@ -20,6 +20,9 @@ module Filemaker
       @attributes = {}
       apply_defaults
       process_attributes(attrs)
+
+      # @server = Filemaker.registry[registry_name.to_s]
+      # @api = @server.db[db].lay[lay]
     end
 
     def new_record?
@@ -52,6 +55,10 @@ module Filemaker
 
       def layout(lay)
         self.lay = lay
+      end
+
+      def registry(name)
+        self.registry_name = name
       end
     end
   end

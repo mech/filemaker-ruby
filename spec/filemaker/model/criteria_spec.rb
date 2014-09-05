@@ -4,6 +4,10 @@ describe Filemaker::Model::Criteria do
   let(:criteria) { Filemaker::Model::Criteria.new(model) }
   let(:cf) { Filemaker::Api::QueryCommands::CompoundFind }
 
+  before do
+    Filemaker.registry['default'] = ''
+  end
+
   context 'selectable' do
     describe 'where' do
       it 'raises MixedClauseError if mixed with -findquery' do

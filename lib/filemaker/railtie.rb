@@ -7,7 +7,7 @@ module Rails
         config_file = Rails.root.join('config', 'filemaker.yml')
 
         if config_file.file?
-          Filemaker.load!(config_file, 'development')
+          Filemaker.load!(config_file, Rails.env)
         end
       end
     end
