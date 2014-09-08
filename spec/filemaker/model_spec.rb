@@ -2,19 +2,20 @@ describe Filemaker::Model do
 
   let(:model) { MyModel.new }
 
-  before do
-    Filemaker.registry['default'] = Filemaker::Server.new do |config|
-      config.host         = 'host'
-      config.account_name = 'account_name'
-      config.password     = 'password'
-    end
-  end
-
   it 'sets up -db and -lay' do
     expect(MyModel.db).to eq :candidates
     expect(MyModel.lay).to eq :profile
     expect(model.db).to eq :candidates
     expect(model.lay).to eq :profile
+  end
+
+  it 'sets up server and api' do
+    expect(MyModel.api.default_params).to eq \
+      ({'-db' => :candidates, '-lay' => :profile})
+    expect(MyModel.server.host).to eq 'host'
+    expect(model.api.default_params).to eq \
+      ({'-db' => :candidates, '-lay' => :profile})
+    expect(model.server.host).to eq 'host'
   end
 
   it 'is a new record' do

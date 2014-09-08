@@ -83,6 +83,12 @@ RSpec.configure do |config|
 
 end
 
+Filemaker.registry['default'] = Filemaker::Server.new do |config|
+  config.host         = 'host'
+  config.account_name = 'account_name'
+  config.password     = 'password'
+end
+
 class MyModel
   include Filemaker::Model
 

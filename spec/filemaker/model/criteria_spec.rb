@@ -4,14 +4,6 @@ describe Filemaker::Model::Criteria do
   let(:criteria) { Filemaker::Model::Criteria.new(model) }
   let(:cf) { Filemaker::Api::QueryCommands::CompoundFind }
 
-  before do
-    Filemaker.registry['default'] = Filemaker::Server.new do |config|
-      config.host         = 'host'
-      config.account_name = 'account_name'
-      config.password     = 'password'
-    end
-  end
-
   context 'selectable' do
     describe 'where' do
       it 'raises MixedClauseError if mixed with -findquery' do

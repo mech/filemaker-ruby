@@ -8,11 +8,8 @@ module Filemaker
     # @return [Boolean] indicates if this is a new fresh record
     attr_reader :new_record
 
-    # @return [Filemaker::Layout] the raw API for you to make low-level call
-    attr_reader :api
-
     included do
-      class_attribute :db, :lay, :registry_name
+      class_attribute :db, :lay, :registry_name, :server, :api
     end
 
     def initialize(attrs = nil)
@@ -20,9 +17,6 @@ module Filemaker
       @attributes = {}
       apply_defaults
       process_attributes(attrs)
-
-      @server = Filemaker.registry[(registry_name || 'default').to_s]
-      @api = @server.db[db][lay]
     end
 
     def new_record?
@@ -51,14 +45,24 @@ module Filemaker
     module ClassMethods
       def database(db)
         self.db = db
+        self.registry_name ||= 'default' unless lay.blank?
+        register
       end
 
       def layout(lay)
         self.lay = lay
+        self.registry_name ||= 'default' unless db.blank?
+        register
       end
 
       def registry(name)
-        self.registry_name = name
+        self.registry_name = (name || 'default').to_s
+        register
+      end
+
+      def register
+        self.server = Filemaker.registry[registry_name]
+        self.api = server.db[db][lay] if server && db && lay
       end
     end
   end
