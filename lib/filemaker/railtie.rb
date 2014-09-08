@@ -8,6 +8,8 @@ module Rails
 
         if config_file.file?
           Filemaker.load!(config_file, Rails.env)
+        else
+          fail Error::ConfigurationError, 'No config file provided'
         end
       end
     end

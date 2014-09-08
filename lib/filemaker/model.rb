@@ -21,14 +21,8 @@ module Filemaker
       apply_defaults
       process_attributes(attrs)
 
-      @server = Filemaker.registry[get_registry_name]
+      @server = Filemaker.registry[(registry_name || 'default').to_s]
       @api = @server.db[db][lay]
-    end
-
-    # If no registry has been setup, we will use the 'default' registry name
-    # @return [String] the registry name
-    def get_registry_name
-      (registry_name || 'default').to_s
     end
 
     def new_record?
