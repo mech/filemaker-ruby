@@ -2,6 +2,14 @@ describe Filemaker::Model do
 
   let(:model) { MyModel.new }
 
+  before do
+    Filemaker.registry['default'] = Filemaker::Server.new do |config|
+      config.host         = 'host'
+      config.account_name = 'account_name'
+      config.password     = 'password'
+    end
+  end
+
   it 'sets up -db and -lay' do
     expect(MyModel.db).to eq :candidates
     expect(MyModel.lay).to eq :profile

@@ -5,7 +5,11 @@ describe Filemaker::Model::Criteria do
   let(:cf) { Filemaker::Api::QueryCommands::CompoundFind }
 
   before do
-    Filemaker.registry['default'] = ''
+    Filemaker.registry['default'] = Filemaker::Server.new do |config|
+      config.host         = 'host'
+      config.account_name = 'account_name'
+      config.password     = 'password'
+    end
   end
 
   context 'selectable' do

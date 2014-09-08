@@ -25,7 +25,8 @@ module Filemaker
   module_function
 
   # Based on the environment, register the server so we only ever have one
-  # instance of Filemaker::Server.
+  # instance of Filemaker::Server per named session. The named session will be
+  # defined at the `filemaker.yml` config file.
   def load!(path, environment = nil)
     sessions = YAML.load(ERB.new(File.new(path).read).result)[environment.to_s]
     fail Error::ConfigurationError, "Environment wrong?" if sessions.nil?
