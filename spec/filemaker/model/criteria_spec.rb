@@ -279,7 +279,7 @@ describe Filemaker::Model::Criteria do
 
     it 'will use real FileMaker fieldname' do
       criteria.order('updated_at desc')
-      expect(criteria.options[:sortfield]).to eq ['ModifiedDate']
+      expect(criteria.options[:sortfield]).to eq ['modifieddate']
     end
   end
 

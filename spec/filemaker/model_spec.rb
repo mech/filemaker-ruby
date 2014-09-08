@@ -32,9 +32,9 @@ describe Filemaker::Model do
       [
         'name',
         'email',
-        'CA ID',
+        'ca id',
         'created_at',
-        'ModifiedDate',
+        'modifieddate',
         'salary',
         'passage of time'
       ]
