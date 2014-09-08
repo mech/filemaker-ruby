@@ -17,7 +17,7 @@ module Filemaker
       }
 
       included do
-        class_attribute :fields
+        class_attribute :fields, :identity
         self.fields = {}
       end
 
@@ -34,14 +34,6 @@ module Filemaker
 
       def fm_names
         fields.values.map(&:fm_name)
-      end
-
-      # Find FileMaker's real name given either the attribute name or the real
-      # FileMaker name.
-      def find_field_by_name(name)
-        fields.values.find do |f|
-          f.name == name.to_sym || f.fm_name == name.to_s
-        end
       end
 
       module ClassMethods
@@ -64,6 +56,7 @@ module Filemaker
 
         def add_field(name, type, options)
           fields[name] = Filemaker::Model::Field.new(name, type, options)
+          self.identity = fields[name] if options[:identity]
         end
 
         def create_accessors(name)
@@ -73,6 +66,14 @@ module Filemaker
           end
           define_method("#{name}?") do
             attributes[name] == true || attributes[name].present?
+          end
+        end
+
+        # Find FileMaker's real name given either the attribute name or the real
+        # FileMaker name.
+        def find_field_by_name(name)
+          fields.values.find do |f|
+            f.name == name.to_sym || f.fm_name == name.to_s
           end
         end
       end

@@ -79,7 +79,7 @@ module Filemaker
     private
 
     def raise_potential_error!(error_code)
-      return if error_code.zero?
+      return if error_code.zero? || error_code == 401
 
       Filemaker::Error.raise_error_by_code(error_code)
     end

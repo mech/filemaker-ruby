@@ -1,4 +1,5 @@
 require 'filemaker/model/fields'
+require 'filemaker/model/findable'
 
 module Filemaker
   module Model
@@ -6,7 +7,7 @@ module Filemaker
       extend ActiveSupport::Concern
 
       included do
-        # extend Findable
+        extend Findable
       end
 
       include ActiveModel::Model

@@ -7,7 +7,10 @@ module Filemaker
         @name = name
         @type = type
         @default_value = coerce(options.fetch(:default) { nil })
-        @fm_name = (options.fetch(:fm_name) { name }).to_s
+
+        # We need to downcase because Filemaker::Record is
+        # HashWithIndifferentAndCaseInsensitiveAccess
+        @fm_name = (options.fetch(:fm_name) { name }).to_s.downcase
       end
 
       # From FileMaker to Ruby

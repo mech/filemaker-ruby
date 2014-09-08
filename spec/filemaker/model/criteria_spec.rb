@@ -1,7 +1,6 @@
 describe Filemaker::Model::Criteria do
 
-  let(:model) { MyModel.new }
-  let(:criteria) { Filemaker::Model::Criteria.new(model) }
+  let(:criteria) { Filemaker::Model::Criteria.new(MyModel) }
   let(:cf) { Filemaker::Api::QueryCommands::CompoundFind }
 
   context 'selectable' do

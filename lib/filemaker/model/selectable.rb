@@ -32,11 +32,21 @@ module Filemaker
         return where(criterion) if criterion.is_a? Hash
 
         # Find using model ID (may not be the -recid)
-        _id = criterion.gsub(/\A=*/, '=') # Always append '=' for ID
+        id = criterion.gsub(/\A=*/, '=') # Always append '=' for ID
 
         # If we are finding with ID, we just limit to one and return
         # immediately.
-        limit(1).first
+        where(klass.identity.name => id).first
+      end
+
+      # Using FileMaker's internal ID to find the record.
+      def recid(id)
+        return nil if id.blank?
+
+        @selector ||= {}
+        selector['-recid'] = id
+        chains.push(:where)
+        first
       end
 
       %w(eq cn bw ew gt gte lt lte neq).each do |operator|
@@ -44,6 +54,7 @@ module Filemaker
           fail Filemaker::Error::MixedClauseError,
                "Can't mix 'where' with 'in'." if chains.include?(:in)
           chains.push(operator.to_sym)
+          chains.push(:where) unless chains.include?(:where) # Just one time
           @selector ||= {}
 
           if operator == 'bw'
@@ -134,7 +145,7 @@ module Filemaker
         accepted_fields = {}
 
         criterion.each_pair do |key, value|
-          field = model.find_field_by_name(key)
+          field = klass.find_field_by_name(key)
 
           next unless field
 

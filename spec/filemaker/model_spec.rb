@@ -11,10 +11,10 @@ describe Filemaker::Model do
 
   it 'sets up server and api' do
     expect(MyModel.api.default_params).to eq \
-      ({'-db' => :candidates, '-lay' => :profile})
+      ({ '-db' => :candidates, '-lay' => :profile })
     expect(MyModel.server.host).to eq 'host'
     expect(model.api.default_params).to eq \
-      ({'-db' => :candidates, '-lay' => :profile})
+      ({ '-db' => :candidates, '-lay' => :profile })
     expect(model.server.host).to eq 'host'
   end
 
