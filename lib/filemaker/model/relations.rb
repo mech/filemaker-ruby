@@ -30,8 +30,31 @@ module Filemaker
         def relate_single(type, name, options)
           name = name.to_s
 
-          define_method(name) do
-            @relations[name] ||= type.new(self, name, options)
+          # Reader
+          #
+          # @example Reload the record
+          #   job.company(true)
+          define_method(name) do |force_reload = false|
+            if force_reload
+              @relations[name] = type.new(self, name, options)
+            else
+              @relations[name] ||= type.new(self, name, options)
+            end
+          end
+
+          # Writer
+          #
+          # TODO: What happen if `object` is brand new? We would want to save
+          # the child as well as the parent. We need to wait for the child to
+          # save and return the identity ID, then we update the parent's
+          # reference_key.
+          define_method("#{name}=") do |object|
+            params = {"#{name}_id" => object.public_send("#{name}_id")}
+            self.update_attributes(params)
+          end
+
+          # Creator
+          define_method("create_#{name}") do |attrs = {}|
           end
         end
 

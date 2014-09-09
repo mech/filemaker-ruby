@@ -13,6 +13,8 @@ module Filemaker
           options.fetch(:reference_key) { "#{@name}_id" }
         end
 
+        protected
+
         def build_target
           key_value = owner.public_send(reference_key.to_sym)
 

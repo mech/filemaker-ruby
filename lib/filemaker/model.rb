@@ -33,7 +33,11 @@ module Filemaker
     end
 
     def id
-      self.class.identity ? public_send(self.class.identity.name) : record_id
+      self.class.identity ? identity_id : record_id
+    end
+
+    def identity_id
+      public_send(identity.name) if identity
     end
 
     def to_param
