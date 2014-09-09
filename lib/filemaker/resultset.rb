@@ -38,9 +38,9 @@ module Filemaker
     # @return [String] the raw XML for inspection
     attr_reader :xml
 
-    # @param xml [Filemaker::Server] server
-    # @param xml [String] the XML string from response
-    # @param xml [Hash] the request params used to construct request
+    # @param [Filemaker::Server] server
+    # @param [String] xml The XML string from response
+    # @param [Hash] params The request params used to construct request
     def initialize(server, xml, params = nil)
       @list = []
       @fields = {}

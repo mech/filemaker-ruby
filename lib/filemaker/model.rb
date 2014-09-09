@@ -15,6 +15,7 @@ module Filemaker
     def initialize(attrs = nil)
       @new_record = true
       @attributes = {}
+      @relations = {}
       apply_defaults
       process_attributes(attrs)
     end
@@ -29,6 +30,14 @@ module Filemaker
 
     def to_a
       [self]
+    end
+
+    def id
+      self.class.identity ? public_send(self.class.identity.name) : record_id
+    end
+
+    def to_param
+      id.to_s if id
     end
 
     private

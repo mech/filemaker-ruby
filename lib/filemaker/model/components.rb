@@ -1,5 +1,6 @@
 require 'filemaker/model/fields'
 require 'filemaker/model/findable'
+require 'filemaker/model/relations'
 
 module Filemaker
   module Model
@@ -14,7 +15,7 @@ module Filemaker
       include ActiveModel::Serializers::JSON
       include ActiveModel::Serializers::Xml
       include Fields
-      # include Relations
+      include Relations
       # include Persistable
       # include Serializable
     end

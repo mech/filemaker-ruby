@@ -21,28 +21,30 @@ Ensure you have Web Publishing Engine (XML Publishing) enabled. Please turn on S
 Configuration for initializing a server:
 
 * `host` - IP or hostname
-* `ssl` - `{ verify: false }` if you are using FileMaker's unsigned certificate. You can also pass a hash which will be forwarded to Faraday directly like `ssl: { client_cert: '', client_key: '', ca_file: '', ca_path: '/path/to/certs', cert_store: '' }`. See [Setting up SSL certificates](https://github.com/lostisland/faraday/wiki/Setting-up-SSL-certificates)
 * `account` - Please use `ENV` variable like `ENV['FILEMAKER_ACCOUNT']`
 * `password` - Please use `ENV` variable like `ENV['FILEMAKER_PASSWORD']`
+* `ssl` - Use `{ verify: false }` if you are using FileMaker's unsigned certificate. You can also pass a hash which will be forwarded to Faraday directly like `ssl: { client_cert: '', client_key: '', ca_file: '', ca_path: '/path/to/certs', cert_store: '' }`. See [Setting up SSL certificates on the Faraday wiki](https://github.com/lostisland/faraday/wiki/Setting-up-SSL-certificates)
+* `log` - A choice of `:simple`, `:curl` and `:curl_auth`. 
 
 ```ruby
 server = Filemaker::Server.new do |config|
-  config.host         = 'localhost'
+  config.host         = ENV['FILEMAKER_HOST']
   config.account_name = ENV['FILEMAKER_ACCOUNT_NAME']
   config.password     = ENV['FILEMAKER_PASSWORD']
   config.ssl          = { verify: false }
   config.log          = :curl
 end
 
-server.databases.all                   # Using -dbnames
-server.database['candidates'].layouts  # Using -layoutnames and -db=candidates
+server.databases.all                      # Using -dbnames
+server.database['candidates'].layouts.all # Using -layoutnames and -db=candidates
+server.database['candidates'].scripts.all # Using -scriptnames and -db=candidates
 
 api = server.db['candidates'].lay['profile']
 api = server.db['candidates']['profile']
 api = server.database['candidates'].layout['profile']
 ```
 
-Once you are able to grab the `api`, you are golden and can make request to read/write to FileMaker API.
+Once you are able to grab the `api`, you are golden and can make requests to read/write to FileMaker API.
 
 ## Using the API
 
@@ -61,7 +63,7 @@ Most API will be smart enough to reject invalid query parameters if passed in in
 
 ## Using Filemaker::Model
 
-If you want ActiveModel-like access with a decent query DSL like `where`, `find`, `all`, you can include `Filemaker::Model` to your model. Your Rails form will work as well as JSON serialization.
+If you want ActiveModel-like access with a decent query DSL like `where`, `find`, `in`, you can include `Filemaker::Model` to your model. Your Rails form will work as well as JSON serialization.
 
 ```ruby
 class Job
@@ -71,7 +73,7 @@ class Job
   layout :job
 
   # Taken from filemaker.yml config file, default to :default
-  # Only use registry if you have multiple FileMaker server you want to connect
+  # Only use registry if you have multiple FileMaker servers you want to connect
   registry :read_slave
 
   string   :job_id, fm_name: 'JobOrderID', id: true
@@ -82,7 +84,8 @@ class Job
 
   validates :title, presence: true
 
-  has_many :applicants
+  belongs_to :company
+  has_many :applicants, class_name: 'JobApplication', reference_key: 'job_id'
 end
 ```
 
@@ -112,11 +115,12 @@ production:
 ### Using -find
 
 ```ruby
-Model.where(gender: 'male', age: '< 50')      # Default -lop=and
-Model.where(gender: 'male').or(age: '< 50')   # -lop=or
-Model.where(gender: 'male').not(age: 40)   # age.op=neq
+Model.where(gender: 'male', age: '< 50')    # Default -lop=and
+Model.where(gender: 'male').or(age: '< 50') # -lop=or
+Model.where(gender: 'male').not(age: 40)    # age.op=neq
 
-# Supply a block to configure additional options like -script, -script.prefind, -lay.response, etc
+# Supply a block to configure additional options like
+# -script, -script.prefind, -lay.response, etc
 Model.where(gender: 'male').or(age: '< 50') do |option|
   option[:script] = ['RemoveDuplicates', 20]
 end

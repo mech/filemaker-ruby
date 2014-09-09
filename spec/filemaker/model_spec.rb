@@ -22,6 +22,11 @@ describe Filemaker::Model do
     expect(model.new_record).to be true
   end
 
+  it 'has identity' do
+    model.candidate_id = 'CA123'
+    expect(model.id).to eq 'CA123'
+  end
+
   it 'name and email default to UNTITLED' do
     expect(model.name).to eq 'UNTITLED'
     expect(model.email).to eq 'UNTITLED'
