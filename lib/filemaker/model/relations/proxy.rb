@@ -12,6 +12,8 @@ module Filemaker
         attr_accessor :owner, :target, :options
 
         # @param [Filemaker::Layout] owner The instance of the model
+        # @param [String] name The relationship name
+        # @param [Hash] options Relationship options
         def initialize(owner, name, options)
           @owner = owner
           @name = name

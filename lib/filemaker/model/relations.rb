@@ -1,7 +1,9 @@
 require 'filemaker/model/relations/belongs_to'
+require 'filemaker/model/relations/has_many'
 
 module Filemaker
   module Model
+    # Model relationships such as has_many, belongs_to, and has_portal.
     module Relations
       extend ActiveSupport::Concern
 
@@ -11,7 +13,7 @@ module Filemaker
 
       module ClassMethods
         def has_many(name, options = {})
-          Relations::HasMany.new(self, name, options)
+          relate_collection(Relations::HasMany, name, options)
         end
 
         def belongs_to(name, options = {})
@@ -24,6 +26,7 @@ module Filemaker
 
         protected
 
+        # Get the single model and cache it to `relations`
         def relate_single(type, name, options)
           name = name.to_s
 
@@ -32,7 +35,13 @@ module Filemaker
           end
         end
 
+        # For collection, we will return criteria and not cache anything.
         def relate_collection(type, name, options)
+          name = name.to_s
+
+          define_method(name) do
+            type.new(self, name, options)
+          end
         end
       end
     end
