@@ -71,6 +71,8 @@ class Job
 
   database :jobs
   layout :job
+  
+  paginates_per 50
 
   # Taken from filemaker.yml config file, default to :default
   # Only use registry if you have multiple FileMaker servers you want to connect
@@ -176,9 +178,32 @@ Model.not_in([{ name: 'Lee' }, { age: '< 40' }])
 Model.in(nationality: %w(Singapore Malaysia)).not_in(name: 'Lee', age: '< 40')
 ```
 
-- [ ] Please test the above query with real data to ensure correctness!
-- [ ] Please test the comparison operators with keyword as well as applied to value.
-- [ ] Test serialization of BigDecimal and other types.
+- [x] Please test the above query with real data to ensure correctness!
+- [x] Please test the comparison operators with keyword as well as applied to value.
+- [x] Test serialization of BigDecimal and other types.
+
+## Pagination
+
+If you have [kaminari](https://github.com/amatsuda/kaminari) in your project's `Gemfile`, `Filemaker::Model` will use it to page through the returned collection.
+
+```ruby
+Job.where(title: 'admin').per(50) # default to page(1)
+Job.where(title: 'admin').page(5) # default to per(25)
+Job.where(title: 'admin').page(2).per(35)
+
+# In your model, you can customize the per_page
+class Job
+  include Filemaker::Model
+
+  database :jobs
+  layout :job
+  
+  paginates_per 50
+
+end
+
+Job.per_page # => 50
+```
 
 ## Credits
 

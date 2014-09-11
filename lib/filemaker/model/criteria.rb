@@ -1,6 +1,7 @@
 require 'filemaker/model/selectable'
 require 'filemaker/model/optional'
 require 'filemaker/model/builder'
+require 'filemaker/model/pagination'
 
 module Filemaker
   module Model
@@ -12,6 +13,7 @@ module Filemaker
       include Enumerable
       include Selectable
       include Optional
+      include Pagination
 
       # @return [Filemaker::Model] the class of the model
       attr_reader :klass
@@ -29,6 +31,7 @@ module Filemaker
         @klass    = klass
         @options  = {}
         @chains   = []
+        @_page    = 1
       end
 
       def to_s
@@ -69,6 +72,7 @@ module Filemaker
 
       def execute
         resultset = []
+        paginated = chains.include?(:page)
 
         if chains.include?(:where)
           # Use -find
@@ -82,7 +86,15 @@ module Filemaker
           resultset = klass.api.findall(options)
         end
 
-        Filemaker::Model::Builder.collection(resultset, klass)
+        models = Filemaker::Model::Builder.collection(resultset, klass)
+
+        if defined?(Kaminari) && paginated
+          Kaminari.paginate_array(models, resultset.count)
+            .page(@_page)
+            .per(options[:max])
+        else
+          models
+        end
       end
     end
   end

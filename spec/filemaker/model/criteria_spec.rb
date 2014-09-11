@@ -283,4 +283,22 @@ describe Filemaker::Model::Criteria do
     end
   end
 
+  context 'pagination' do
+    it 'sets the limit' do
+      expect(criteria.per(50).options[:max]).to eq 50
+    end
+
+    it 'sets the page to skip' do
+      expect(criteria.page(2).per(50).options[:skip]).to eq 50
+    end
+
+    it 'sets the page to skip with larger page' do
+      expect(criteria.page(12).per(50).options[:skip]).to eq 550
+    end
+
+    it 'will not populate skip option if there is no page' do
+      expect(criteria.per(50).options[:skip]).to be_nil
+    end
+  end
+
 end

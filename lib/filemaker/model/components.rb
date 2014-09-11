@@ -20,7 +20,6 @@ module Filemaker
       include Fields
       include Relations
       include Persistable
-      # include Serializable
     end
   end
 end

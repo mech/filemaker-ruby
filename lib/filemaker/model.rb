@@ -9,7 +9,8 @@ module Filemaker
     attr_reader :attributes, :new_record, :record_id, :mod_id
 
     included do
-      class_attribute :db, :lay, :registry_name, :server, :api
+      class_attribute :db, :lay, :registry_name, :server, :api, :per_page
+      self.per_page = Kaminari.config.default_per_page if defined?(Kaminari)
     end
 
     def initialize(attrs = nil)
@@ -80,6 +81,11 @@ module Filemaker
       def register
         self.server = Filemaker.registry[registry_name]
         self.api = server.db[db][lay] if server && db && lay
+      end
+
+      # A chance for the model to set it's per_page.
+      def paginates_per(value)
+        self.per_page = value.to_i
       end
 
       # Make use of -view to return an array of [name, data_type] for this
