@@ -24,7 +24,7 @@ Configuration for initializing a server:
 * `account` - Please use `ENV` variable like `ENV['FILEMAKER_ACCOUNT']`
 * `password` - Please use `ENV` variable like `ENV['FILEMAKER_PASSWORD']`
 * `ssl` - Use `{ verify: false }` if you are using FileMaker's unsigned certificate. You can also pass a hash which will be forwarded to Faraday directly like `ssl: { client_cert: '', client_key: '', ca_file: '', ca_path: '/path/to/certs', cert_store: '' }`. See [Setting up SSL certificates on the Faraday wiki](https://github.com/lostisland/faraday/wiki/Setting-up-SSL-certificates)
-* `log` - A choice of `:simple`, `:curl` and `:curl_auth`. 
+* `log` - A choice of `:simple`, `:curl` and `:curl_auth`.
 
 ```ruby
 server = Filemaker::Server.new do |config|
@@ -65,20 +65,30 @@ Most API will be smart enough to reject invalid query parameters if passed in in
 
 If you want ActiveModel-like access with a decent query DSL like `where`, `find`, `in`, you can include `Filemaker::Model` to your model. Your Rails form will work as well as JSON serialization.
 
+The following data types can be used to register the fields: `string`, `integer`, `money`, `date` and `datetime`. If the field name has spaces, you can use `fm_name` to identify the real FileMaker field name.
+
+```ruby
+string :job_id, fm_name: 'JobOrderID', identity: true
+```
+
+You can also use 3 relations: `has_many`, `belongs_to` and `has_portal`.
+
+`has_many` will refer to the model's own identity as the reference key while `belongs_to` will append `_id` for the reference key.
+
 ```ruby
 class Job
   include Filemaker::Model
 
   database :jobs
   layout :job
-  
+
   paginates_per 50
 
   # Taken from filemaker.yml config file, default to :default
   # Only use registry if you have multiple FileMaker servers you want to connect
   registry :read_slave
 
-  string   :job_id, fm_name: 'JobOrderID', id: true
+  string   :job_id, fm_name: 'JobOrderID', identity: true
   string   :title, :requirements
   datetime :created_at
   datetime :published_at, fm_name: 'ModifiedDate'
@@ -96,9 +106,9 @@ end
 
 development:
   default:
-    host: localhost
-    account_name: ENV['FILEMAKER_ACCOUNT_NAME']
-    password: ENV['FILEMAKER_PASSWORD']
+    host: <%= ENV['FILEMAKER_HOSTNAME'] %>
+    account_name: <%= ENV['FILEMAKER_ACCOUNT_NAME'] %>
+    password: <%= ENV['FILEMAKER_PASSWORD'] %>
     ssl: true
     log: :curl
 
@@ -197,7 +207,7 @@ class Job
 
   database :jobs
   layout :job
-  
+
   paginates_per 50
 
 end
