@@ -24,12 +24,12 @@ class MyModel
   database :candidates
   layout :profile
 
-  string   :name, :email, default: 'UNTITLED'
-  string   :candidate_id, fm_name: 'CA ID', identity: true
-  date     :created_at
+  string :name, :email, default: 'UNTITLED'
+  string :candidate_id, fm_name: 'CA ID', identity: true
+  date :created_at
   datetime :updated_at, fm_name: 'ModifiedDate'
-  money    :salary
-  integer  :age, fm_name: 'passage of time'
+  money :salary
+  integer :age, fm_name: 'passage of time'
 
   belongs_to :candidate
   belongs_to :applicant, class_name: User, reference_key: :name

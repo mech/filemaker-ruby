@@ -3,11 +3,11 @@ development:
     host: host.com
     account_name: FILEMAKER_ACCOUNT_NAME
     password: FILEMAKER_PASSWORD
-    ssl: true
+    ssl: { verify: false }
     log: :curl
 
   read_slave:
     host: host.com
     account_name: FILEMAKER_ACCOUNT_NAME
     password: FILEMAKER_PASSWORD
-    ssl: { verify: false }
+    ssl: true

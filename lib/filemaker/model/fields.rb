@@ -5,8 +5,6 @@ module Filemaker
     module Fields
       extend ActiveSupport::Concern
 
-      attr_reader :attributes
-
       TYPE_MAPPINGS = {
         string: String,
         date: Date,

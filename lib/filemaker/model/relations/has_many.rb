@@ -28,16 +28,16 @@ module Filemaker
         def <<(*args)
           docs = args.flatten
           return concat(docs) if docs.size > 1
-          if doc = docs.first
+          if (doc = docs.first)
             create(doc)
           end
           self
         end
         alias_method :push, :<<
 
-        def concat(docs)
-          # TODO: Find out how to do batch insert in FileMaker
-        end
+        # def concat(docs)
+        #   # TODO: Find out how to do batch insert in FileMaker
+        # end
 
         # Build a single model. The owner will be linked, but the record will
         # not be saved.

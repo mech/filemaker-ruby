@@ -76,10 +76,18 @@ module Filemaker
       list.each(*args, &block)
     end
 
+    def size
+      list.size
+    end
+    alias_method :length, :size
+
     private
 
+    # For 401 (No records match the request) and 101 (Record is missing), we
+    # will return empty array or nil back rather than raise those errors. Is it
+    # a good design? We need to find out after production usage.
     def raise_potential_error!(error_code)
-      return if error_code.zero? || error_code == 401
+      return if error_code.zero? || error_code == 401 || error_code == 101
 
       Filemaker::Error.raise_error_by_code(error_code)
     end

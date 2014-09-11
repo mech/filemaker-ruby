@@ -28,6 +28,25 @@ module Filemaker
 
         models
       end
+
+      def single(resultset, klass)
+        record = resultset.first
+        object = klass.new
+
+        object.instance_variable_set('@new_record', false)
+        object.instance_variable_set('@record_id', record.record_id)
+        object.instance_variable_set('@mod_id', record.mod_id)
+
+        record.keys.each do |fm_field_name|
+          # record.keys are all lowercase
+          field = klass.find_field_by_name(fm_field_name)
+          next unless field
+
+          object.public_send("#{field.name}=", record[fm_field_name])
+        end
+
+        object
+      end
     end
   end
 end

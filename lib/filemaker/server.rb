@@ -14,7 +14,7 @@ module Filemaker
     alias_method :database, :databases
     alias_method :db, :databases
 
-    def_delegators :@config, :host, :url, :ssl, :endpoint
+    def_delegators :@config, :host, :url, :ssl, :endpoint, :log
     def_delegators :@config, :account_name, :password
 
     def initialize(options = {})

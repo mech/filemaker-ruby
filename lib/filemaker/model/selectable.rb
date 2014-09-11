@@ -12,12 +12,15 @@ module Filemaker
         chains.push(:where)
 
         @selector ||= {}
-        selector.merge!(with_model_fields(criterion))
+        selector.merge!(klass.with_model_fields(criterion))
         yield options if block_given?
         self
       end
 
       # Find records based on model ID. If passed a hash, will use `where`.
+      # On the last resort, if we seriously can't find using `where`, we find
+      # it thru the `recid`. Is this a good design? We will see in production.
+      # Performance note: 2 HTTP requests if going that last resort route.
       #
       # @example Find by model ID.
       #   Model.find('CAID324')
@@ -32,11 +35,11 @@ module Filemaker
         return where(criterion) if criterion.is_a? Hash
 
         # Find using model ID (may not be the -recid)
-        id = criterion.gsub(/\A=*/, '=') # Always append '=' for ID
+        id = criterion.to_s.gsub(/\A=*/, '=') # Always append '=' for ID
 
         # If we are finding with ID, we just limit to one and return
-        # immediately.
-        where(klass.identity.name => id).first
+        # immediately. Last resort is to use the recid to find.
+        where(klass.identity.name => id).first || recid(criterion)
       end
 
       # Using FileMaker's internal ID to find the record.
@@ -58,9 +61,9 @@ module Filemaker
           @selector ||= {}
 
           if operator == 'bw'
-            criterion = with_model_fields(criterion, false)
+            criterion = klass.with_model_fields(criterion, false)
           else
-            criterion = with_model_fields(criterion)
+            criterion = klass.with_model_fields(criterion)
           end
 
           criterion.each_key do |key|
@@ -100,7 +103,7 @@ module Filemaker
         @selector ||= []
 
         become_array(criterion).each do |hash|
-          accepted_hash = with_model_fields(hash)
+          accepted_hash = klass.with_model_fields(hash)
           accepted_hash.merge!('-omit' => true) if negating
           @selector << accepted_hash
         end
@@ -127,45 +130,13 @@ module Filemaker
         fail Filemaker::Error::MixedClauseError,
              "Can't mix 'or' with 'in'." if chains.include?(:in)
         @selector ||= {}
-        selector.merge!(with_model_fields(criterion))
+        selector.merge!(klass.with_model_fields(criterion))
         options[:lop] = 'or'
         yield options if block_given?
         self
       end
 
       private
-
-      # Filter out any fields that do not match model's fields.
-      #
-      # A testing story to tell: when working on `in` query, we have value that
-      # is an array. Without the test and expectation setup, debugging the
-      # output will take far longer to realise. This reinforce the belief that
-      # TDD is in fact a valuable thing to do.
-      def with_model_fields(criterion, coerce = true)
-        accepted_fields = {}
-
-        criterion.each_pair do |key, value|
-          field = klass.find_field_by_name(key)
-
-          next unless field
-
-          # We do not serialize at this point, as we are still in Ruby-land.
-          # Filemaker::Server will help us serialize into FileMaker format.
-          if value.is_a? Array
-            temp = []
-            value.each do |v|
-              temp << (coerce ? field.coerce(v) : v)
-            end
-
-            accepted_fields[field.fm_name] = temp
-          else
-            accepted_fields[field.fm_name] = \
-              coerce ? field.coerce(value) : value
-          end
-        end
-
-        accepted_fields
-      end
 
       def become_array(value)
         value.is_a?(Array) ? value : [value]

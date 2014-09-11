@@ -49,13 +49,13 @@ module Filemaker
           # save and return the identity ID, then we update the parent's
           # reference_key.
           define_method("#{name}=") do |object|
-            params = {"#{name}_id" => object.public_send("#{name}_id")}
-            self.update_attributes(params)
+            params = { "#{name}_id" => object.public_send("#{name}_id") }
+            update_attributes(params)
           end
 
           # Creator
-          define_method("create_#{name}") do |attrs = {}|
-          end
+          # define_method("create_#{name}") do |attrs = {}|
+          # end
         end
 
         # For collection, we will return criteria and not cache anything.

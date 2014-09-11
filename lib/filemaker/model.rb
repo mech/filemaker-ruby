@@ -6,7 +6,7 @@ module Filemaker
     include Components
 
     # @return [Boolean] indicates if this is a new fresh record
-    attr_reader :new_record, :record_id, :mod_id
+    attr_reader :attributes, :new_record, :record_id, :mod_id
 
     included do
       class_attribute :db, :lay, :registry_name, :server, :api
@@ -44,6 +44,10 @@ module Filemaker
       id.to_s if id
     end
 
+    def fm_attributes
+      self.class.with_model_fields(attributes)
+    end
+
     private
 
     def process_attributes(attrs)
@@ -76,6 +80,46 @@ module Filemaker
       def register
         self.server = Filemaker.registry[registry_name]
         self.api = server.db[db][lay] if server && db && lay
+      end
+
+      # Make use of -view to return an array of [name, data_type] for this
+      # model from FileMaker.
+      #
+      # @return [Array] array of [name, data_type]
+      def fm_fields
+        api.view.fields.values.map { |field| [field.name, field.data_type] }
+      end
+
+      # Filter out any fields that do not match model's fields.
+      #
+      # A testing story to tell: when working on `in` query, we have value that
+      # is an array. Without the test and expectation setup, debugging the
+      # output will take far longer to realise. This reinforce the belief that
+      # TDD is in fact a valuable thing to do.
+      def with_model_fields(criterion, coerce = true)
+        accepted_fields = {}
+
+        criterion.each_pair do |key, value|
+          field = find_field_by_name(key)
+
+          next unless field
+
+          # We do not serialize at this point, as we are still in Ruby-land.
+          # Filemaker::Server will help us serialize into FileMaker format.
+          if value.is_a? Array
+            temp = []
+            value.each do |v|
+              temp << (coerce ? field.coerce(v) : v)
+            end
+
+            accepted_fields[field.fm_name] = temp
+          else
+            accepted_fields[field.fm_name] = \
+              coerce ? field.coerce(value) : value
+          end
+        end
+
+        accepted_fields
       end
     end
   end
