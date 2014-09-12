@@ -182,7 +182,7 @@ module Filemaker
       auth = " -H 'Authorization: #{@connection.headers['Authorization']}'" if \
         has_auth
 
-      warn 'Pretty print like so: `curl XXX | xmllint --format -`'
+      # warn 'Pretty print like so: `curl XXX | xmllint --format -`'
       warn "curl -XGET '#{full_url}'#{curl_ssl_option} -i#{auth}"
     end
 
