@@ -16,6 +16,7 @@ module Filemaker
       @record_id = record['record-id']
       @portals   = HashWithIndifferentAndCaseInsensitiveAccess.new
       @dirty     = {} # Keep track of field modification
+      @ready     = false
 
       record.xpath('field').each do |field|
         # `field` is Nokogiri::XML::Element
