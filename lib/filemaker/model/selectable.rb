@@ -46,9 +46,9 @@ module Filemaker
       def recid(id)
         return nil if id.blank?
 
-        @selector ||= {}
+        @selector = {} # We want to clear the selector when it comes to recid
         selector['-recid'] = id
-        chains.push(:where)
+        chains.push(:where) unless chains.include?(:where) # No double :where
         first
       end
 

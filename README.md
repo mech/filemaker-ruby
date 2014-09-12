@@ -188,9 +188,13 @@ Model.not_in([{ name: 'Lee' }, { age: '< 40' }])
 Model.in(nationality: %w(Singapore Malaysia)).not_in(name: 'Lee', age: '< 40')
 ```
 
+Note: It is vitally important that you get the order right for mixing in the use of `in` with `not_in`. Likely you want to do an `in` first to be inclusive and later omit using `not_in`.
+
 - [x] Please test the above query with real data to ensure correctness!
 - [x] Please test the comparison operators with keyword as well as applied to value.
 - [x] Test serialization of BigDecimal and other types.
+- [ ] Caching of relation models
+- [ ] Test the order for `in` and `not_in` found set accuracy.
 
 ## Pagination
 

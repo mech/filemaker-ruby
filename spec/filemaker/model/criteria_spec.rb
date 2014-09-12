@@ -41,6 +41,21 @@ describe Filemaker::Model::Criteria do
       end
     end
 
+    describe 'find' do
+      it 'resets the selector and will not double :where' do
+        allow(criteria).to receive(:first).and_return(nil)
+        criteria.find(12)
+        expect(criteria.selector).to eq({ '-recid' => 12 })
+        expect(criteria.chains).to eq [:where]
+      end
+
+      it 'will use the identity to find' do
+        allow(criteria).to receive(:first).and_return([])
+        criteria.find(22)
+        expect(criteria.selector).to eq({ 'ca id' => '=22' })
+      end
+    end
+
     describe 'or' do
       it 'chains `or` as logical OR option' do
         criteria.where(name: 'Bob').or(email: 'bob@cern.org')
