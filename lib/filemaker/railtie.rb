@@ -7,9 +7,9 @@ module Rails
         config_file = Rails.root.join('config', 'filemaker.yml')
 
         if config_file.file?
-          Filemaker.load!(config_file, Rails.env)
+          ::Filemaker.load!(config_file, Rails.env)
         else
-          fail Error::ConfigurationError, 'No config file provided'
+          fail ::Filemaker::Error::ConfigurationError, 'No config file provided'
         end
       end
     end
