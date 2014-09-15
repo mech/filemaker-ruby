@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['mech@me.com']
   spec.summary       = 'A Ruby wrapper to FileMaker XML API.'
   spec.description   = 'Provides ActiveModel-like object to read and write.'
-  spec.homepage      = ''
+  spec.homepage      = 'https://github.com/mech/filemaker-ruby'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")

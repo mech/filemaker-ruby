@@ -68,6 +68,14 @@ describe Filemaker::Model do
       expect(model.name).to eq 'Bob'
       expect(model.email).to eq 'bob@cern.org'
     end
+
+    it 'will ignore nil values for fm_attributes' do
+      model = MyModel.new(name: 'Bob', email: nil, candidate_id: '')
+      expect(model.fm_attributes['name']).to eq 'Bob'
+      expect(model.fm_attributes['ca id']).to eq ''
+      expect(model.fm_attributes['email']).to be_nil
+      expect(model.fm_attributes.size).to eq 2
+    end
   end
 
 end

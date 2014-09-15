@@ -3,6 +3,7 @@ module Filemaker
     module Pagination
       # Calling `page` will trigger pagination.
       def page(value)
+        value = 1 if value.nil?
         chains << :page
         @_page = value.to_i
         update_skip
