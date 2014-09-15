@@ -54,6 +54,12 @@ describe Filemaker::Resultset do
     it 'has 2 portals' do
       expect(resultset.portal_fields.size).to eq 2
     end
+
+    it 'PORTAL_2 has 2 fields: Expired and Renewed', :focus do
+      expect(resultset.portal_fields['PORTAL_2'].size).to eq 2
+      expect(resultset.portal_fields['PORTAL_2'].keys).to eq \
+        %w(PORTAL_2::Expired PORTAL_2::Renewed)
+    end
   end
 
   describe 'build records' do

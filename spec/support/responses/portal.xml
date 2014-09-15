@@ -18,6 +18,9 @@
     <relatedset-definition table="PORTAL_2">
       <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="PORTAL_2::Expired" not-empty="no" numeric-only="no" result="date" time-of-day="no" type="normal"/>
     </relatedset-definition>
+    <relatedset-definition table="PORTAL_2">
+      <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="PORTAL_2::Renewed" not-empty="no" numeric-only="no" result="date" time-of-day="no" type="normal"/>
+    </relatedset-definition>
   </metadata>
   <resultset count="2" fetch-size="2">
     <record mod-id="mod-id-1" record-id="record-id-1">
@@ -61,6 +64,18 @@
           </field>
         </record>
       </relatedset>
+      <relatedset count="2" table="PORTAL_2">
+        <record mod-id="24" record-id="12492">
+          <field name="PORTAL_2::Renewed">
+            <data>10/4/2014</data>
+          </field>
+        </record>
+        <record mod-id="21" record-id="12591">
+          <field name="PORTAL_2::Renewed">
+            <data>12/12/2014</data>
+          </field>
+        </record>
+      </relatedset>
     </record>
     <record mod-id="mod-id-2" record-id="record-id-2">
       <field name="PortalID">
@@ -99,6 +114,18 @@
         </record>
         <record mod-id="21" record-id="12191">
           <field name="PORTAL_2::Expired">
+            <data/>
+          </field>
+        </record>
+      </relatedset>
+      <relatedset count="2" table="PORTAL_2">
+        <record mod-id="24" record-id="12152">
+          <field name="PORTAL_2::Renewed">
+            <data>12/31/2014</data>
+          </field>
+        </record>
+        <record mod-id="21" record-id="12141">
+          <field name="PORTAL_2::Renewed">
             <data/>
           </field>
         </record>

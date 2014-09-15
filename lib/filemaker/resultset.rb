@@ -101,14 +101,15 @@ module Filemaker
         table_name = relatedset.attribute('table').value
         p_fields     = {}
 
+        @portal_fields[table_name] ||= p_fields
+
         relatedset.xpath('field-definition').each do |definition|
           # Right now, I do not want to mess with the field name
           # name = definition['name'].gsub("#{table_name}::", '')
           name = definition['name']
-          p_fields[name] = Metadata::Field.new(definition, self)
+          @portal_fields[table_name][name] = \
+            Metadata::Field.new(definition, self)
         end
-
-        @portal_fields[table_name] = p_fields
       end
     end
 
