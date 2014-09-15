@@ -67,11 +67,11 @@ module Filemaker
         table_name = relatedset['table']
         records    = []
 
-        relatedset.xpath('record').each do |record|
-          records << self.class.new(record, resultset, table_name)
-        end
+        @portals[table_name] ||= records
 
-        @portals[table_name] = records
+        relatedset.xpath('record').each do |record|
+          @portals[table_name] << self.class.new(record, resultset, table_name)
+        end
       end
     end
 

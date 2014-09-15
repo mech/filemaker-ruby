@@ -44,6 +44,11 @@ describe Filemaker::Record do
     expect(@record.portals[:PORTAL_1]).to eq @record.portals['portal_1']
   end
 
+  it 'has 4 records for PORTAL_2' do
+    expect(@record.portals[:PORTAL_2].size).to eq 4
+    expect(@record.portals[:PORTAL_2][1]['portal_2::expired']).to be_nil
+  end
+
   it 'key access as plain method' do
     expect(@record.portalid).to eq '1234'
   end
