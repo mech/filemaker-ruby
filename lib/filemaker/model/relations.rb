@@ -1,5 +1,6 @@
 require 'filemaker/model/relations/belongs_to'
 require 'filemaker/model/relations/has_many'
+require 'filemaker/model/relations/has_portal'
 
 module Filemaker
   module Model
