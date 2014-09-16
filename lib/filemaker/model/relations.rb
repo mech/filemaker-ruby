@@ -21,10 +21,18 @@ module Filemaker
         end
 
         def has_portal(name, options = {})
-          Relations::HasPortal.new(self, name, options)
+          relate_portal(Relations::HasPortal, name, options)
         end
 
         protected
+
+        def relate_portal(type, name, options)
+          name = name.to_s
+
+          define_method(name) do
+            type.new(self, name, options)
+          end
+        end
 
         # Get the single model and cache it to `relations`
         def relate_single(type, name, options)

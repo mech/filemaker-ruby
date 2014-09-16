@@ -70,9 +70,8 @@ module Filemaker
           value
         end
       rescue
-        warn "Could not coerce #{value}. Return nil instead."
-        nil
-        # raise Filemaker::Error::CoerceError, msg
+        warn "Could not coerce #{name}: #{value}"
+        value
       end
 
       private

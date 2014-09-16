@@ -14,6 +14,7 @@ module Filemaker
           object.instance_variable_set('@new_record', false)
           object.instance_variable_set('@record_id', record.record_id)
           object.instance_variable_set('@mod_id', record.mod_id)
+          object.instance_variable_set('@portals', record.portals)
 
           record.keys.each do |fm_field_name|
             # record.keys are all lowercase
@@ -36,6 +37,7 @@ module Filemaker
         object.instance_variable_set('@new_record', false)
         object.instance_variable_set('@record_id', record.record_id)
         object.instance_variable_set('@mod_id', record.mod_id)
+        object.instance_variable_set('@portals', record.portals)
 
         record.keys.each do |fm_field_name|
           # record.keys are all lowercase

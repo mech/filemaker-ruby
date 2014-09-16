@@ -6,7 +6,7 @@ module Filemaker
     include Components
 
     # @return [Boolean] indicates if this is a new fresh record
-    attr_reader :attributes, :new_record, :record_id, :mod_id
+    attr_reader :attributes, :new_record, :record_id, :mod_id, :portals
 
     included do
       class_attribute :db, :lay, :registry_name, :server, :api, :per_page
