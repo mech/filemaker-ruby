@@ -16,7 +16,7 @@ describe 'Configuration' do
       path = File.expand_path('../../support/filemaker.yml', __FILE__)
       expect do
         Filemaker.load!(path, 'unknown')
-      end.to raise_error Filemaker::Error::ConfigurationError
+      end.to raise_error Filemaker::Errors::ConfigurationError
     end
   end
 

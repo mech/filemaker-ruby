@@ -49,13 +49,13 @@ module Filemaker
 
       case response.status
       when 200 then [response, params]
-      when 401 then fail Error::AuthenticationError, 'Auth failed.'
-      when 0   then fail Error::CommunicationError, 'Empty response.'
-      when 404 then fail Error::CommunicationError, 'HTTP 404 Not Found'
-      when 302 then fail Error::CommunicationError, 'Redirect not supported'
+      when 401 then fail Errors::AuthenticationError, 'Auth failed.'
+      when 0   then fail Errors::CommunicationError, 'Empty response.'
+      when 404 then fail Errors::CommunicationError, 'HTTP 404 Not Found'
+      when 302 then fail Errors::CommunicationError, 'Redirect not supported'
       else
         msg = "Unknown response status = #{response.status}"
-        fail Error::CommunicationError, msg
+        fail Errors::CommunicationError, msg
       end
     end
 
@@ -105,7 +105,7 @@ module Filemaker
         when :sortfield
           if value.is_a? Array
             msg = 'Too many sortfield, limit=9'
-            fail(Filemaker::Error::ParameterError, msg) if value.size > 9
+            fail(Filemaker::Errors::ParameterError, msg) if value.size > 9
             value.each_index do |index|
               expanded["-sortfield.#{index + 1}"] = value[index]
             end
@@ -116,7 +116,7 @@ module Filemaker
           if value.is_a? Array
             # Use :sortfield as single source of truth for array size
             msg = 'Too many sortorder, limit=9'
-            fail(Filemaker::Error::ParameterError, msg) if value.size > 9
+            fail(Filemaker::Errors::ParameterError, msg) if value.size > 9
             options[:sortfield].each_index do |index|
               expanded["-sortorder.#{index + 1}"] = value[index] || 'ascend'
             end

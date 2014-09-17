@@ -7,7 +7,7 @@ module Filemaker
       #
       # @return [Filemaker::Model::Criteria]
       def where(criterion)
-        fail Filemaker::Error::MixedClauseError,
+        fail Filemaker::Errors::MixedClauseError,
              "Can't mix 'where' with 'in'." if chains.include?(:in)
         chains.push(:where)
 
@@ -54,7 +54,7 @@ module Filemaker
 
       %w(eq cn bw ew gt gte lt lte neq).each do |operator|
         define_method(operator) do |criterion, &block|
-          fail Filemaker::Error::MixedClauseError,
+          fail Filemaker::Errors::MixedClauseError,
                "Can't mix 'where' with 'in'." if chains.include?(:in)
           chains.push(operator.to_sym)
           chains.push(:where) unless chains.include?(:where) # Just one time
@@ -97,7 +97,7 @@ module Filemaker
       #
       # @return [Filemaker::Model::Criteria]
       def in(criterion, negating = false)
-        fail Filemaker::Error::MixedClauseError,
+        fail Filemaker::Errors::MixedClauseError,
              "Can't mix 'in' with 'where'." if chains.include?(:where)
         chains.push(:in)
         @selector ||= []
@@ -127,7 +127,7 @@ module Filemaker
       #
       # @return [Filemaker::Model::Criteria]
       def or(criterion)
-        fail Filemaker::Error::MixedClauseError,
+        fail Filemaker::Errors::MixedClauseError,
              "Can't mix 'or' with 'in'." if chains.include?(:in)
         @selector ||= {}
         selector.merge!(klass.with_model_fields(criterion))

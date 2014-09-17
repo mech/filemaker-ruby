@@ -193,8 +193,9 @@ Note: It is vitally important that you get the order right for mixing in the use
 - [x] Please test the above query with real data to ensure correctness!
 - [x] Please test the comparison operators with keyword as well as applied to value.
 - [x] Test serialization of BigDecimal and other types.
-- [ ] Caching of relation models
+- [x] Caching of relation models.
 - [ ] Test the order for `in` and `not_in` found set accuracy.
+- [ ] Dirty checking API for model.
 
 ## Pagination
 

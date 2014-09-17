@@ -1,5 +1,5 @@
 module Filemaker
-  module Error
+  module Errors
     class CommunicationError < StandardError; end
     class AuthenticationError < StandardError; end
     class ParameterError < StandardError; end

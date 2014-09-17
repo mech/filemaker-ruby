@@ -89,7 +89,7 @@ module Filemaker
     def raise_potential_error!(error_code)
       return if error_code.zero? || error_code == 401 || error_code == 101
 
-      Filemaker::Error.raise_error_by_code(error_code)
+      Filemaker::Errors.raise_error_by_code(error_code)
     end
 
     def build_metadata(metadata)

@@ -65,7 +65,7 @@ describe Filemaker::Layout do
             sortfield: %w(f1 f2 f3 f4 f5 f6 f7 f8 f9 f10),
             sortorder: %w(o1 o2 o3 o4 o5 o6 o7 o8 o9)
           )
-        end.to raise_error Filemaker::Error::ParameterError
+        end.to raise_error Filemaker::Errors::ParameterError
       end
 
       it 'will not accept more than 9 sortorders' do
@@ -74,7 +74,7 @@ describe Filemaker::Layout do
             sortfield: %w(f1 f2 f3 f4 f5 f6 f7 f8 f9),
             sortorder: %w(o1 o2 o3 o4 o5 o6 o7 o8 o9 o10)
           )
-        end.to raise_error Filemaker::Error::ParameterError
+        end.to raise_error Filemaker::Errors::ParameterError
       end
     end
 

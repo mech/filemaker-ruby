@@ -8,7 +8,7 @@ describe Filemaker::Model::Criteria do
       it 'raises MixedClauseError if mixed with -findquery' do
         expect do
           criteria.in(status: %w(pending subscribed)).where(name: 'Bob')
-        end.to raise_error Filemaker::Error::MixedClauseError
+        end.to raise_error Filemaker::Errors::MixedClauseError
       end
 
       it 'single hash criterion are recorded as is' do
@@ -78,7 +78,7 @@ describe Filemaker::Model::Criteria do
       it 'only works on `where` query' do
         expect do
           criteria.in(status: %w(pending subscribed)).eq(name: 'Bob')
-        end.to raise_error Filemaker::Error::MixedClauseError
+        end.to raise_error Filemaker::Errors::MixedClauseError
       end
 
       describe 'not' do
@@ -114,7 +114,7 @@ describe Filemaker::Model::Criteria do
       it 'raises MixedClauseError if mixed with -find' do
         expect do
           criteria.where(name: 'Bob').in(status: %w(pending subscribed))
-        end.to raise_error Filemaker::Error::MixedClauseError
+        end.to raise_error Filemaker::Errors::MixedClauseError
       end
 
       it '{a: [1, 2]} to (q0);(q1)' do

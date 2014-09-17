@@ -78,28 +78,28 @@ describe Filemaker::Server do
       end
     end
 
-    it 'raises Filemaker::Error::CommunicationError if status = 0' do
+    it 'raises Filemaker::Errors::CommunicationError if status = 0' do
       fake_error(@server, nil, 0)
 
       expect do
         @server.databases.all
-      end.to raise_error Filemaker::Error::CommunicationError
+      end.to raise_error Filemaker::Errors::CommunicationError
     end
 
-    it 'raises Filemaker::Error::CommunicationError if status = 404' do
+    it 'raises Filemaker::Errors::CommunicationError if status = 404' do
       fake_error(@server, nil, 404)
 
       expect do
         @server.databases.all
-      end.to raise_error Filemaker::Error::CommunicationError
+      end.to raise_error Filemaker::Errors::CommunicationError
     end
 
-    it 'raises Filemaker::Error::AuthenticationError if status = 401' do
+    it 'raises Filemaker::Errors::AuthenticationError if status = 401' do
       fake_error(@server, nil, 401)
 
       expect do
         @server.databases.all
-      end.to raise_error Filemaker::Error::AuthenticationError
+      end.to raise_error Filemaker::Errors::AuthenticationError
     end
   end
 

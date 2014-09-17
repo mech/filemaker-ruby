@@ -45,14 +45,14 @@ module Filemaker
     end
 
     def [](key)
-      fail(Filemaker::Error::InvalidFieldError, "Invalid field: #{key}") \
+      fail(Filemaker::Errors::InvalidFieldError, "Invalid field: #{key}") \
         unless key?(key)
       super
     end
 
     def []=(key, value)
       return super unless @ready
-      fail(Filemaker::Error::InvalidFieldError, "Invalid field: #{key}") \
+      fail(Filemaker::Errors::InvalidFieldError, "Invalid field: #{key}") \
         unless key?(key)
       @dirty[key] = value
     end
