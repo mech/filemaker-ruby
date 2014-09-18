@@ -3,6 +3,7 @@ AllCops:
     - .bundle/**
     - filemaker.gemspec
     - lib/filemaker/errors.rb
+    - lib/generators/filemaker/model/templates/model.rb
 
 Documentation:
   Enabled: false

@@ -80,7 +80,7 @@ module Filemaker
     end
 
     def self.error_message_by_code(code)
-      "FileMaker Error: #{code} (#{DESCRIPTION.fetch(code.to_s) { '??' }})"
+      "#{code} (#{DESCRIPTION.fetch(code.to_s) { '??' }})"
     end
 
     def self.find_error_class_by_code(code)
