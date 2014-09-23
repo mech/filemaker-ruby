@@ -8,16 +8,16 @@ module Filemaker
       end
 
       # Call save! but do not raise error.
-      def save
-        save!
+      def save(attrs = nil)
+        save!(attrs)
       rescue
         errors.add(:base) << $! # Does this works?
         nil
       end
 
-      def save!
+      def save!(attrs = nil)
         run_callbacks :save do
-          new_record? ? create : update
+          new_record? ? create : update(attrs)
         end
       end
 
@@ -33,14 +33,20 @@ module Filemaker
         self
       end
 
-      def update
+      def update(attrs = nil)
         return false unless valid?
+
+        if attrs
+          dirty_attributes = self.class.with_model_fields(attrs)
+        else
+          dirty_attributes = fm_attributes
+        end
 
         run_callbacks :update do
           # Will raise `RecordModificationIdMismatchError` if does not match
           options = { modid: mod_id } # Always pass in?
           yield options if block_given?
-          resultset = api.edit(record_id, fm_attributes, options)
+          resultset = api.edit(record_id, dirty_attributes, options)
           replace_new_data(resultset)
         end
         self
@@ -48,8 +54,8 @@ module Filemaker
 
       def update_attributes(attrs = {})
         return self if attrs.blank?
-        assign_attributes(attrs)
-        save
+        dirty_attributes = assign_attributes(attrs)
+        save(dirty_attributes)
       end
 
       # Use -delete to remove the record backed by the model.
@@ -68,11 +74,27 @@ module Filemaker
 
       # If value is nil, we convert to empty string so it will get pick up by
       # `fm_attributes`
+      #
+      # We return the dirty attributes because we do not want to update the
+      # entire attributes.
       def assign_attributes(new_attributes)
         return if new_attributes.blank?
+        dirty_attributes = {}
+
         new_attributes.each_pair do |key, value|
-          public_send("#{key}=", (value || '')) if respond_to?("#{key}=")
+          if respond_to?("#{key}=")
+            public_send("#{key}=", (value || '')) # May be wasted effort
+            dirty_attributes[key] = value || ''
+          end
         end
+
+        dirty_attributes
+      end
+
+      def reload!
+        resultset = api.find(record_id)
+        replace_new_data(resultset)
+        self
       end
 
       private

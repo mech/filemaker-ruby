@@ -1,5 +1,5 @@
 Filemaker.registry['default'] = Filemaker::Server.new do |config|
-  config.host         = 'host'
+  config.host         = 'example'
   config.account_name = 'account_name'
   config.password     = 'password'
 end

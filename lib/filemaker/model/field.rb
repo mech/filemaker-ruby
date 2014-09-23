@@ -13,9 +13,13 @@ module Filemaker
         @fm_name = (options.fetch(:fm_name) { name }).to_s.downcase
       end
 
-      # From FileMaker to Ruby
+      # From FileMaker to Ruby.
+      #
+      # If the value is `==` (match empty) or `=*` (match record), then we will
+      # skip coercion.
       def coerce(value)
         return nil if value.nil?
+        return value if value == '==' || value == '=*'
 
         if @type == String
           value.to_s
@@ -32,6 +36,9 @@ module Filemaker
         else
           value
         end
+      rescue
+        warn "Could not coerce #{name}: #{value}"
+        value
       end
     end
   end

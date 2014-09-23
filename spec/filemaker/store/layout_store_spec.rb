@@ -16,7 +16,7 @@ describe Filemaker::Store::LayoutStore do
   describe 'all' do
     it 'returns all layouts for a database' do
       server = Filemaker::Server.new do |config|
-        config.host         = 'host'
+        config.host         = 'example'
         config.account_name = 'account_name'
         config.password     = 'password'
       end

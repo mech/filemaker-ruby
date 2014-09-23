@@ -49,7 +49,7 @@ module Filemaker
           rescue
             # We could be getting back these date:
             # '17.12.95', '19/05/99', '27/11 /1981'
-            # '1959-07-03' will be beyong us, so consider returning nil
+            # '1959-07-03' will be beyond us, so consider returning exact value
             value = value.gsub(/-|\./, '/')
             split = value.split('/').map(&:strip)
             split[2] = "19#{split[2]}" if split[2].size == 2

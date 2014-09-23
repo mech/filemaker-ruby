@@ -3,13 +3,13 @@ describe Filemaker::Server do
   context 'initializing a server' do
     it 'provides a host, account_name, and password' do
       server = Filemaker::Server.new do |config|
-        config.host         = 'host'
+        config.host         = 'example'
         config.account_name = 'account_name'
         config.password     = 'password'
       end
 
-      expect(server.host).to eq 'host'
-      expect(server.url).to eq 'http://host'
+      expect(server.host).to eq 'example'
+      expect(server.url).to eq 'http://example'
       expect(server.account_name).to eq 'account_name'
       expect(server.password).to eq 'password'
       expect(server.connection).to be_a Faraday::Connection
@@ -21,13 +21,13 @@ describe Filemaker::Server do
 
     it 'specifically ask for no SSL' do
       server = Filemaker::Server.new do |config|
-        config.host         = 'host'
+        config.host         = 'example'
         config.account_name = 'account_name'
         config.password     = 'password'
         config.ssl          = false
       end
 
-      expect(server.url).to eq 'http://host'
+      expect(server.url).to eq 'http://example'
     end
 
     it 'did not provide host, account_name, and password' do
@@ -36,7 +36,7 @@ describe Filemaker::Server do
       end.to raise_error ArgumentError
 
       expect do
-        Filemaker::Server.new { |config| config.host = 'host' }
+        Filemaker::Server.new { |config| config.host = 'example' }
       end.to raise_error ArgumentError
     end
   end
@@ -44,13 +44,13 @@ describe Filemaker::Server do
   context 'initializing a server with SSL' do
     it 'indicates secured connection' do
       server = Filemaker::Server.new do |config|
-        config.host         = 'host'
+        config.host         = 'example'
         config.account_name = 'account_name'
         config.password     = 'password'
         config.ssl          = { verify: false }
       end
 
-      expect(server.url).to eq 'https://host'
+      expect(server.url).to eq 'https://example'
       expect(server.connection.ssl[:verify]).to be false
     end
   end
@@ -58,7 +58,7 @@ describe Filemaker::Server do
   describe 'databases is a store to track encountered -db' do
     it 'stores database object and can be accessed with db and database' do
       server = Filemaker::Server.new do |config|
-        config.host         = 'host'
+        config.host         = 'example'
         config.account_name = 'account_name'
         config.password     = 'password'
       end
@@ -72,7 +72,7 @@ describe Filemaker::Server do
   context 'HTTP errors' do
     before do
       @server = Filemaker::Server.new do |config|
-        config.host         = 'host'
+        config.host         = 'example'
         config.account_name = 'account_name'
         config.password     = 'password'
       end
