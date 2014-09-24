@@ -53,7 +53,7 @@ describe Filemaker::Model::Relations do
 
     context 'when using default reference_key' do
       it 'will use owner identity name' do
-        expect(@model.posts.reference_key).to eq :candidate_id
+        expect(@model.posts.reference_key).to eq 'candidate_id'
       end
 
       it 'target class should be Post' do

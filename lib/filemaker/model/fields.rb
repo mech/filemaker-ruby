@@ -2,16 +2,29 @@ require 'filemaker/model/field'
 
 module Filemaker
   module Model
+    # `Fields` help to give `Model` their perceived schema. To find out your
+    # fields, use `Model.fm_fields` or use Rails generator like:
+    #
+    #   rails generate filemaker:model filename database layout
+    #
+    # @example
+    #   class Model
+    #     include Filemaker::Model
+    #
+    #     string :id, identity: true
+    #     string :title, fm_name: 'A_Title', default: 'Untitled'
+    #     money  :salary
+    #   end
     module Fields
       extend ActiveSupport::Concern
 
       TYPE_MAPPINGS = {
-        string: String,
-        date: Date,
+        string:   String,
+        date:     Date,
         datetime: DateTime,
-        money: BigDecimal,
-        integer: Integer,
-        number: BigDecimal
+        money:    BigDecimal,
+        number:   BigDecimal,
+        integer:  Integer
       }
 
       included do
@@ -19,6 +32,8 @@ module Filemaker
         self.fields = {}
       end
 
+      # Apply default value when you instantiate a new model.
+      # @See Model.new
       def apply_defaults
         attribute_names.each do |name|
           field = fields[name]
@@ -53,15 +68,24 @@ module Filemaker
         end
 
         def add_field(name, type, options)
+          name = name.to_s
           fields[name] = Filemaker::Model::Field.new(name, type, options)
           self.identity = fields[name] if options[:identity]
         end
 
         def create_accessors(name)
+          name = name.to_s # Normalize it so ActiveModel::Serialization can work
+
+          # Reader
           define_method(name) { attributes[name] }
+
+          # Writer - We try to map to the correct type, if not we just return
+          # original.
           define_method("#{name}=") do |value|
             attributes[name] = fields[name].coerce(value)
           end
+
+          # Predicate
           define_method("#{name}?") do
             attributes[name] == true || attributes[name].present?
           end
@@ -70,8 +94,9 @@ module Filemaker
         # Find FileMaker's real name given either the attribute name or the real
         # FileMaker name.
         def find_field_by_name(name)
+          name = name.to_s
           fields.values.find do |f|
-            f.name == name.to_sym || f.fm_name == name.to_s
+            f.name == name || f.fm_name == name
           end
         end
       end

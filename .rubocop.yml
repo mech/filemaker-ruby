@@ -16,3 +16,9 @@ MethodLength:
 
 LineLength:
   Max: 80
+
+SpecialGlobalVars:
+  Enabled: false
+
+PredicateName:
+  Enabled: false

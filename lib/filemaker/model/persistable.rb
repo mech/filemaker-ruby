@@ -82,10 +82,10 @@ module Filemaker
         dirty_attributes = {}
 
         new_attributes.each_pair do |key, value|
-          if respond_to?("#{key}=")
-            public_send("#{key}=", (value || '')) # May be wasted effort
-            dirty_attributes[key] = value || ''
-          end
+          next unless respond_to?("#{key}=")
+
+          public_send("#{key}=", (value || '')) # May be wasted effort
+          dirty_attributes[key] = value || ''
         end
 
         dirty_attributes

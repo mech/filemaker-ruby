@@ -58,3 +58,15 @@ module Filemaker
 end
 
 require 'filemaker/railtie' if defined?(Rails)
+
+if defined?(Elasticsearch::Model)
+  require 'filemaker/elasticsearch/filemaker_adapter'
+
+  Elasticsearch::Model::Adapter.register(
+    ::Filemaker::Elasticsearch::FilemakerAdapter,
+    lambda do |klass|
+      !!defined?(::Filemaker::Model) && \
+        klass.ancestors.include?(::Filemaker::Model)
+    end
+  )
+end
