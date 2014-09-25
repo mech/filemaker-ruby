@@ -8,16 +8,16 @@ module Filemaker
       end
 
       # Call save! but do not raise error.
-      def save(attrs = nil)
-        save!(attrs)
+      def save
+        save!
       rescue
         errors.add(:base) << $! # Does this works?
         nil
       end
 
-      def save!(attrs = nil)
+      def save!
         run_callbacks :save do
-          new_record? ? create : update(attrs)
+          new_record? ? create : update
         end
       end
 
@@ -33,20 +33,16 @@ module Filemaker
         self
       end
 
-      def update(attrs = nil)
+      def update
         return false unless valid?
-
-        if attrs
-          dirty_attributes = self.class.with_model_fields(attrs)
-        else
-          dirty_attributes = fm_attributes
-        end
+        return true if dirty_attributes.empty?
 
         run_callbacks :update do
           # Will raise `RecordModificationIdMismatchError` if does not match
           options = { modid: mod_id } # Always pass in?
           yield options if block_given?
           resultset = api.edit(record_id, dirty_attributes, options)
+          changes_applied
           replace_new_data(resultset)
         end
         self
@@ -54,8 +50,8 @@ module Filemaker
 
       def update_attributes(attrs = {})
         return self if attrs.blank?
-        dirty_attributes = assign_attributes(attrs)
-        save(dirty_attributes)
+        assign_attributes(attrs)
+        save
       end
 
       # Use -delete to remove the record backed by the model.
@@ -74,24 +70,18 @@ module Filemaker
 
       # If value is nil, we convert to empty string so it will get pick up by
       # `fm_attributes`
-      #
-      # We return the dirty attributes because we do not want to update the
-      # entire attributes.
       def assign_attributes(new_attributes)
         return if new_attributes.blank?
-        dirty_attributes = {}
 
         new_attributes.each_pair do |key, value|
           next unless respond_to?("#{key}=")
 
-          public_send("#{key}=", (value || '')) # May be wasted effort
-          dirty_attributes[key] = value || ''
+          public_send("#{key}=", (value || ''))
         end
-
-        dirty_attributes
       end
 
       def reload!
+        reset_changes
         resultset = api.find(record_id)
         replace_new_data(resultset)
         self
@@ -112,7 +102,8 @@ module Filemaker
           field = self.class.find_field_by_name(fm_field_name)
           next unless field
 
-          public_send("#{field.name}=", record[fm_field_name])
+          # Because we are using ActiveModel::Dirty, so we hydrate directly.
+          attributes[field.name] = field.coerce(record[fm_field_name])
         end
       end
     end

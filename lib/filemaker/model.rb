@@ -49,6 +49,14 @@ module Filemaker
       self.class.with_model_fields(attributes)
     end
 
+    def dirty_attributes
+      dirty = {}
+      changed.each do |attr_name|
+        dirty[attr_name] = attributes[attr_name]
+      end
+      self.class.with_model_fields(dirty)
+    end
+
     private
 
     def process_attributes(attrs)

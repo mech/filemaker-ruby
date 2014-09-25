@@ -14,6 +14,7 @@ module Filemaker
       end
 
       include ActiveModel::Model
+      include ActiveModel::Dirty
       include ActiveModel::Serializers::JSON
       include ActiveModel::Serializers::Xml
       include ActiveModel::Validations::Callbacks

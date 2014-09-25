@@ -78,4 +78,17 @@ describe Filemaker::Model do
     end
   end
 
+  context 'dirty attributes' do
+    it 'does not track changes for new model' do
+      expect(model.changed?).to be false
+    end
+
+    it 'tracks changes' do
+      model.name = 'Bob'
+      expect(model.changed?).to be true
+      expect(model.changed).to eq ['name']
+      expect(model.dirty_attributes).to eq({'name' => 'Bob'})
+    end
+  end
+
 end

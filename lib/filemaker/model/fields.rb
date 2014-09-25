@@ -76,12 +76,15 @@ module Filemaker
         def create_accessors(name)
           name = name.to_s # Normalize it so ActiveModel::Serialization can work
 
+          define_attribute_methods name
+
           # Reader
           define_method(name) { attributes[name] }
 
           # Writer - We try to map to the correct type, if not we just return
           # original.
           define_method("#{name}=") do |value|
+            public_send("#{name}_will_change!") unless value == attributes[name]
             attributes[name] = fields[name].coerce(value)
           end
 

@@ -21,7 +21,8 @@ module Filemaker
             field = klass.find_field_by_name(fm_field_name)
             next unless field
 
-            object.public_send("#{field.name}=", record[fm_field_name])
+            # Because we are using ActiveModel::Dirty, so we hydrate directly.
+            object.attributes[field.name] = field.coerce(record[fm_field_name])
           end
 
           models << object
