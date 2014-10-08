@@ -96,6 +96,10 @@ module Filemaker
         self.per_page = value.to_i
       end
 
+      def default_per_page
+        self.per_page
+      end
+
       # Make use of -view to return an array of [name, data_type] for this
       # model from FileMaker.
       #
