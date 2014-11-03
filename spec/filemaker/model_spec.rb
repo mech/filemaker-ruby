@@ -62,6 +62,17 @@ describe Filemaker::Model do
     expect(model.salary?).to be true
   end
 
+  it 'has model key' do
+    expect(model.model_key).to eq 'my_models'
+  end
+
+  it 'has cache key' do
+    expect(model.cache_key).to eq 'my_models/new'
+    model.candidate_id = 'CA123'
+    model.instance_variable_set('@new_record', false)
+    expect(model.cache_key).to eq 'my_models/CA123'
+  end
+
   describe 'process_attributes' do
     it 'accepts a hash of attributes' do
       model = MyModel.new(name: 'Bob', email: 'bob@cern.org')

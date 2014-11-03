@@ -33,6 +33,17 @@ module Filemaker
       [self]
     end
 
+    def model_key
+      @model_cache_key ||= "#{self.class.model_name.cache_key}"
+    end
+
+    def cache_key
+      return "#{model_key}/new" if new_record?
+      return "#{model_key}/#{id}-#{updated_at.to_datetime.utc.to_s(:number)}" \
+        if respond_to?(:updated_at) && send(:updated_at)
+      "#{model_key}/#{id}"
+    end
+
     def id
       self.class.identity ? identity_id : record_id
     end
