@@ -70,6 +70,10 @@ module Filemaker
           if key_value.blank?
             @target = nil # Or should we return empty array?
           else
+            # Single `=` match whole word or (match empty)
+            # Double `==` match entire field
+            # If the field value contains underscore or space like 'FM_notified'
+            # or 'FM notified', a single `=` may not match correctly.
             @target = target_class.where(reference_key => "=#{key_value}")
           end
         end
