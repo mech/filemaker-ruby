@@ -96,6 +96,7 @@ module Filemaker
         @new_record = false
         @record_id = record.record_id
         @mod_id = record.mod_id
+        @portals = record.portals
 
         record.keys.each do |fm_field_name|
           # record.keys are all lowercase
