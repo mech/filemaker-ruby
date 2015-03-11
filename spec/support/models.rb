@@ -18,6 +18,18 @@ class Post
   string :candidate_id, :email
 end
 
+class Job
+  include Filemaker::Model
+
+  database :jobs
+  layout   :jobs
+
+  string :status
+  string :jdid, fm_name: 'JDID'
+  date   :modify_date, fm_name: 'modify date'
+
+end
+
 class MyModel
   include Filemaker::Model
 
