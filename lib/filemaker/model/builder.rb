@@ -15,13 +15,6 @@ module Filemaker
         models
       end
 
-      def single(resultset, klass)
-        record = resultset.first
-        object = klass.new
-
-        build(record, object)
-      end
-
       def build(record, object)
         object.instance_variable_set('@new_record', false)
         object.instance_variable_set('@record_id', record.record_id)

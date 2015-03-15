@@ -5,10 +5,10 @@ describe Filemaker::Model::Builder do
   let(:xml) { import_xml_as_string('jobs.xml') }
   let(:resultset) { Filemaker::Resultset.new(server, xml) }
 
-  context '.single' do
+  context '.' do
 
     let(:subject) {
-      Filemaker::Model::Builder.single(resultset, model)
+      Filemaker::Model::Builder.build(resultset.first, model.new)
     }
 
     it 'has portals' do
