@@ -91,7 +91,7 @@ module Filemaker
 
       # If you have calculated field from FileMaker, it will be replaced.
       def replace_new_data(resultset)
-        FileMaker::Model::Builder.hydrated_object_from_record(self, resultset.first, true)
+        FileMaker::Model::Builder.build(resultset.first, self)
       end
     end
   end
