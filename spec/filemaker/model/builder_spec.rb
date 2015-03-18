@@ -5,7 +5,7 @@ describe Filemaker::Model::Builder do
   let(:xml) { import_xml_as_string('jobs.xml') }
   let(:resultset) { Filemaker::Resultset.new(server, xml) }
 
-  context '.' do
+  context '.build' do
 
     let(:subject) {
       Filemaker::Model::Builder.build(resultset.first, model.new)
