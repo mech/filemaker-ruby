@@ -91,21 +91,7 @@ module Filemaker
 
       # If you have calculated field from FileMaker, it will be replaced.
       def replace_new_data(resultset)
-        record = resultset.first
-
-        @new_record = false
-        @record_id = record.record_id
-        @mod_id = record.mod_id
-        @portals = record.portals
-
-        record.keys.each do |fm_field_name|
-          # record.keys are all lowercase
-          field = self.class.find_field_by_name(fm_field_name)
-          next unless field
-
-          # Because we are using ActiveModel::Dirty, so we hydrate directly.
-          attributes[field.name] = field.coerce(record[fm_field_name])
-        end
+        FileMaker::Model::Builder.build(resultset.first, self)
       end
     end
   end
