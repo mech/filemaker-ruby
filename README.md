@@ -139,6 +139,9 @@ end
 
 Model.where(gender: 'male').or(name: 'Lee').not(age: '=40')
 
+# DateTime range example
+Model.where(timestamp: "10/17/2015 00:00:00...10/20/2015 23:59:59")
+
 # Comparison operator
 
 Model.equals(candidate_id: '123')         # { candidate_id: '=123' }
