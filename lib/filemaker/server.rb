@@ -82,8 +82,8 @@ module Filemaker
 
       args.each do |key, value|
         case value
-        when Date     then args[key] = value.strftime('%m/%d/%Y')
         when DateTime then args[key] = value.strftime('%m/%d/%Y %H:%M:%S')
+        when Date     then args[key] = value.strftime('%m/%d/%Y')
         when Time     then args[key] = value.strftime('%H:%M')
         else
           # Especially for range operator (...), we want to output as String
