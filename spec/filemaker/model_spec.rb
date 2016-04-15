@@ -1,5 +1,4 @@
 describe Filemaker::Model do
-
   let(:model) { MyModel.new }
 
   it 'sets up -db and -lay' do
@@ -12,10 +11,10 @@ describe Filemaker::Model do
   it 'sets up server and api' do
     expect(MyModel.api.default_params).to eq \
       ({ '-db' => :candidates, '-lay' => :profile })
-    expect(MyModel.server.host).to eq 'example'
+    expect(MyModel.server.host).to eq 'example.com'
     expect(model.api.default_params).to eq \
       ({ '-db' => :candidates, '-lay' => :profile })
-    expect(model.server.host).to eq 'example'
+    expect(model.server.host).to eq 'example.com'
   end
 
   it 'is a new record' do
@@ -53,6 +52,16 @@ describe Filemaker::Model do
   it 'created_at is Date' do
     model.created_at = '4/12/2014'
     expect(model.created_at).to be_a Date
+  end
+
+  it 'accepts date range as string' do
+    model.created_at = '1/1/2016...1/31/2016'
+    expect(model.created_at).to be_a String
+  end
+
+  it 'accepts number range as string' do
+    model.salary = '1000...2000'
+    expect(model.salary).to be_a String
   end
 
   it 'check for presence of name and salary' do
@@ -98,8 +107,7 @@ describe Filemaker::Model do
       model.name = 'Bob'
       expect(model.changed?).to be true
       expect(model.changed).to eq ['name']
-      expect(model.dirty_attributes).to eq({'name' => 'Bob'})
+      expect(model.dirty_attributes).to eq({ 'name' => 'Bob' })
     end
   end
-
 end

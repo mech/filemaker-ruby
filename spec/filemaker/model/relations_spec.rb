@@ -1,5 +1,4 @@
 describe Filemaker::Model::Relations do
-
   it 'every model has a relations hash' do
     expect(MyModel.new.relations).to eq({})
   end

@@ -1,5 +1,5 @@
 Filemaker.registry['default'] = Filemaker::Server.new do |config|
-  config.host         = 'example'
+  config.host         = 'example.com'
   config.account_name = 'account_name'
   config.password     = 'password'
 end
@@ -27,7 +27,6 @@ class Job
   string :status
   string :jdid, fm_name: 'JDID'
   date   :modify_date, fm_name: 'modify date'
-
 end
 
 class MyModel
@@ -36,15 +35,15 @@ class MyModel
   database :candidates
   layout :profile
 
+  belongs_to :candidate
+  belongs_to :applicant, class_name: User, reference_key: :name
+  has_many :posts
+  has_many :posters, class_name: User, reference_key: :email
+
   string :name, :email, default: 'UNTITLED'
   string :candidate_id, fm_name: 'CA ID', identity: true
   date :created_at
   datetime :updated_at, fm_name: 'ModifiedDate'
   money :salary
   integer :age, fm_name: 'passage of time'
-
-  belongs_to :candidate
-  belongs_to :applicant, class_name: User, reference_key: :name
-  has_many :posts
-  has_many :posters, class_name: User, reference_key: :email
 end

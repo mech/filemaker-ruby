@@ -1,5 +1,4 @@
 describe Filemaker::Model::Criteria do
-
   let(:criteria) { Filemaker::Model::Criteria.new(MyModel) }
   let(:cf) { Filemaker::Api::QueryCommands::CompoundFind }
 
@@ -130,7 +129,7 @@ describe Filemaker::Model::Criteria do
         expect(compound_find.key_maps_string).to eq \
           '(q0,q2);(q0,q3);(q1,q2);(q1,q3)'
         expect(criteria.selector).to eq \
-          [{ 'name' => %w(Bob Lee), 'passage of time' =>  [20, 30] }]
+          [{ 'name' => %w(Bob Lee), 'passage of time' => [20, 30] }]
       end
 
       it '{a: [1, 2], b: 3} to (q0,q2);(q1,q2)' do
@@ -315,5 +314,4 @@ describe Filemaker::Model::Criteria do
       expect(criteria.per(50).options[:skip]).to be_nil
     end
   end
-
 end

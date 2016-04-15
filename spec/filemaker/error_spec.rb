@@ -1,5 +1,4 @@
 describe Filemaker::Errors do
-
   context '-1 to 100 errors' do
     it 'raises UnknownError for -1' do
       expect do
@@ -253,5 +252,4 @@ describe Filemaker::Errors do
       end.to raise_error Filemaker::Errors::UnableToOpenFileError
     end
   end
-
 end

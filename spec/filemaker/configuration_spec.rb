@@ -1,5 +1,4 @@
 describe 'Configuration' do
-
   context 'with yaml file' do
     it 'load settings based on environment' do
       path = File.expand_path('../../support/filemaker.yml', __FILE__)
@@ -19,5 +18,4 @@ describe 'Configuration' do
       end.to raise_error Filemaker::Errors::ConfigurationError
     end
   end
-
 end

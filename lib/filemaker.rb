@@ -29,20 +29,20 @@ module Filemaker
   # defined at the `filemaker.yml` config file.
   def load!(path, environment = nil)
     sessions = YAML.load(ERB.new(File.new(path).read).result)[environment.to_s]
-    fail Errors::ConfigurationError, 'Environment wrong?' if sessions.nil?
+    raise Errors::ConfigurationError, 'Environment wrong?' if sessions.nil?
 
     sessions.each_pair do |key, value|
       registry[key] = Filemaker::Server.new do |config|
         config.host = value.fetch('host') do
-          fail Errors::ConfigurationError, 'Missing config.host'
+          raise Errors::ConfigurationError, 'Missing config.host'
         end
 
         config.account_name = value.fetch('account_name') do
-          fail Errors::ConfigurationError, 'Missing config.account_name'
+          raise Errors::ConfigurationError, 'Missing config.account_name'
         end
 
         config.password = value.fetch('password') do
-          fail Errors::ConfigurationError, 'Missing config.password'
+          raise Errors::ConfigurationError, 'Missing config.password'
         end
 
         config.ssl = value['ssl'] if value['ssl']

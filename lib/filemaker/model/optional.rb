@@ -48,8 +48,8 @@ module Filemaker
 
           next unless field
 
-          direction = 'ascend' if direction.downcase == 'asc'
-          direction = 'descend' if direction.downcase == 'desc'
+          direction = 'ascend' if direction.casecmp('ASC').zero?
+          direction = 'descend' if direction.casecmp('DESC').zero?
 
           sortfield << field.fm_name
           sortorder << direction

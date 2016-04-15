@@ -66,6 +66,7 @@ module Filemaker
         end
         freeze
       end
+
       alias_method :delete, :destroy
 
       # If value is nil, we convert to empty string so it will get pick up by

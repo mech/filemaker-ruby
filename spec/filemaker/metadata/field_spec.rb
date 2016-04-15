@@ -58,5 +58,4 @@ describe Filemaker::Metadata::Field do
         'https://host/fmi/xml/cnt/1234jpg'
     end
   end
-
 end

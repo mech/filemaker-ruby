@@ -20,6 +20,7 @@ module Filemaker
       def coerce(value)
         return nil if value.nil?
         return value if value == '==' || value == '=*'
+        return value if value =~ /(\.\.\.)/
 
         if @type == String
           value.to_s

@@ -34,7 +34,7 @@ module Filemaker
     end
 
     def model_key
-      @model_cache_key ||= "#{self.class.model_name.cache_key}"
+      @model_cache_key ||= self.class.model_name.cache_key
     end
 
     def cache_key
@@ -108,7 +108,7 @@ module Filemaker
       end
 
       def default_per_page
-        self.per_page
+        per_page
       end
 
       # Make use of -view to return an array of [name, data_type] for this

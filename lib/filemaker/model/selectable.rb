@@ -7,8 +7,8 @@ module Filemaker
       #
       # @return [Filemaker::Model::Criteria]
       def where(criterion)
-        fail Filemaker::Errors::MixedClauseError,
-             "Can't mix 'where' with 'in'." if chains.include?(:in)
+        raise Filemaker::Errors::MixedClauseError,
+              "Can't mix 'where' with 'in'." if chains.include?(:in)
         chains.push(:where)
 
         @selector ||= {}
@@ -54,17 +54,17 @@ module Filemaker
 
       %w(eq cn bw ew gt gte lt lte neq).each do |operator|
         define_method(operator) do |criterion, &block|
-          fail Filemaker::Errors::MixedClauseError,
-               "Can't mix 'where' with 'in'." if chains.include?(:in)
+          raise Filemaker::Errors::MixedClauseError,
+                "Can't mix 'where' with 'in'." if chains.include?(:in)
           chains.push(operator.to_sym)
           chains.push(:where) unless chains.include?(:where) # Just one time
           @selector ||= {}
 
-          if operator == 'bw'
-            criterion = klass.with_model_fields(criterion, false)
-          else
-            criterion = klass.with_model_fields(criterion)
-          end
+          criterion = if operator == 'bw'
+                        klass.with_model_fields(criterion, false)
+                      else
+                        klass.with_model_fields(criterion)
+                      end
 
           criterion.each_key do |key|
             selector["#{key}.op"] = operator
@@ -97,8 +97,8 @@ module Filemaker
       #
       # @return [Filemaker::Model::Criteria]
       def in(criterion, negating = false)
-        fail Filemaker::Errors::MixedClauseError,
-             "Can't mix 'in' with 'where'." if chains.include?(:where)
+        raise Filemaker::Errors::MixedClauseError,
+              "Can't mix 'in' with 'where'." if chains.include?(:where)
         chains.push(:in)
         @selector ||= []
 
@@ -127,8 +127,8 @@ module Filemaker
       #
       # @return [Filemaker::Model::Criteria]
       def or(criterion)
-        fail Filemaker::Errors::MixedClauseError,
-             "Can't mix 'or' with 'in'." if chains.include?(:in)
+        raise Filemaker::Errors::MixedClauseError,
+              "Can't mix 'or' with 'in'." if chains.include?(:in)
         @selector ||= {}
         selector.merge!(klass.with_model_fields(criterion))
         options[:lop] = 'or'

@@ -1,5 +1,4 @@
 describe Filemaker::Store::ScriptStore do
-
   it 'is a Hash' do
     store = Filemaker::Store::ScriptStore.new(double, double)
     expect(store).to be_a Hash
@@ -16,7 +15,7 @@ describe Filemaker::Store::ScriptStore do
   describe 'all' do
     it 'returns all scripts for a database' do
       server = Filemaker::Server.new do |config|
-        config.host         = 'example'
+        config.host         = 'example.com'
         config.account_name = 'account_name'
         config.password     = 'password'
       end
@@ -27,5 +26,4 @@ describe Filemaker::Store::ScriptStore do
         ['library', 'open job', 'copy resume']
     end
   end
-
 end

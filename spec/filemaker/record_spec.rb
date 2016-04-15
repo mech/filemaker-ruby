@@ -8,7 +8,8 @@ describe Filemaker::Record do
 
     xml = import_xml_as_string('portal.xml')
     resultset = Filemaker::Resultset.new(server, xml)
-    records = Nokogiri::XML(xml).remove_namespaces!.xpath('/fmresultset/resultset/record')
+    path = '/fmresultset/resultset/record'
+    records = Nokogiri::XML(xml).remove_namespaces!.xpath(path)
     @record = Filemaker::Record.new(records.first, resultset)
   end
 
@@ -59,5 +60,4 @@ describe Filemaker::Record do
       expect(@record.dirty).to eq({ 'year' => 2014 })
     end
   end
-
 end

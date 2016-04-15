@@ -25,7 +25,7 @@ module Filemaker
         money:    BigDecimal,
         number:   BigDecimal,
         integer:  Integer
-      }
+      }.freeze
 
       included do
         class_attribute :fields, :identity

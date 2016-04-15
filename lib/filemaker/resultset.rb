@@ -99,7 +99,7 @@ module Filemaker
 
       metadata.xpath('relatedset-definition').each do |relatedset|
         table_name = relatedset.attribute('table').value
-        p_fields     = {}
+        p_fields   = {}
 
         @portal_fields[table_name] ||= p_fields
 

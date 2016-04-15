@@ -50,8 +50,10 @@ module Filemaker
         #
         # @return [Filemaker::Model] the actual model
         def build(attrs = {})
-          attrs.merge!(owner.identity.name => owner.identity_id) if \
-            owner.identity_id
+          # attrs.merge!(owner.identity.name => owner.identity_id) if \
+          #   owner.identity_id
+          #
+          attrs[owner.identity.name] = owner.identity_id if owner.identity_id
           target_class.new(attrs)
         end
 

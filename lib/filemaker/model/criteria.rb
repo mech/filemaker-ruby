@@ -90,8 +90,8 @@ module Filemaker
 
         if defined?(Kaminari) && paginated
           Kaminari.paginate_array(models, total_count: resultset.count)
-            .page(@_page)
-            .per(options[:max])
+                  .page(@_page)
+                  .per(options[:max])
         else
           models
         end

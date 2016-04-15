@@ -1,5 +1,4 @@
 describe Filemaker::Layout do
-
   it 'presets -db and -lay' do
     database = Filemaker::Database.new('candidates', double)
     layout = Filemaker::Layout.new('profile', double, database)
@@ -8,10 +7,9 @@ describe Filemaker::Layout do
   end
 
   context 'api' do
-
     before do
       @server = Filemaker::Server.new do |config|
-        config.host         = 'example'
+        config.host         = 'example.com'
         config.account_name = 'account_name'
         config.password     = 'password'
       end
@@ -182,7 +180,6 @@ describe Filemaker::Layout do
 
       it 'transforms [{a:1, b:2}, {c:3}, {d:4}, {e:5, "-omit": true}] to \
         (q0,q1);(q2);(q3);!(q4)' do
-
         resultset = @layout.query(
           [{ a: 1, b: 2 }, { c: 3 }, { d: 4 }, { e: 5, '-omit' => true }]
         )

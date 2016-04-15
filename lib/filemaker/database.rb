@@ -8,8 +8,8 @@ module Filemaker
 
     # @return [Filemaker::Store::LayoutStore] the layout store
     attr_reader :layouts
-    alias_method :layout, :layouts
-    alias_method :lay, :layouts
+    alias layout layouts
+    alias lay layouts
 
     # @return [Filemaker::Store::ScriptStore] the script store
     attr_reader :scripts

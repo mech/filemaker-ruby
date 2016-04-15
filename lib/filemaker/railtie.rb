@@ -9,7 +9,7 @@ module Rails
         if config_file.file?
           ::Filemaker.load!(config_file, Rails.env)
         else
-          fail ::Filemaker::Errors::ConfigurationError, 'No config file'
+          raise ::Filemaker::Errors::ConfigurationError, 'No config file'
         end
       end
     end

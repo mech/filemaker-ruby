@@ -20,7 +20,7 @@ module Filemaker
     def initialize(options = {})
       @config = Configuration.new
       yield @config if block_given?
-      fail ArgumentError, 'Missing config block' if @config.not_configurable?
+      raise ArgumentError, 'Missing config block' if @config.not_configurable?
 
       @databases = Store::DatabaseStore.new(self)
       @connection = get_connection(options)
@@ -36,8 +36,8 @@ module Filemaker
     # @return [Array] Faraday::Response and request params Hash
     def perform_request(method, action, args, options = {})
       params = serialize_args(args)
-        .merge(expand_options(options))
-        .merge({ action => '' })
+               .merge(expand_options(options))
+               .merge({ action => '' })
 
       # Serialize the params for submission??
       params.stringify_keys!
@@ -49,13 +49,13 @@ module Filemaker
 
       case response.status
       when 200 then [response, params]
-      when 401 then fail Errors::AuthenticationError, 'Auth failed.'
-      when 0   then fail Errors::CommunicationError, 'Empty response.'
-      when 404 then fail Errors::CommunicationError, 'HTTP 404 Not Found'
-      when 302 then fail Errors::CommunicationError, 'Redirect not supported'
+      when 401 then raise Errors::AuthenticationError, 'Auth failed.'
+      when 0   then raise Errors::CommunicationError, 'Empty response.'
+      when 404 then raise Errors::CommunicationError, 'HTTP 404 Not Found'
+      when 302 then raise Errors::CommunicationError, 'Redirect not supported'
       else
         msg = "Unknown response status = #{response.status}"
-        fail Errors::CommunicationError, msg
+        raise Errors::CommunicationError, msg
       end
     end
 
@@ -105,7 +105,7 @@ module Filemaker
         when :sortfield
           if value.is_a? Array
             msg = 'Too many sortfield, limit=9'
-            fail(Filemaker::Errors::ParameterError, msg) if value.size > 9
+            raise(Filemaker::Errors::ParameterError, msg) if value.size > 9
             value.each_index do |index|
               expanded["-sortfield.#{index + 1}"] = value[index]
             end
@@ -116,7 +116,7 @@ module Filemaker
           if value.is_a? Array
             # Use :sortfield as single source of truth for array size
             msg = 'Too many sortorder, limit=9'
-            fail(Filemaker::Errors::ParameterError, msg) if value.size > 9
+            raise(Filemaker::Errors::ParameterError, msg) if value.size > 9
             options[:sortfield].each_index do |index|
               expanded["-sortorder.#{index + 1}"] = value[index] || 'ascend'
             end
@@ -174,8 +174,9 @@ module Filemaker
     end
 
     def log_curl(params, has_auth = false)
-      full_url = "#{url}#{endpoint}?#{log_params(params)}"
-      curl_ssl_option, auth = '', ''
+      full_url        = "#{url}#{endpoint}?#{log_params(params)}"
+      curl_ssl_option = ''
+      auth            = ''
 
       curl_ssl_option = ' -k' if ssl.is_a?(Hash) && !ssl.fetch(:verify) { true }
 

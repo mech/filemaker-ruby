@@ -12,8 +12,8 @@ module Filemaker
       super(convert_key(key))
     end
 
-    alias_method :include?, :key?
-    alias_method :member?, :key?
+    alias include? key?
+    alias member? key?
 
     def fetch(key, *extras)
       super(convert_key(key), *extras)

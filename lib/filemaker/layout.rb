@@ -23,8 +23,12 @@ module Filemaker
 
     # @return [Filemaker::Resultset]
     def perform_request(action, args, options)
-      response, params = server
-        .perform_request(:post, action, default_params.merge(args), options)
+      response, params = server.perform_request(
+        :post,
+        action,
+        default_params.merge(args),
+        options
+      )
 
       Filemaker::Resultset.new(server, response.body, params)
     end

@@ -67,5 +67,4 @@ describe Filemaker::Resultset do
       expect(resultset.list.size).to eq 2
     end
   end
-
 end
