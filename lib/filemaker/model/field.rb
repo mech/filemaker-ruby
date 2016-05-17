@@ -17,6 +17,9 @@ module Filemaker
       #
       # If the value is `==` (match empty) or `=*` (match record), then we will
       # skip coercion.
+      #
+      # Date and DateTime will be special. If the value is a String, the query
+      # may be '2016', '3/2016' or '3/24/2016' for example.
       def coerce(value)
         return nil if value.nil?
         return value if value == '==' || value == '=*'
@@ -30,15 +33,17 @@ module Filemaker
           BigDecimal.new(value.to_s)
         elsif @type == Date
           return value if value.is_a? Date
+          return value.to_s if value.is_a? String
           Date.parse(value.to_s)
         elsif @type == DateTime
           return value if value.is_a? DateTime
+          return value.to_s if value.is_a? String
           DateTime.parse(value.to_s)
         else
           value
         end
-      rescue
-        warn "Could not coerce #{name}: #{value}"
+      rescue Exception => e
+        warn "[#{e.message}] Could not coerce #{name}: #{value}"
         value
       end
     end

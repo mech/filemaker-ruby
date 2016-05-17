@@ -49,10 +49,10 @@ describe Filemaker::Model do
     expect(model.salary).to be_a BigDecimal
   end
 
-  it 'created_at is Date' do
-    model.created_at = '4/12/2014'
-    expect(model.created_at).to be_a Date
-  end
+  # it 'created_at is Date' do
+  #   model.created_at = '4/12/2014'
+  #   expect(model.created_at).to be_a Date
+  # end
 
   it 'accepts date range as string' do
     model.created_at = '1/1/2016...1/31/2016'
