@@ -10,6 +10,7 @@ module Filemaker
         raise Filemaker::Errors::MixedClauseError,
               "Can't mix 'where' with 'in'." if chains.include?(:in)
         chains.push(:where)
+        chains.delete(:in)
 
         @selector ||= {}
         selector.merge!(klass.with_model_fields(criterion))
@@ -58,6 +59,7 @@ module Filemaker
                 "Can't mix 'where' with 'in'." if chains.include?(:in)
           chains.push(operator.to_sym)
           chains.push(:where) unless chains.include?(:where) # Just one time
+          chains.delete(:in)
           @selector ||= {}
 
           criterion = if operator == 'bw'
@@ -100,6 +102,7 @@ module Filemaker
         raise Filemaker::Errors::MixedClauseError,
               "Can't mix 'in' with 'where'." if chains.include?(:where)
         chains.push(:in)
+        chains.delete(:where)
         @selector ||= []
 
         become_array(criterion).each do |hash|
@@ -109,6 +112,14 @@ module Filemaker
         end
 
         yield options if block_given?
+        self
+      end
+
+      def custom_query(criterion)
+        chains.push(:custom)
+        chains.delete(:where)
+        chains.delete(:in)
+        @selector = criterion
         self
       end
 

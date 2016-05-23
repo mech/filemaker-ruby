@@ -40,6 +40,15 @@ describe Filemaker::Model::Criteria do
       end
     end
 
+    describe 'custom_query' do
+      it 'remove :where chain' do
+        query = { '-query' => 'this is custom' }
+        criteria.where(name: 'Bob').custom_query(query)
+        expect(criteria.chains).to eq [:custom]
+        expect(criteria.selector).to eq query
+      end
+    end
+
     describe 'find' do
       it 'resets the selector and will not double :where' do
         allow(criteria).to receive(:first).and_return(nil)

@@ -63,6 +63,8 @@ module Filemaker
           klass.api.find(selector, options).count
         elsif chains.include?(:in)
           klass.api.query(selector, options).count
+        elsif chains.include?(:custom)
+          klass.api.findquery(selector, options).count
         else
           klass.api.findall(options).count
         end
@@ -80,6 +82,9 @@ module Filemaker
         elsif chains.include?(:in)
           # Use -findquery
           resultset = klass.api.query(selector, options)
+        elsif chains.include?(:custom)
+          # Use -findquery directly
+          resultset = klass.api.findquery(selector, options)
         else
           # Use -findall
           limit(1) unless limit?
