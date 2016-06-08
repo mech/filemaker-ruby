@@ -15,6 +15,10 @@ module Filemaker
           options.fetch(:reference_key) { owner.identity.name }
         end
 
+        def source_key
+          options.fetch(:source_key) { reference_key }
+        end
+
         # Append a model or array of models to the relation. Will set the owner
         # ID to the children.
         #
@@ -76,7 +80,7 @@ module Filemaker
             # Double `==` match entire field
             # If the field value contains underscore or space like 'FM_notified'
             # or 'FM notified', a single `=` may not match correctly.
-            @target = target_class.where(reference_key => "=#{key_value}")
+            @target = target_class.where(source_key => "=#{key_value}")
           end
         end
       end
