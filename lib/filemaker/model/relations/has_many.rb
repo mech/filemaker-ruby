@@ -15,8 +15,18 @@ module Filemaker
           options.fetch(:reference_key) { owner.identity.name }
         end
 
+        def reference_value
+          owner.public_send(reference_key.to_sym)
+        end
+
         def source_key
-          options.fetch(:source_key) { reference_key }
+          options.fetch(:source_key) { nil }
+        end
+
+        def final_reference_key
+          target_class.find_field_by_name(source_key).try(:name) ||
+          target_class.find_field_by_name(reference_key).try(:name) ||
+          target_class.identity.try(:name)
         end
 
         # Append a model or array of models to the relation. Will set the owner
@@ -71,17 +81,11 @@ module Filemaker
         protected
 
         def build_target
-          key_value = owner.public_send(reference_key.to_sym)
+          @target = [] if reference_value.blank? || final_reference_key.blank?
 
-          if key_value.blank?
-            @target = nil # Or should we return empty array?
-          else
-            # Single `=` match whole word or (match empty)
-            # Double `==` match entire field
-            # If the field value contains underscore or space like 'FM_notified'
-            # or 'FM notified', a single `=` may not match correctly.
-            @target = target_class.where(source_key => "=#{key_value}")
-          end
+          @target = target_class.where(
+            final_reference_key => "=#{reference_value}"
+          )
         end
       end
     end

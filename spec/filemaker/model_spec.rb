@@ -37,6 +37,8 @@ describe Filemaker::Model do
         'name',
         'email',
         'ca id',
+        'member_id',
+        'manager_id',
         'created_at',
         'modifieddate',
         'salary',
