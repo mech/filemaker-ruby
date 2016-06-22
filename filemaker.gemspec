@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'typhoeus'
   spec.add_runtime_dependency 'nokogiri'
   spec.add_runtime_dependency 'activemodel'
+  spec.add_runtime_dependency 'globalid'
 
   spec.add_development_dependency 'bundler', '~> 1.11'
   spec.add_development_dependency 'rake', '~> 11.0'

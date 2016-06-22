@@ -16,8 +16,8 @@ module Filemaker
       include ActiveModel::Model
       include ActiveModel::Dirty
       include ActiveModel::Serializers::JSON
-      # include ActiveModel::Serializers::Xml
       include ActiveModel::Validations::Callbacks
+      include GlobalID::Identification
       include Fields
       include Relations
       include Persistable
