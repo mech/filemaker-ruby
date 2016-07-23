@@ -188,13 +188,17 @@ module Filemaker
     end
 
     def log_simple(params)
-      warn "#{endpoint}?#{log_params(params)}"
+      warn colorize('48;2;255;0;0', "#{endpoint}?#{log_params(params)}")
     end
 
     def log_params(params)
       params.map do |key, value|
         "#{CGI.escape(key.to_s)}=#{CGI.escape(value.to_s)}"
       end.join('&')
+    end
+
+    def colorize(color, message)
+      "\e[#{color}m#{message}\e[0m"
     end
   end
 end
