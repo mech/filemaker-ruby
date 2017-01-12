@@ -42,7 +42,7 @@ module Filemaker
         else
           value
         end
-      rescue Exception => e
+      rescue StandardError => e
         warn "[#{e.message}] Could not coerce #{name}: #{value}"
         value
       end

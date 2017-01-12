@@ -77,13 +77,17 @@ module Filemaker
 
     def normalize_data(datum)
       return nil if datum.empty?
-      (datum.size == 1) ? datum.first : datum
+      datum.size == 1 ? datum.first : datum
     end
 
     def method_missing(symbol, *args, &block)
       method = symbol.to_s
       return self[method] if key?(method)
       return @dirty[$`] = args.first if method =~ /(=)$/ && key?($`)
+      super
+    end
+
+    def respond_to_missing?
       super
     end
   end

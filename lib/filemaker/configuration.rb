@@ -21,8 +21,12 @@ module Filemaker
       ssl.is_a?(Hash) ? { ssl: ssl } : {}
     end
 
+    def is_ssl?
+      ssl.is_a?(Hash) || ssl == true
+    end
+
     def url
-      (ssl.is_a?(Hash) || ssl == true) ? "https://#{host}" : "http://#{host}"
+      is_ssl? ? "https://#{host}" : "http://#{host}"
     end
   end
 end

@@ -27,7 +27,11 @@ module Filemaker
         end
 
         def method_missing(name, *args, &block)
-          target.send(name, *args, &block)
+          target.send(name, *args, &block) || super
+        end
+
+        def respond_to_missing?(method_name, include_private = false)
+          super
         end
       end
     end

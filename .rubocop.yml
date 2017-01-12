@@ -22,3 +22,21 @@ SpecialGlobalVars:
 
 PredicateName:
   Enabled: false
+
+Metrics/AbcSize:
+  Max: 50
+
+Metrics/ClassLength:
+  Max: 200
+
+Metrics/BlockLength:
+  Max: 100
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Style/DoubleNegation:
+  Enabled: false

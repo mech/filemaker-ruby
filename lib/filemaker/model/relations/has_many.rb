@@ -25,8 +25,8 @@ module Filemaker
 
         def final_reference_key
           target_class.find_field_by_name(source_key).try(:name) ||
-          target_class.find_field_by_name(reference_key).try(:name) ||
-          target_class.identity.try(:name)
+            target_class.find_field_by_name(reference_key).try(:name) ||
+            target_class.identity.try(:name)
         end
 
         # Append a model or array of models to the relation. Will set the owner
@@ -47,7 +47,7 @@ module Filemaker
           end
           self
         end
-        alias_method :push, :<<
+        alias push <<
 
         # def concat(docs)
         #   # TODO: Find out how to do batch insert in FileMaker

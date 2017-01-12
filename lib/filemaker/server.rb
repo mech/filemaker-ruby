@@ -11,8 +11,8 @@ module Filemaker
 
     # @return [Filemaker::Store::DatabaseStore] the database store
     attr_reader :databases
-    alias_method :database, :databases
-    alias_method :db, :databases
+    alias database databases
+    alias db databases
 
     def_delegators :@config, :host, :url, :ssl, :endpoint, :log
     def_delegators :@config, :account_name, :password
@@ -168,8 +168,6 @@ module Filemaker
       when :simple    then log_simple(params)
       when :curl      then log_curl(params)
       when :curl_auth then log_curl(params, true)
-      else
-        return
       end
     end
 

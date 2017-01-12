@@ -197,8 +197,8 @@ Note: It is vitally important that you get the order right for mixing in the use
 - [x] Please test the comparison operators with keyword as well as applied to value.
 - [x] Test serialization of BigDecimal and other types.
 - [x] Caching of relation models.
+- [x] Dirty checking API for model.
 - [ ] Test the order for `in` and `not_in` found set accuracy.
-- [ ] Dirty checking API for model.
 
 ## Pagination
 
@@ -221,6 +221,10 @@ end
 
 Job.per_page # => 50
 ```
+
+## Overview
+
+`Model` include `Findable` which create `Criteria` and `execute()` to return `Resultset` to be built by `Builder`.
 
 ## Credits
 

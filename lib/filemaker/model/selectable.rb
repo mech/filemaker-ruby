@@ -7,8 +7,11 @@ module Filemaker
       #
       # @return [Filemaker::Model::Criteria]
       def where(criterion)
-        raise Filemaker::Errors::MixedClauseError,
-              "Can't mix 'where' with 'in'." if chains.include?(:in)
+        if chains.include?(:in)
+          raise Filemaker::Errors::MixedClauseError,
+                "Can't mix 'where' with 'in'."
+        end
+
         chains.push(:where)
         chains.delete(:in)
 
@@ -55,8 +58,11 @@ module Filemaker
 
       %w(eq cn bw ew gt gte lt lte neq).each do |operator|
         define_method(operator) do |criterion, &block|
-          raise Filemaker::Errors::MixedClauseError,
-                "Can't mix 'where' with 'in'." if chains.include?(:in)
+          if chains.include?(:in)
+            raise Filemaker::Errors::MixedClauseError,
+                  "Can't mix 'where' with 'in'."
+          end
+
           chains.push(operator.to_sym)
           chains.push(:where) unless chains.include?(:where) # Just one time
           chains.delete(:in)
@@ -81,11 +87,11 @@ module Filemaker
         end
       end
 
-      alias_method :equals, :eq
-      alias_method :contains, :cn
-      alias_method :begins_with, :bw
-      alias_method :ends_with, :ew
-      alias_method :not, :neq
+      alias equals eq
+      alias contains cn
+      alias begins_with bw
+      alias ends_with ew
+      alias not neq
 
       # Find records based on FileMaker's compound find syntax.
       #
@@ -99,15 +105,18 @@ module Filemaker
       #
       # @return [Filemaker::Model::Criteria]
       def in(criterion, negating = false)
-        raise Filemaker::Errors::MixedClauseError,
-              "Can't mix 'in' with 'where'." if chains.include?(:where)
+        if chains.include?(:where)
+          raise Filemaker::Errors::MixedClauseError,
+                "Can't mix 'in' with 'where'."
+        end
+
         chains.push(:in)
         chains.delete(:where)
         @selector ||= []
 
         become_array(criterion).each do |hash|
           accepted_hash = klass.with_model_fields(hash)
-          accepted_hash.merge!('-omit' => true) if negating
+          accepted_hash['-omit'] = true if negating
           @selector << accepted_hash
         end
 
@@ -138,8 +147,11 @@ module Filemaker
       #
       # @return [Filemaker::Model::Criteria]
       def or(criterion)
-        raise Filemaker::Errors::MixedClauseError,
-              "Can't mix 'or' with 'in'." if chains.include?(:in)
+        if chains.include?(:in)
+          raise Filemaker::Errors::MixedClauseError,
+                "Can't mix 'or' with 'in'."
+        end
+
         @selector ||= {}
         selector.merge!(klass.with_model_fields(criterion))
         options[:lop] = 'or'

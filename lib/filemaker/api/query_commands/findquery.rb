@@ -80,7 +80,8 @@ module Filemaker
           omit = q_tag_array.delete('-omit')
           len = q_tag_array.length
           result = q_tag_array.flatten.combination(len).select do |c|
-            q_tag_array.all? { |a| (a & c).size > 0 }
+            # q_tag_array.all? { |a| (a & c).size > 0 }
+            q_tag_array.all? { |a| !(a & c).empty? }
           end
           result = result.each { |c| c.unshift('-omit') if omit }
           @key_maps.concat result

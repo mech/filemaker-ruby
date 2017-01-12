@@ -57,7 +57,10 @@ class MyModel
   belongs_to :applicant, class_name: User, reference_key: :name
   belongs_to :member
   belongs_to :manager, source_key: :mg_id
-  belongs_to :another_manager, class_name: Manager, source_key: :mg_id, reference_key: :candidate_id
+  belongs_to :another_manager,
+             class_name: Manager,
+             source_key: :mg_id,
+             reference_key: :candidate_id
   has_many :posts
   has_many :posters, class_name: User, reference_key: :email
 

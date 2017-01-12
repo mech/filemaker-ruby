@@ -6,11 +6,11 @@ module Rails
       initializer 'filemaker-load-config-yml' do
         config_file = Rails.root.join('config', 'filemaker.yml')
 
-        if config_file.file?
-          ::Filemaker.load!(config_file, Rails.env)
-        else
+        unless config_file.file?
           raise ::Filemaker::Errors::ConfigurationError, 'No config file'
         end
+
+        ::Filemaker.load!(config_file, Rails.env)
       end
     end
   end

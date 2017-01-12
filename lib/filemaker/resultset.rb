@@ -79,7 +79,7 @@ module Filemaker
     def size
       list.size
     end
-    alias_method :length, :size
+    alias length size
 
     private
 
