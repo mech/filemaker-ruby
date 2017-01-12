@@ -33,13 +33,17 @@ module Filemaker
         @resultset  = resultset
       end
 
+      def remove_decimal_mark(value)
+        value.delete(',')
+      end
+
       def coerce(value)
         value = value.to_s.strip
         return nil if value.empty?
 
         case data_type
         when 'number'
-          BigDecimal.new(value)
+          BigDecimal.new(remove_decimal_mark(value))
         when 'date'
           # date_format likely will be '%m/%d/%Y', but if we got '19/8/2014',
           # then `strptime` will raise invalid date error
