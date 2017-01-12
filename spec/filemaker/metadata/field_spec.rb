@@ -36,6 +36,12 @@ describe Filemaker::Metadata::Field do
       expect(field.coerce('100')).to be_a BigDecimal
     end
 
+    it 'removes decimal mark in number' do
+      allow(field).to receive(:data_type).and_return 'number'
+      expect(field.coerce('49,028.39')).to be_a BigDecimal
+      expect(field.coerce('49,028.39')).to eq 49_028.39
+    end
+
     it 'converts date to Date' do
       allow(field).to receive(:data_type).and_return 'date'
       expect(field.coerce('10/31/2014')).to be_a Date
