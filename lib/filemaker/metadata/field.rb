@@ -34,7 +34,7 @@ module Filemaker
       end
 
       def remove_decimal_mark(value)
-        value.delete(',')
+        value.delete('$,')
       end
 
       def coerce(value)
