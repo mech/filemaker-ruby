@@ -48,11 +48,23 @@ module Filemaker
       response = @connection.public_send(method, endpoint, params)
 
       case response.status
-      when 200 then [response, params]
-      when 401 then raise Errors::AuthenticationError, 'Auth failed.'
-      when 0   then raise Errors::CommunicationError, 'Empty response.'
-      when 404 then raise Errors::CommunicationError, 'HTTP 404 Not Found'
-      when 302 then raise Errors::CommunicationError, 'Redirect not supported'
+      when 200
+        [response, params]
+      when 401
+        raise Errors::AuthenticationError,
+              "[#{response.status}] Authentication failed."
+      when 0
+        raise Errors::CommunicationError,
+              "[#{response.status}] Empty response."
+      when 404
+        raise Errors::CommunicationError,
+              "[#{response.status}] Not found"
+      when 302
+        raise Errors::CommunicationError,
+              "[#{response.status}] Redirect not supported"
+      when 502
+        raise Errors::CommunicationError,
+              "[#{response.status}] Bad gateway. Too many records."
       else
         msg = "Unknown response status = #{response.status}"
         raise Errors::CommunicationError, msg
