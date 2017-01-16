@@ -1,5 +1,6 @@
 require 'filemaker/model/fields'
 require 'filemaker/model/findable'
+require 'filemaker/model/batches'
 require 'filemaker/model/relations'
 require 'filemaker/model/persistable'
 
@@ -10,6 +11,7 @@ module Filemaker
 
       included do
         extend Findable
+        extend Batches
         extend ActiveModel::Callbacks
       end
 
