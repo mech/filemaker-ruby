@@ -14,7 +14,7 @@ class User
   include Filemaker::Model
 
   string :name
-  string :email
+  email :email
 end
 
 class Post
@@ -64,6 +64,7 @@ class MyModel
   has_many :posts
   has_many :posters, class_name: User, reference_key: :email
 
+  email  :backup_email
   string :name, :email, default: 'UNTITLED'
   string :candidate_id, fm_name: 'CA ID', identity: true
   string :member_id

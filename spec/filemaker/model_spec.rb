@@ -31,9 +31,46 @@ describe Filemaker::Model do
     expect(model.email).to eq 'UNTITLED'
   end
 
+  it 'parse multiple emails into one' do
+    model.backup_email = "   one@host.com,two@host.com\nthree@host.com"
+    expect(model.backup_email.to_s).to eq 'one@host.com'
+  end
+
+  it 'parse good email' do
+    model.backup_email = 'one@host.com'
+    expect(model.backup_email.to_s).to eq 'one@host.com'
+  end
+
+  it 'parse bad emails' do
+    model.backup_email = 'bounced@example.com - bounce'
+    expect(model.backup_email.to_s).to eq 'bounced@example.com'
+
+    model.backup_email = 'bounced@example.com (bounce)'
+    expect(model.backup_email.to_s).to eq 'bounced@example.com'
+
+    model.backup_email = 'bounced@example.com(bounce)'
+    expect(model.backup_email.to_s).to eq 'bounced@example.com'
+
+    model.backup_email = 'dated@example.com - 18/1/05'
+    expect(model.backup_email.to_s).to eq 'dated@example.com'
+
+    model.backup_email = 'dated@example.com - niu'
+    expect(model.backup_email.to_s).to eq 'dated@example.com'
+
+    model.backup_email = 'don want to give email add'
+    expect(model.backup_email.to_s).to be_nil
+
+    model.backup_email = 'a＠host.com'
+    expect(model.backup_email.to_s).to eq 'a@host.com'
+
+    model.backup_email = 'a﹫host.com'
+    expect(model.backup_email.to_s).to eq 'a@host.com'
+  end
+
   it 'stores the real FileMaker name under fm_name' do
     expect(model.fm_names).to eq \
       [
+        'backup_email',
         'name',
         'email',
         'ca id',

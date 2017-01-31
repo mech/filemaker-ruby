@@ -1,3 +1,5 @@
+require 'filemaker/model/types/email'
+
 module Filemaker
   module Model
     class Field
@@ -39,6 +41,8 @@ module Filemaker
           return value if value.is_a? DateTime
           return value.to_s if value.is_a? String
           DateTime.parse(value.to_s)
+        elsif @type == Filemaker::Model::Types::Email
+          Filemaker::Model::Types::Email.new(value)
         else
           value
         end

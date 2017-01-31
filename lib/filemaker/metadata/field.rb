@@ -33,6 +33,7 @@ module Filemaker
         @resultset  = resultset
       end
 
+      # Remove dollar sign also
       def remove_decimal_mark(value)
         value.delete('$,')
       end

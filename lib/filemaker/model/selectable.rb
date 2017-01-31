@@ -82,7 +82,7 @@ module Filemaker
 
           # Inside define_method, we cannot have yield or block_given?, so we
           # just use &block
-          block.call(options) if block
+          block&.call(options)
           self
         end
       end

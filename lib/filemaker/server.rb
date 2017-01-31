@@ -89,14 +89,20 @@ module Filemaker
       end
     end
 
+    # {"-db"=>"mydb", "-lay"=>"mylay", "email"=>"a@b.com", "updated_at": Date}
     def serialize_args(args)
       return {} if args.nil?
 
       args.each do |key, value|
         case value
-        when DateTime then args[key] = value.strftime('%m/%d/%Y %H:%M:%S')
-        when Date     then args[key] = value.strftime('%m/%d/%Y')
-        when Time     then args[key] = value.strftime('%H:%M')
+        when DateTime
+          args[key] = value.strftime('%m/%d/%Y %H:%M:%S')
+        when Date
+          args[key] = value.strftime('%m/%d/%Y')
+        when Time
+          args[key] = value.strftime('%H:%M')
+        when Filemaker::Model::Types::Email
+          args[key] = value.to_query
         else
           # Especially for range operator (...), we want to output as String
           args[key] = value.to_s

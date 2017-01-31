@@ -1,4 +1,5 @@
 require 'filemaker/model/field'
+require 'filemaker/model/types/email'
 
 module Filemaker
   module Model
@@ -24,7 +25,8 @@ module Filemaker
         datetime: DateTime,
         money:    BigDecimal,
         number:   BigDecimal,
-        integer:  Integer
+        integer:  Integer,
+        email:    Filemaker::Model::Types::Email
       }.freeze
 
       included do
@@ -54,7 +56,7 @@ module Filemaker
           fields.keys
         end
 
-        %w(string date datetime money integer number).each do |type|
+        TYPE_MAPPINGS.keys.each do |type|
           define_method(type) do |*args|
             # TODO: It will be good if we can accept lambda also
             options = args.last.is_a?(Hash) ? args.pop : {}
