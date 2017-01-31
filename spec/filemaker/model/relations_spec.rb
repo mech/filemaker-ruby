@@ -38,6 +38,11 @@ describe Filemaker::Model::Relations do
         expect(@model.member.reference_key).to eq 'member_id'
         expect(@model.member.final_reference_key).to eq 'id'
       end
+
+      it 'proxy blank?' do
+        expect(@model.candidate.blank?).to eq false
+        expect(@model.candidate.nil?).to eq false
+      end
     end
 
     context 'when using supplied reference_key' do

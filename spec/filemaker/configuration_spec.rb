@@ -8,7 +8,7 @@ describe 'Configuration' do
       expect(Filemaker.registry['default'].account_name).to eq \
         'FILEMAKER_ACCOUNT_NAME'
       expect(Filemaker.registry['default'].ssl).to eq({ 'verify' => false })
-      expect(Filemaker.registry['default'].log).to eq :curl
+      expect(Filemaker.registry['default'].log).to eq 'curl'
     end
 
     it 'raises ConfigurationError for wrong environment' do

@@ -176,10 +176,10 @@ module Filemaker
 
     # TODO: Should we convert it to string so 'cURL' will work also?
     def log_action(params)
-      case @config.log
-      when :simple    then log_simple(params)
-      when :curl      then log_curl(params)
-      when :curl_auth then log_curl(params, true)
+      case @config.log.to_s
+      when 'simple'    then log_simple(params)
+      when 'curl'      then log_curl(params)
+      when 'curl_auth' then log_curl(params, true)
       end
     end
 

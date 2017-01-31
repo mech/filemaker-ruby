@@ -29,7 +29,8 @@ module Filemaker
   # instance of Filemaker::Server per named session. The named session will be
   # defined at the `filemaker.yml` config file.
   def load!(path, environment = nil)
-    sessions = YAML.load(ERB.new(File.new(path).read).result)[environment.to_s]
+    file_string = ERB.new(File.new(path).read).result
+    sessions = YAML.safe_load(file_string)[environment.to_s]
     raise Errors::ConfigurationError, 'Environment wrong?' if sessions.nil?
 
     sessions.each_pair do |key, value|

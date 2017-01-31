@@ -4,7 +4,7 @@ development:
     account_name: FILEMAKER_ACCOUNT_NAME
     password: FILEMAKER_PASSWORD
     ssl: { verify: false }
-    log: :curl
+    log: curl
 
   read_slave:
     host: host.com

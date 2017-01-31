@@ -24,7 +24,7 @@ Configuration for initializing a server:
 * `account` - Please use `ENV` variable like `ENV['FILEMAKER_ACCOUNT']`
 * `password` - Please use `ENV` variable like `ENV['FILEMAKER_PASSWORD']`
 * `ssl` - Use `{ verify: false }` if you are using FileMaker's unsigned certificate. You can also pass a hash which will be forwarded to Faraday directly like `ssl: { client_cert: '', client_key: '', ca_file: '', ca_path: '/path/to/certs', cert_store: '' }`. See [Setting up SSL certificates on the Faraday wiki](https://github.com/lostisland/faraday/wiki/Setting-up-SSL-certificates)
-* `log` - A choice of `:simple`, `:curl` and `:curl_auth`.
+* `log` - A choice of `simple`, `curl` and `curl_auth`.
 
 ```ruby
 server = Filemaker::Server.new do |config|
@@ -32,7 +32,7 @@ server = Filemaker::Server.new do |config|
   config.account_name = ENV['FILEMAKER_ACCOUNT_NAME']
   config.password     = ENV['FILEMAKER_PASSWORD']
   config.ssl          = { verify: false }
-  config.log          = :curl
+  config.log          = curl
 end
 
 server.databases.all                      # Using -dbnames
@@ -110,7 +110,7 @@ development:
     account_name: <%= ENV['FILEMAKER_ACCOUNT_NAME'] %>
     password: <%= ENV['FILEMAKER_PASSWORD'] %>
     ssl: true
-    log: :curl
+    log: curl
 
   read_slave:
     host: ...
