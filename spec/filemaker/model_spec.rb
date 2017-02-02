@@ -67,6 +67,14 @@ describe Filemaker::Model do
     expect(model.backup_email.to_s).to eq 'a@host.com'
   end
 
+  it 'can compare email' do
+    model.backup_email = 'one@host.com'
+    expect(model.backup_email).to eq 'one@host.com'
+
+    other_email = Filemaker::Model::Types::Email.new('one@host.com')
+    expect(model.backup_email).to eq other_email
+  end
+
   it 'stores the real FileMaker name under fm_name' do
     expect(model.fm_names).to eq \
       [

@@ -42,6 +42,7 @@ module Filemaker
           return value.to_s if value.is_a? String
           DateTime.parse(value.to_s)
         elsif @type == Filemaker::Model::Types::Email
+          return value if value.is_a? Filemaker::Model::Types::Email
           Filemaker::Model::Types::Email.new(value)
         else
           value

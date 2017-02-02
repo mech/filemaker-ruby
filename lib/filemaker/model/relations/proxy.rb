@@ -26,10 +26,11 @@ module Filemaker
           @class_name.constantize
         end
 
+        # Rubocop will complain and ask to fallback on `super`, but we won't be
+        # able to do that because the target may have method that throw
+        # exception
         def method_missing(name, *args, &block)
           target.send(name, *args, &block)
-        rescue
-          super
         end
 
         def respond_to_missing?(method_name, include_private = false)
