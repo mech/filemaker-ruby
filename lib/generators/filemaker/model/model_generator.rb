@@ -26,7 +26,8 @@ module Filemaker
           'number' => 'number',
           'date' => 'date',
           'time' => 'datetime',
-          'timestamp' => 'datetime'
+          'timestamp' => 'datetime',
+          'container' => 'string'
         }
 
         template(
