@@ -87,7 +87,8 @@ describe Filemaker::Model do
         'created_at',
         'modifieddate',
         'salary',
-        'passage of time'
+        'passage of time',
+        'document'
       ]
   end
 
@@ -111,6 +112,16 @@ describe Filemaker::Model do
     expect(model.salary).to be_a String
   end
 
+  it 'accepts == for any type' do
+    model.salary = '=='
+    expect(model.salary).to eq '=='
+  end
+
+  it 'accepts =* for any type' do
+    model.age = '=*'
+    expect(model.age).to eq '=*'
+  end
+
   it 'check for presence of name and salary' do
     expect(model.name?).to be true
     expect(model.salary?).to be false
@@ -127,6 +138,15 @@ describe Filemaker::Model do
     model.candidate_id = 'CA123'
     model.instance_variable_set('@new_record', false)
     expect(model.cache_key).to eq 'my_models/CA123'
+  end
+
+  it 'has attachment' do
+    model.document = URI.parse('http://host/somefile.pdf')
+    expect(model.document.url).to eq 'http://host/somefile.pdf'
+    expect(model.document.filename).to eq 'somefile.pdf'
+    model.document.body
+    expect(model.document.extension).to eq '.pdf'
+    expect(model.document.content_type).to eq 'application/pdf'
   end
 
   describe 'process_attributes' do

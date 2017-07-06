@@ -6,7 +6,7 @@ describe Filemaker::Model::Criteria do
     describe 'where' do
       it 'raises MixedClauseError if mixed with -findquery' do
         expect do
-          criteria.in(status: %w(pending subscribed)).where(name: 'Bob')
+          criteria.in(status: %w[pending subscribed]).where(name: 'Bob')
         end.to raise_error Filemaker::Errors::MixedClauseError
       end
 
@@ -85,7 +85,7 @@ describe Filemaker::Model::Criteria do
     context 'comparison operators' do
       it 'only works on `where` query' do
         expect do
-          criteria.in(status: %w(pending subscribed)).eq(name: 'Bob')
+          criteria.in(status: %w[pending subscribed]).eq(name: 'Bob')
         end.to raise_error Filemaker::Errors::MixedClauseError
       end
 
@@ -121,32 +121,32 @@ describe Filemaker::Model::Criteria do
     describe 'in' do
       it 'raises MixedClauseError if mixed with -find' do
         expect do
-          criteria.where(name: 'Bob').in(status: %w(pending subscribed))
+          criteria.where(name: 'Bob').in(status: %w[pending subscribed])
         end.to raise_error Filemaker::Errors::MixedClauseError
       end
 
       it '{a: [1, 2]} to (q0);(q1)' do
-        criteria.in(name: %w(Bob Lee))
+        criteria.in(name: %w[Bob Lee])
         compound_find = cf.new(criteria.selector)
         expect(compound_find.key_maps_string).to eq '(q0);(q1)'
-        expect(criteria.selector).to eq [{ 'name' => %w(Bob Lee) }]
+        expect(criteria.selector).to eq [{ 'name' => %w[Bob Lee] }]
       end
 
       it '{a: [1, 2], b: [3, 4]} to (q0,q2);(q0,q3);(q1,q2);(q1,q3)' do
-        criteria.in(name: %w(Bob Lee), age: ['20', 30])
+        criteria.in(name: %w[Bob Lee], age: ['20', 30])
         compound_find = cf.new(criteria.selector)
         expect(compound_find.key_maps_string).to eq \
           '(q0,q2);(q0,q3);(q1,q2);(q1,q3)'
         expect(criteria.selector).to eq \
-          [{ 'name' => %w(Bob Lee), 'passage of time' => [20, 30] }]
+          [{ 'name' => %w[Bob Lee], 'passage of time' => [20, 30] }]
       end
 
       it '{a: [1, 2], b: 3} to (q0,q2);(q1,q2)' do
-        criteria.in(name: %w(Bob Lee), age: '30')
+        criteria.in(name: %w[Bob Lee], age: '30')
         compound_find = cf.new(criteria.selector)
         expect(compound_find.key_maps_string).to eq '(q0,q2);(q1,q2)'
         expect(criteria.selector).to eq \
-          [{ 'name' => %w(Bob Lee), 'passage of time' => 30 }]
+          [{ 'name' => %w[Bob Lee], 'passage of time' => 30 }]
       end
 
       it '{a: 1, b: 2} to (q0,q1)' do
@@ -166,11 +166,11 @@ describe Filemaker::Model::Criteria do
       end
 
       it '[{a: [1, 2]}, {b: [1, 2]}] to (q0);(q1);(q2);(q3)' do
-        criteria.in([{ name: %w(Bob Lee) }, { age: [20, 30] }])
+        criteria.in([{ name: %w[Bob Lee] }, { age: [20, 30] }])
         compound_find = cf.new(criteria.selector)
         expect(compound_find.key_maps_string).to eq '(q0);(q1);(q2);(q3)'
         expect(criteria.selector).to eq \
-          [{ 'name' => %w(Bob Lee) }, { 'passage of time' => [20, 30] }]
+          [{ 'name' => %w[Bob Lee] }, { 'passage of time' => [20, 30] }]
       end
 
       it '[{a: 1}, {b: 2}] to (q0);(q1)' do
@@ -200,20 +200,20 @@ describe Filemaker::Model::Criteria do
 
     describe 'not_in' do
       it '{a: [1, 2]} to !(q0);!(q1)' do
-        criteria.not_in(name: %w(Bob Lee))
+        criteria.not_in(name: %w[Bob Lee])
         compound_find = cf.new(criteria.selector)
         expect(compound_find.key_maps_string).to eq '!(q0);!(q1)'
       end
 
       it '{a: [1, 2], b: [3, 4]} to !(q0,q2);!(q0,q3);!(q1,q2);!(q1,q3)' do
-        criteria.not_in(name: %w(Bob Lee), age: ['20', 30])
+        criteria.not_in(name: %w[Bob Lee], age: ['20', 30])
         compound_find = cf.new(criteria.selector)
         expect(compound_find.key_maps_string).to eq \
           '!(q0,q2);!(q0,q3);!(q1,q2);!(q1,q3)'
       end
 
       it '{a: [1, 2], b: 3} to !(q0,q2);!(q1,q2)' do
-        criteria.not_in(name: %w(Bob Lee), age: '30')
+        criteria.not_in(name: %w[Bob Lee], age: '30')
         compound_find = cf.new(criteria.selector)
         expect(compound_find.key_maps_string).to eq '!(q0,q2);!(q1,q2)'
       end
@@ -231,7 +231,7 @@ describe Filemaker::Model::Criteria do
       end
 
       it '[{a: [1, 2]}, {b: [1, 2]}] to !(q0);!(q1);!(q2);!(q3)' do
-        criteria.not_in([{ name: %w(Bob Lee) }, { age: [20, 30] }])
+        criteria.not_in([{ name: %w[Bob Lee] }, { age: [20, 30] }])
         compound_find = cf.new(criteria.selector)
         expect(compound_find.key_maps_string).to eq '!(q0);!(q1);!(q2);!(q3)'
       end
@@ -255,7 +255,7 @@ describe Filemaker::Model::Criteria do
       end
 
       it 'using in and not_in at the same time' do
-        criteria.in(name: %w(Bob Lee)).not_in(age: 20, email: 'A')
+        criteria.in(name: %w[Bob Lee]).not_in(age: 20, email: 'A')
         compound_find = cf.new(criteria.selector)
         expect(compound_find.key_maps_string).to eq '(q0);(q1);!(q2,q3)'
       end
@@ -297,7 +297,7 @@ describe Filemaker::Model::Criteria do
 
     it 'will default to asc for missing order' do
       criteria.order('name, email')
-      expect(criteria.options[:sortorder]).to eq %w(ascend ascend)
+      expect(criteria.options[:sortorder]).to eq %w[ascend ascend]
     end
 
     it 'will use real FileMaker fieldname' do

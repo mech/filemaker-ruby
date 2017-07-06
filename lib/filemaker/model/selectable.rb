@@ -56,7 +56,7 @@ module Filemaker
         first
       end
 
-      %w(eq cn bw ew gt gte lt lte neq).each do |operator|
+      %w[eq cn bw ew gt gte lt lte neq].each do |operator|
         define_method(operator) do |criterion, &block|
           if chains.include?(:in)
             raise Filemaker::Errors::MixedClauseError,

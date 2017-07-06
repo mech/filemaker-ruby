@@ -1,4 +1,5 @@
 require 'filemaker/model/types/email'
+require 'filemaker/model/types/attachment'
 
 module Filemaker
   module Model
@@ -22,9 +23,9 @@ module Filemaker
       #
       # Date and DateTime will be special. If the value is a String, the query
       # may be '2016', '3/2016' or '3/24/2016' for example.
-      def coerce(value)
+      def coerce(value, model = nil)
         return nil if value.nil?
-        return value if value == '==' || value == '=*'
+        return value if value =~ /^==|=\*/
         return value if value =~ /(\.\.\.)/
 
         if @type == String
@@ -44,6 +45,9 @@ module Filemaker
         elsif @type == Filemaker::Model::Types::Email
           return value if value.is_a? Filemaker::Model::Types::Email
           Filemaker::Model::Types::Email.new(value)
+        elsif @type == Filemaker::Model::Types::Attachment
+          return value if value.is_a? Filemaker::Model::Types::Attachment
+          Filemaker::Model::Types::Attachment.new(value, model)
         else
           value
         end

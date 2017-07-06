@@ -22,7 +22,7 @@ describe Filemaker::Store::DatabaseStore do
 
       fake_post_response(server, nil, 'dbnames.xml')
 
-      expected_result = %w(Billing Candidates Employee Jobs)
+      expected_result = %w[Billing Candidates Employee Jobs]
 
       expect(server.databases.all).to eq expected_result
       expect(server.database.all).to eq expected_result

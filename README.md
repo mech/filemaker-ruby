@@ -8,7 +8,7 @@ A Ruby wrapper to FileMaker XML API.
 
 ## Installation
 
-Put this in your Gemfile and you are ready to go:
+At your Gemfile:
 
 ```
 gem 'filemaker'
@@ -16,7 +16,7 @@ gem 'filemaker'
 
 ## Initializing the Server
 
-Ensure you have Web Publishing Engine (XML Publishing) enabled. Please turn on SSL also or credential will not be protected. Remember to also set the "Extended Privileges" to this keyword: `fmxml`.
+Ensure you have Web Publishing Engine (XML Publishing) enabled. Please turn on SSL or credential won't be protected. Remember to also set the "Extended Privileges" to: `fmxml`.
 
 Configuration for initializing a server:
 
@@ -42,6 +42,8 @@ server.database['candidates'].scripts.all # Using -scriptnames and -db=candidate
 api = server.db['candidates'].lay['profile']
 api = server.db['candidates']['profile']
 api = server.database['candidates'].layout['profile']
+
+api.find(...)
 ```
 
 Once you are able to grab the `api`, you are golden and can make requests to read/write to FileMaker API.
@@ -65,7 +67,19 @@ Most API will be smart enough to reject invalid query parameters if passed in in
 
 If you want ActiveModel-like access with a decent query DSL like `where`, `find`, `in`, you can include `Filemaker::Model` to your model. Your Rails form will work as well as JSON serialization.
 
-The following data types can be used to register the fields: `string`, `integer`, `money`, `date` and `datetime`. If the field name has spaces, you can use `fm_name` to identify the real FileMaker field name.
+The following data type mappings can be used to register the fields:
+
+* `string` - `String`
+* `text` - `String`
+* `integer` - `Integer`
+* `number` - `BigDecimal`
+* `money` - `BigDecimal`
+* `date` - `Date`
+* `datetime` - `DateTime`
+* `email` - `Filemaker::Model::Types::Email`
+* `object` - `Filemaker::Model::Types::Attachment`
+
+If the field name has spaces, you can use `fm_name` to identify the real FileMaker field name.
 
 ```ruby
 string :job_id, fm_name: 'JobOrderID', identity: true
@@ -73,7 +87,7 @@ string :job_id, fm_name: 'JobOrderID', identity: true
 
 You can also use 3 relations: `has_many`, `belongs_to` and `has_portal`.
 
-`has_many` will refer to the model's own identity as the reference key while `belongs_to` will append `_id` for the reference key.
+`has_many` will refer to the model's own identity as the reference key while `belongs_to` will append `_id` for the reference key unless being overridden by `reference_key`.
 
 ```ruby
 class Job
@@ -93,6 +107,7 @@ class Job
   datetime :created_at
   datetime :published_at, fm_name: 'ModifiedDate'
   money    :salary
+  object   :attachment
 
   validates :title, presence: true
 
@@ -120,6 +135,35 @@ production:
   default:
     host: example.com
     ssl: { ca_path: '/secret/path' }
+```
+
+## Writing Standalone script
+
+```ruby
+#!/usr/bin/env ruby
+
+equire 'bundler/setup'
+Bundler.require
+
+Filemaker.registry['default'] = Filemaker::Server.new do |config|
+  config.host         = ENV['FILEMAKER_HOST']
+  config.account_name = ENV['FILEMAKER_ACCOUNT_NAME']
+  config.password     = ENV['FILEMAKER_PASSWORD']
+end
+
+class Invoice
+  include Filemaker::Model
+
+  string :invoice_id, identity: true
+  date :paid_at
+  money :amount
+end
+
+invoices = Invoice.where(paid_at: '2017')
+
+invoices.each do |invoice|
+  import_invoice_to_s3
+end
 ```
 
 ## Query DSL
@@ -157,7 +201,7 @@ Model.not(name: 'Bob')
 
 ### Using -findquery
 
-OR broadens the found set and AND narrows it
+**OR** broadens the found set and **AND** narrows it
 
 ```ruby
 # (q0);(q1)
@@ -222,9 +266,9 @@ end
 Job.per_page # => 50
 ```
 
-## Overview
+## Tips
 
-`Model` include `Findable` which create `Criteria` and `execute()` to return `Resultset` to be built by `Builder`.
+`Filemaker::Model` include `Filemaker::Model::Findable` which create `Criteria` and `execute()` to return `Filemaker::Resultset` to be built by `Filemaker::Model::Builder`.
 
 ## Credits
 

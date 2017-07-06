@@ -46,7 +46,7 @@ describe Filemaker::Layout do
       it 'allows -max, -skip' do
         resultset = @layout.findall(
           max: 5, skip: 10,
-          sortfield: %w(f1 f2), sortorder: ['descend']
+          sortfield: %w[f1 f2], sortorder: ['descend']
         )
 
         expect(resultset.params['-max']).to eq 5
@@ -60,8 +60,8 @@ describe Filemaker::Layout do
       it 'will not accept more than 9 sortfields' do
         expect do
           @layout.findall(
-            sortfield: %w(f1 f2 f3 f4 f5 f6 f7 f8 f9 f10),
-            sortorder: %w(o1 o2 o3 o4 o5 o6 o7 o8 o9)
+            sortfield: %w[f1 f2 f3 f4 f5 f6 f7 f8 f9 f10],
+            sortorder: %w[o1 o2 o3 o4 o5 o6 o7 o8 o9]
           )
         end.to raise_error Filemaker::Errors::ParameterError
       end
@@ -69,8 +69,8 @@ describe Filemaker::Layout do
       it 'will not accept more than 9 sortorders' do
         expect do
           @layout.findall(
-            sortfield: %w(f1 f2 f3 f4 f5 f6 f7 f8 f9),
-            sortorder: %w(o1 o2 o3 o4 o5 o6 o7 o8 o9 o10)
+            sortfield: %w[f1 f2 f3 f4 f5 f6 f7 f8 f9],
+            sortorder: %w[o1 o2 o3 o4 o5 o6 o7 o8 o9 o10]
           )
         end.to raise_error Filemaker::Errors::ParameterError
       end
@@ -174,7 +174,7 @@ describe Filemaker::Layout do
 
     describe 'query' do
       it 'transform {a: [1,2]} to (q0);(q1)' do
-        resultset = @layout.query(status: %w(open closed))
+        resultset = @layout.query(status: %w[open closed])
         expect(resultset.params['-query']).to eq '(q0);(q1)'
       end
 
@@ -205,7 +205,7 @@ describe Filemaker::Layout do
       end
 
       it 'can do -script.prefind.param' do
-        resultset = @layout.find(1, script_prefind: %w(Unique yes))
+        resultset = @layout.find(1, script_prefind: %w[Unique yes])
         expect(resultset.params['-script.prefind']).to eq 'Unique'
         expect(resultset.params['-script.prefind.param']).to eq 'yes'
       end
@@ -216,7 +216,7 @@ describe Filemaker::Layout do
       end
 
       it 'can do -script.presort.param' do
-        resultset = @layout.find(1, script_presort: %w(Order ascend))
+        resultset = @layout.find(1, script_presort: %w[Order ascend])
         expect(resultset.params['-script.presort']).to eq 'Order'
         expect(resultset.params['-script.presort.param']).to eq 'ascend'
       end

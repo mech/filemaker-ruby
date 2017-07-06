@@ -1,5 +1,3 @@
-require 'active_model/type/value'
-
 module Filemaker
   module Model
     module Types

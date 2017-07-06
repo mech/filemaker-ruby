@@ -20,13 +20,15 @@ module Filemaker
       extend ActiveSupport::Concern
 
       TYPE_MAPPINGS = {
-        string:   String,
-        date:     Date,
-        datetime: DateTime,
-        money:    BigDecimal,
-        number:   BigDecimal,
-        integer:  Integer,
-        email:    Filemaker::Model::Types::Email
+        string:     String,
+        text:       String,
+        date:       Date,
+        datetime:   DateTime,
+        money:      BigDecimal,
+        number:     BigDecimal,
+        integer:    Integer,
+        email:      Filemaker::Model::Types::Email,
+        object:     Filemaker::Model::Types::Attachment
       }.freeze
 
       included do
@@ -87,7 +89,7 @@ module Filemaker
           # original.
           define_method("#{name}=") do |value|
             public_send("#{name}_will_change!") unless value == attributes[name]
-            attributes[name] = fields[name].coerce(value)
+            attributes[name] = fields[name].coerce(value, self)
           end
 
           # Predicate

@@ -1,9 +1,10 @@
 describe Filemaker::Metadata::Field do
   let(:server) do
     Filemaker::Server.new do |config|
-      config.host         = 'https://host'
+      config.host         = 'host'
       config.account_name = 'account_name'
       config.password     = 'password'
+      config.ssl          = { verify: false }
     end
   end
   let(:xml) { import_xml_as_string('portal.xml') }
@@ -68,6 +69,13 @@ describe Filemaker::Metadata::Field do
       expect(field.coerce('/fmi/xml/cnt/1234jpg')).to be_a URI
       expect(field.coerce('/fmi/xml/cnt/1234jpg').to_s).to eq \
         'https://host/fmi/xml/cnt/1234jpg'
+    end
+
+    it 'converts container with existing http' do
+      allow(field).to receive(:data_type).and_return 'container'
+      expect(field.coerce('http://host/fmi/xml/cnt/1234jpg')).to be_a URI
+      expect(field.coerce('http://host/fmi/xml/cnt/1234jpg').to_s).to eq \
+        'http://host/fmi/xml/cnt/1234jpg'
     end
   end
 end
