@@ -70,7 +70,7 @@ module Filemaker
         when 'timestamp'
           DateTime.strptime(value, @resultset.timestamp_format)
         when 'container'
-          URI.parse("#{@resultset.server.host}#{value}")
+          URI.parse("https://#{@resultset.server.host}#{value}")
         else
           value
         end
