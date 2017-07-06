@@ -142,7 +142,7 @@ production:
 ```ruby
 #!/usr/bin/env ruby
 
-equire 'bundler/setup'
+require 'bundler/setup'
 Bundler.require
 
 Filemaker.registry['default'] = Filemaker::Server.new do |config|
