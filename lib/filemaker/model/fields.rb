@@ -83,13 +83,15 @@ module Filemaker
           define_attribute_methods name
 
           # Reader
-          define_method(name) { attributes[name] }
+          define_method(name) do
+            attributes[name]
+          end
 
           # Writer - We try to map to the correct type, if not we just return
           # original.
           define_method("#{name}=") do |value|
             public_send("#{name}_will_change!") unless value == attributes[name]
-            attributes[name] = fields[name].coerce(value, public_send('itself'))
+            attributes[name] = fields[name].coerce(value, self.class)
           end
 
           # Predicate

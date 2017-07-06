@@ -5,11 +5,11 @@ module Filemaker
   module Model
     module Types
       class Attachment
-        attr_reader :_body, :content_type, :extension, :model
+        attr_reader :_body, :content_type, :extension, :klass
 
-        def initialize(value, model)
+        def initialize(value, klass)
           @value = value
-          @model = model
+          @klass = klass
         end
 
         def url
@@ -74,8 +74,8 @@ module Filemaker
 
         def download_protected_file
           req = Net::HTTP::Get.new(url)
-          req.basic_auth(model.server.account_name, model.server.password)
-          res = Net::HTTP.new(model.server.host, 80)
+          req.basic_auth(klass.server.account_name, klass.server.password)
+          res = Net::HTTP.new(klass.server.host, 80)
           res = res.start { |http| http.request(req) }
 
           res.body

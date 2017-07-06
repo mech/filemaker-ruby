@@ -23,7 +23,7 @@ module Filemaker
       #
       # Date and DateTime will be special. If the value is a String, the query
       # may be '2016', '3/2016' or '3/24/2016' for example.
-      def coerce(value, model = nil)
+      def coerce(value, klass = nil)
         return nil if value.nil?
         return value if value =~ /^==|=\*/
         return value if value =~ /(\.\.\.)/
@@ -47,7 +47,7 @@ module Filemaker
           Filemaker::Model::Types::Email.new(value)
         elsif @type == Filemaker::Model::Types::Attachment
           return value if value.is_a? Filemaker::Model::Types::Attachment
-          Filemaker::Model::Types::Attachment.new(value, model)
+          Filemaker::Model::Types::Attachment.new(value, klass)
         else
           value
         end

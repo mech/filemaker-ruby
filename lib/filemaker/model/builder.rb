@@ -26,7 +26,10 @@ module Filemaker
           field = object.class.find_field_by_name(fm_field_name)
           next unless field
 
-          object.attributes[field.name] = field.coerce(record[fm_field_name])
+          object.attributes[field.name] = field.coerce(
+            record[fm_field_name],
+            object.class
+          )
         end
 
         object
