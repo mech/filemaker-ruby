@@ -4,7 +4,7 @@
 
 A Ruby wrapper to FileMaker XML API.
 
-![UML - just kidding](diagram.svg)
+![UML - just kidding](https://cdn.rawgit.com/mech/filemaker-ruby/df077526/diagram.svg)
 
 ## Installation
 
