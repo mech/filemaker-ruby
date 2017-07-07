@@ -31,7 +31,7 @@ module Filemaker
 
           @_body = download_protected_file
 
-          if file_extension
+          if !file_extension.blank?
             @content_type = MimeMagic.by_extension(file_extension)
             @extension = file_extension
           else
