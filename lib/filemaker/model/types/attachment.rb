@@ -32,7 +32,7 @@ module Filemaker
           @_body = download_protected_file
 
           if !file_extension.blank?
-            @content_type = MimeMagic.by_extension(file_extension)
+            @content_type = MimeMagic.by_extension(file_extension).try(:type)
             @extension = file_extension
           else
             mime_type = MimeMagic.by_magic(@_body)
