@@ -63,6 +63,9 @@ module Filemaker
               else
                 # No choice, we have to assign it somehow
                 @content_type = mime_type.type
+                @extension = MIME::Types[@content_type].first
+                                                       .try(:extensions)
+                                                       .try(:first)
               end
             end
           end

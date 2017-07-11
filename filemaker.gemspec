@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'activemodel'
   spec.add_runtime_dependency 'globalid'
   spec.add_runtime_dependency 'mimemagic'
+  spec.add_runtime_dependency 'mime-types'
 
   spec.add_development_dependency 'bundler', '~> 1.13'
   spec.add_development_dependency 'rake', '~> 12.0'
