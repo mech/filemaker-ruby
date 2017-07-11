@@ -66,6 +66,7 @@ module Filemaker
                 @extension = MIME::Types[@content_type].first
                                                        .try(:extensions)
                                                        .try(:first)
+                @extension = ".#{@extension}" if @extension
               end
             end
           end
