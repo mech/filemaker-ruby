@@ -5,7 +5,7 @@ module Filemaker
       def page(value)
         value = 1 if value.nil?
         chains << :page
-        @_page = value.to_i
+        @_page = positive_page(value.to_i)
         update_skip
       end
 
@@ -36,6 +36,11 @@ module Filemaker
         skip = (__page - 1) * __per
         skip(skip) unless skip.zero?
         self
+      end
+
+      def positive_page(page)
+        return 1 if page.nil? || !page.is_a?(Integer)
+        page.positive? ? page : 1
       end
     end
   end
