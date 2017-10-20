@@ -51,7 +51,7 @@ module Filemaker
           # Sometimes we can get '27/11 /1981' also :(
           begin
             Date.strptime(value, @resultset.date_format)
-          rescue
+          rescue StandardError
             # We could be getting back these date:
             # '17.12.95', '19/05/99', '27/11 /1981'
             # '1959-07-03' will be beyond us, so consider returning exact value
@@ -76,7 +76,7 @@ module Filemaker
         else
           value
         end
-      rescue
+      rescue StandardError
         warn "Could not coerce #{name}: #{value}"
         value
       end

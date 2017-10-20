@@ -82,10 +82,12 @@ module Filemaker
 
       Faraday.new(@config.url, faraday_options) do |faraday|
         faraday.request :url_encoded
-        faraday.adapter :typhoeus
         faraday.headers[:user_agent] = \
           "filemaker-ruby-#{Filemaker::VERSION}".freeze
         faraday.basic_auth @config.account_name, @config.password
+
+        # The order of the middleware is important, so adapter must be the last
+        faraday.adapter :typhoeus
       end
     end
 

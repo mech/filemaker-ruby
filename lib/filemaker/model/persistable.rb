@@ -10,7 +10,7 @@ module Filemaker
       # Call save! but do not raise error.
       def save
         save!
-      rescue
+      rescue StandardError
         errors.add(:base) << $! # Does this works?
         nil
       end

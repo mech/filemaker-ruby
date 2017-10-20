@@ -21,7 +21,7 @@ module Filemaker
         object.instance_variable_set('@mod_id', record.mod_id)
         object.instance_variable_set('@portals', record.portals)
 
-        record.keys.each do |fm_field_name|
+        record.each_key do |fm_field_name|
           # record.keys are all lowercase
           field = object.class.find_field_by_name(fm_field_name)
           next unless field

@@ -58,7 +58,7 @@ module Filemaker
           fields.keys
         end
 
-        TYPE_MAPPINGS.keys.each do |type|
+        TYPE_MAPPINGS.each_key do |type|
           define_method(type) do |*args|
             # TODO: It will be good if we can accept lambda also
             options = args.last.is_a?(Hash) ? args.pop : {}

@@ -51,10 +51,13 @@ module Filemaker
     end
 
     def []=(key, value)
-      return super unless @ready
-      raise(Filemaker::Errors::InvalidFieldError, "Invalid field: #{key}") \
+      if @ready
+        raise(Filemaker::Errors::InvalidFieldError, "Invalid field: #{key}") \
         unless key?(key)
-      @dirty[key] = value
+        @dirty[key] = value
+      else
+        super
+      end
     end
 
     private

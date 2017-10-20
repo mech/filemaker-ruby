@@ -42,7 +42,7 @@ module Filemaker
 
         sort_spec.each do |spec|
           fieldname, direction = spec.split(' ')
-          direction = 'asc' unless direction
+          direction ||= 'asc'
 
           field = klass.find_field_by_name(fieldname)
 

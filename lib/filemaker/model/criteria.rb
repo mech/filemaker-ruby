@@ -16,7 +16,7 @@ module Filemaker
       include Pagination
 
       # @return [Filemaker::Model] the class of the model
-      attr_reader :klass
+      attr_reader :klass, :loaded
 
       # @return [Hash. Array] represents the query arguments
       attr_reader :selector
@@ -27,15 +27,36 @@ module Filemaker
       # @return [Array] keep track of where clause and in clause to not mix them
       attr_reader :chains
 
+      alias loaded? loaded
+
       def initialize(klass)
         @klass    = klass
         @options  = {}
         @chains   = []
         @_page    = 1
+        @loaded   = false
       end
 
       def to_s
         "#{selector}, #{options}"
+      end
+
+      def to_a
+        records.dup
+      end
+
+      def records
+        load
+        @records
+      end
+
+      # Causes the records to be loaded from FM if they have not been loaded
+      # already
+      def load
+        return if loaded?
+
+        @records = all
+        @loaded = true
       end
 
       def each
@@ -58,15 +79,14 @@ module Filemaker
       #
       # @return [Integer] the count
       def count
-        limit(0)
         if chains.include?(:where)
-          klass.api.find(selector, options).count
+          klass.api.find(selector, options.merge(max: 0)).count
         elsif chains.include?(:in)
-          klass.api.query(selector, options).count
+          klass.api.query(selector, options.merge(max: 0)).count
         elsif chains.include?(:custom)
-          klass.api.findquery(selector, options).count
+          klass.api.findquery(selector, options.merge(max: 0)).count
         else
-          klass.api.findall(options).count
+          klass.api.findall(options.merge(max: 0)).count
         end
       end
 

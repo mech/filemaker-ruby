@@ -36,7 +36,7 @@ module Filemaker
     private
 
     def valid_options(options, *keys)
-      options.keys.each { |key| options.delete(key) unless keys.include?(key) }
+      options.each_key { |key| options.delete(key) unless keys.include?(key) }
     end
   end
 end

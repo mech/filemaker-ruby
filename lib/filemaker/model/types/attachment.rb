@@ -29,9 +29,21 @@ module Filemaker
         def body
           return @_body if defined?(@_body)
 
+          valid_files = %w[
+            .pdf
+            .jpeg .jpg .png .gif .tif .tiff
+            .doc .docx .xls .xlsx .ppt .pptx .pptm
+            .txt
+            .rar .zip .webarchive
+            .htm .html
+            .java
+          ]
+
           @_body = download_protected_file
 
-          if !file_extension.blank?
+          if !file_extension.blank? &&
+             valid_files.include?(file_extension.try(:downcase))
+
             @content_type = MimeMagic.by_extension(file_extension).try(:type)
             @extension = file_extension
           else
