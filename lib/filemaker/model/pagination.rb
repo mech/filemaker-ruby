@@ -7,6 +7,7 @@ module Filemaker
         chains << :page
         @_page = positive_page(value.to_i)
         update_skip
+        all
       end
 
       def per(value)
