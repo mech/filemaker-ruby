@@ -91,7 +91,7 @@ module Filemaker
           # original.
           define_method("#{name}=") do |value|
             public_send("#{name}_will_change!") unless value == attributes[name]
-            attributes[name] = fields[name].coerce(value, self.class)
+            attributes[name] = fields[name].coerce_for_assignment(value, self.class)
           end
 
           # Predicate

@@ -6,7 +6,7 @@ module Filemaker
         total = self.in(options).count
         pages = (total / batch_size.to_f).ceil
         1.upto(pages) do |page|
-          output.concat self.in(options).per(batch_size).page(page).all
+          output.concat self.in(options).per(batch_size).page(page)
         end
 
         output
@@ -17,7 +17,7 @@ module Filemaker
         total = where(options).count
         pages = (total / batch_size.to_f).ceil
         1.upto(pages) do |page|
-          output.concat where(options).per(batch_size).page(page).all
+          output.concat where(options).per(batch_size).page(page)
         end
 
         output
