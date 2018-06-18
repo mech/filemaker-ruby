@@ -44,7 +44,7 @@ module Filemaker
 
         case data_type
         when 'number'
-          BigDecimal.new(remove_decimal_mark(value))
+          BigDecimal(remove_decimal_mark(value))
         when 'date'
           # date_format likely will be '%m/%d/%Y', but if we got '19/8/2014',
           # then `strptime` will raise invalid date error
@@ -76,8 +76,8 @@ module Filemaker
         else
           value
         end
-      rescue StandardError
-        warn "Could not coerce #{name}: #{value}"
+      rescue StandardError => e
+        warn "Could not coerce #{name}: #{value} due to #{e.message}"
         value
       end
 

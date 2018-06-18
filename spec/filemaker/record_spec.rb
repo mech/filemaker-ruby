@@ -36,7 +36,7 @@ describe Filemaker::Record do
 
   it 'Salary should be an array of BigDecimal' do
     expect(@record['Salary']).to be_an Array
-    expect(@record['SALARY']).to eq [BigDecimal.new(5000), BigDecimal.new(6000)]
+    expect(@record['SALARY']).to eq [BigDecimal(5000), BigDecimal(6000)]
   end
 
   it 'has 2 portals' do

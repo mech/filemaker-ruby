@@ -33,7 +33,7 @@ module Filemaker
         elsif @type == Integer
           value.to_i
         elsif @type == BigDecimal
-          BigDecimal.new(value.to_s)
+          BigDecimal(value.to_s)
         elsif @type == Date
           return value if value.is_a? Date
           return value.to_s if value.is_a? String
@@ -68,7 +68,7 @@ module Filemaker
         elsif @type == Integer
           value.to_i
         elsif @type == BigDecimal
-          BigDecimal.new(value.to_s)
+          BigDecimal(value.to_s)
         elsif @type == Date
           return value if value.is_a? Date
           Date.parse(value.to_s)
@@ -88,7 +88,6 @@ module Filemaker
         warn "[#{e.message}] Could not coerce #{name}: #{value}"
         value
       end
-
     end
   end
 end
