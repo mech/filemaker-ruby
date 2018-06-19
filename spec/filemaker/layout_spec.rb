@@ -14,7 +14,8 @@ describe Filemaker::Layout do
         config.password     = 'password'
       end
 
-      fake_post_response(@server, nil, 'employment.xml')
+      # fake_post_response(@server, nil, 'employment.xml')
+      fake_typhoeus_post('employment.xml')
       @layout = @server.db['candidates']['Profile']
     end
 

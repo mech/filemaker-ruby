@@ -30,7 +30,8 @@ module Filemaker
         options
       )
 
-      Filemaker::Resultset.new(server, response.body, params)
+      # Filemaker::Resultset.new(server, response.body, params)
+      Filemaker::Resultset.new(server, response.response_body, params)
     end
 
     private

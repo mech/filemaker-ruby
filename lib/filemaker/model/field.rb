@@ -13,7 +13,7 @@ module Filemaker
 
         # We need to downcase because Filemaker::Record is
         # HashWithIndifferentAndCaseInsensitiveAccess
-        @fm_name = (options.fetch(:fm_name) { name }).to_s.downcase
+        @fm_name = (options.fetch(:fm_name) { name }).to_s.downcase.freeze
       end
 
       # From FileMaker to Ruby.

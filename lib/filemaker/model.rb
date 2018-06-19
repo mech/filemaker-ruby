@@ -5,20 +5,21 @@ module Filemaker
     extend ActiveSupport::Concern
     include Components
 
-    # @return [Boolean] indicates if this is a new fresh record
-    attr_reader :attributes, :new_record, :record_id, :mod_id, :portals
+    attr_reader :new_record, :record_id, :mod_id, :portals
 
     included do
       class_attribute :db, :lay, :registry_name, :server, :api, :per_page
       self.per_page = Kaminari.config.default_per_page if defined?(Kaminari)
     end
 
-    def initialize(attrs = nil)
+    def initialize(attributes = {})
+      # We did not manage to use `ActiveModel::AttributeAssignment`
+      # super
+
       @new_record = true
-      @attributes = {}
       @relations = {}
       apply_defaults
-      process_attributes(attrs)
+      process_attributes(attributes)
     end
 
     def new_record?
@@ -34,7 +35,7 @@ module Filemaker
     end
 
     def model_key
-      @model_cache_key ||= self.class.model_name.cache_key
+      @model_key ||= self.class.model_name.cache_key
     end
 
     def cache_key
@@ -53,7 +54,7 @@ module Filemaker
     end
 
     def to_param
-      id.to_s if id
+      id&.to_s
     end
 
     def fm_attributes
@@ -70,12 +71,12 @@ module Filemaker
 
     private
 
-    def process_attributes(attrs)
-      attrs ||= {}
-      return if attrs.empty?
+    def process_attributes(attributes)
+      return if attributes.empty?
 
-      attrs.each_pair do |key, value|
-        public_send("#{key}=", value) if respond_to?("#{key}=")
+      attributes.each_pair do |key, value|
+        setter = :"#{key}="
+        public_send(setter, value) if respond_to?(setter)
       end
     end
 

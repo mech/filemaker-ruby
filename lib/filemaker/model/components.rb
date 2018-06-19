@@ -15,10 +15,16 @@ module Filemaker
         extend ActiveModel::Callbacks
       end
 
+      # Includes Naming, Translation, Validations, Conversion and
+      # AttributeAssignment
       include ActiveModel::Model
+
       include ActiveModel::Dirty
       include ActiveModel::Serializers::JSON
+
+      # Provide before/after_validation
       include ActiveModel::Validations::Callbacks
+
       include GlobalID::Identification
       include Fields
       include Relations

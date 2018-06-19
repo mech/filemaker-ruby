@@ -78,7 +78,8 @@ describe Filemaker::Server do
     end
 
     it 'raises Filemaker::Errors::CommunicationError if status = 0' do
-      fake_error(@server, nil, 0)
+      # fake_error(@server, nil, 0)
+      fake_typhoeus_error(0)
 
       expect do
         @server.databases.all
@@ -86,7 +87,8 @@ describe Filemaker::Server do
     end
 
     it 'raises Filemaker::Errors::CommunicationError if status = 404' do
-      fake_error(@server, nil, 404)
+      # fake_error(@server, nil, 404)
+      fake_typhoeus_error(404)
 
       expect do
         @server.databases.all
@@ -94,7 +96,8 @@ describe Filemaker::Server do
     end
 
     it 'raises Filemaker::Errors::AuthenticationError if status = 401' do
-      fake_error(@server, nil, 401)
+      # fake_error(@server, nil, 401)
+      fake_typhoeus_error(401)
 
       expect do
         @server.databases.all

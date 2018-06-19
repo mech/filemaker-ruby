@@ -50,9 +50,9 @@ module Filemaker
         config.host         = value['host']
         config.account_name = value['account_name']
         config.password     = value['password']
-        config.ssl          = value['ssl']
-        config.log          = value['log']
-        config.endpoint     = value['endpoint']
+        config.ssl          = value['ssl'] if value['ssl']
+        config.log          = value['log'] if value['log']
+        config.endpoint     = value['endpoint'] if value['endpoint']
       end
     end
   end

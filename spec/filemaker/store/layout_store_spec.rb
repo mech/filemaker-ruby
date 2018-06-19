@@ -20,7 +20,8 @@ describe Filemaker::Store::LayoutStore do
         config.password     = 'password'
       end
 
-      fake_post_response(server, nil, 'layoutnames.xml')
+      # fake_post_response(server, nil, 'layoutnames.xml')
+      fake_typhoeus_post('layoutnames.xml')
 
       expect(server.db['candidates'].layouts.all).to eq \
         ['Dashboard', 'Calender', 'Profile', 'Resume', 'Job Application']

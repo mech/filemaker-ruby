@@ -41,7 +41,7 @@ module Filemaker
       def apply_defaults
         attribute_names.each do |name|
           field = fields[name]
-          attributes[name] = field.default_value
+          instance_variable_set("@#{name}", field.default_value)
         end
       end
 
@@ -51,6 +51,16 @@ module Filemaker
 
       def fm_names
         fields.values.map(&:fm_name)
+      end
+
+      def attributes
+        fields.keys.each_with_object({}) do |field, hash|
+          # Attributes must be strings, not symbols - See
+          # http://api.rubyonrails.org/classes/ActiveModel/Serialization.html
+          hash[field.to_s] = instance_variable_get("@#{field}")
+
+          # If we use public_send(field) will encounter Stack Too Deep
+        end
       end
 
       module ClassMethods
@@ -72,31 +82,34 @@ module Filemaker
         end
 
         def add_field(name, type, options)
-          name = name.to_s
+          name = name.to_s.freeze
           fields[name] = Filemaker::Model::Field.new(name, type, options)
           self.identity = fields[name] if options[:identity]
         end
 
         def create_accessors(name)
-          name = name.to_s # Normalize it so ActiveModel::Serialization can work
+          # Normalize it so ActiveModel::Serialization can work
+          name = name.to_s
 
           define_attribute_methods name
 
           # Reader
           define_method(name) do
-            attributes[name]
+            instance_variable_get("@#{name}")
           end
 
           # Writer - We try to map to the correct type, if not we just return
           # original.
           define_method("#{name}=") do |value|
-            public_send("#{name}_will_change!") unless value == attributes[name]
-            attributes[name] = fields[name].coerce_for_assignment(value, self.class)
+            new_value = fields[name].coerce_for_assignment(value, self.class)
+            public_send("#{name}_will_change!") if new_value != public_send(name)
+            instance_variable_set("@#{name}", new_value)
           end
 
           # Predicate
           define_method("#{name}?") do
-            attributes[name] == true || attributes[name].present?
+            # See ActiveRecord::AttributeMethods::Query implementation
+            public_send(name) == true || public_send(name).present?
           end
         end
 

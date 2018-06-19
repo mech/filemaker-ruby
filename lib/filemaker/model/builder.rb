@@ -24,12 +24,19 @@ module Filemaker
         record.each_key do |fm_field_name|
           # record.keys are all lowercase
           field = object.class.find_field_by_name(fm_field_name)
+
+          # Do not bother with undefined field, we don't necessarily need all
+          # FM's fields
           next unless field
 
-          object.attributes[field.name] = field.coerce(
-            record[fm_field_name],
-            object.class
-          )
+          # object.attributes[field.name] = field.coerce(
+          #   record[fm_field_name],
+          #   object.class
+          # )
+
+          setter = :"#{field.name}="
+          value = field.coerce(record[fm_field_name], object.class)
+          object.public_send(setter, value)
         end
 
         object

@@ -28,6 +28,7 @@ module Filemaker
           options = {}
           yield options if block_given?
           resultset = api.new(fm_attributes, options)
+          changes_applied
           replace_new_data(resultset)
         end
         self
@@ -82,7 +83,8 @@ module Filemaker
       end
 
       def reload!
-        reset_changes
+        # reset_changes
+        clear_changes_information
         resultset = api.find(record_id)
         replace_new_data(resultset)
         self

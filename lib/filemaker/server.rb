@@ -1,4 +1,5 @@
 require 'faraday'
+require 'typhoeus'
 require 'typhoeus/adapters/faraday'
 require 'filemaker/configuration'
 
@@ -45,30 +46,61 @@ module Filemaker
       log_action(params)
 
       # yield params if block_given?
-      response = @connection.public_send(method, endpoint, params)
+      # response = @connection.public_send(method, endpoint, params)
 
-      case response.status
+      response = Typhoeus.post(
+        "#{url}#{endpoint}",
+        ssl_verifypeer: false,
+        ssl_verifyhost: 0,
+        userpwd: "#{@config.account_name}:#{@config.password}",
+        body: params
+      )
+
+      case response.response_code
       when 200
         [response, params]
       when 401
         raise Errors::AuthenticationError,
-              "[#{response.status}] Authentication failed."
+              "[#{response.response_code}] Authentication failed."
       when 0
         raise Errors::CommunicationError,
-              "[#{response.status}] Empty response."
+              "[#{response.response_code}] Empty response."
       when 404
         raise Errors::CommunicationError,
-              "[#{response.status}] Not found"
+              "[#{response.response_code}] Not found"
       when 302
         raise Errors::CommunicationError,
-              "[#{response.status}] Redirect not supported"
+              "[#{response.response_code}] Redirect not supported"
       when 502
         raise Errors::CommunicationError,
-              "[#{response.status}] Bad gateway. Too many records."
+              "[#{response.response_code}] Bad gateway. Too many records."
       else
-        msg = "Unknown response status = #{response.status}"
+        msg = "Unknown response code = #{response.response_code}"
         raise Errors::CommunicationError, msg
       end
+
+      # case response.status
+      # when 200
+      #   [response, params]
+      # when 401
+      #   raise Errors::AuthenticationError,
+      #         "[#{response.status}] Authentication failed."
+      # when 0
+      #   raise Errors::CommunicationError,
+      #         "[#{response.status}] Empty response."
+      # when 404
+      #   raise Errors::CommunicationError,
+      #         "[#{response.status}] Not found"
+      # when 302
+      #   raise Errors::CommunicationError,
+      #         "[#{response.status}] Redirect not supported"
+      # when 502
+      #   raise Errors::CommunicationError,
+      #         "[#{response.status}] Bad gateway. Too many records."
+      # else
+      #   msg = "Unknown response status = #{response.status}"
+      #   raise Errors::CommunicationError, msg
+      # end
     end
 
     def handler_names
@@ -78,6 +110,8 @@ module Filemaker
     private
 
     def get_connection(options = {})
+      # Additional options can be passed into Faraday that are not specified
+      # at configuration
       faraday_options = @config.connection_options.merge(options)
 
       Faraday.new(@config.url, faraday_options) do |faraday|
