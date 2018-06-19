@@ -35,21 +35,24 @@ module Filemaker
 
     sessions.each_pair do |key, value|
       registry[key] = Filemaker::Server.new do |config|
-        config.host = value.fetch('host') do
-          raise Errors::ConfigurationError, 'Missing config.host'
-        end
+        # config.host = value.fetch('host') do
+        #   raise Errors::ConfigurationError, 'Missing config.host'
+        # end
 
-        config.account_name = value.fetch('account_name') do
-          raise Errors::ConfigurationError, 'Missing config.account_name'
-        end
+        # config.account_name = value.fetch('account_name') do
+        #   raise Errors::ConfigurationError, 'Missing config.account_name'
+        # end
 
-        config.password = value.fetch('password') do
-          raise Errors::ConfigurationError, 'Missing config.password'
-        end
+        # config.password = value.fetch('password') do
+        #   raise Errors::ConfigurationError, 'Missing config.password'
+        # end
 
-        config.ssl = value['ssl'] if value['ssl']
-        config.log = value['log'] if value['log']
-        config.endpoint = value['endpoint'] if value['endpoint']
+        config.host         = value['host']
+        config.account_name = value['account_name']
+        config.password     = value['password']
+        config.ssl          = value['ssl']
+        config.log          = value['log']
+        config.endpoint     = value['endpoint']
       end
     end
   end
