@@ -1,6 +1,3 @@
-require 'filemaker/model/types/email'
-require 'filemaker/model/types/attachment'
-
 module Filemaker
   module Model
     class Field

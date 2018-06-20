@@ -88,8 +88,7 @@ describe Filemaker::Model do
         'created_at',
         'modifieddate',
         'salary',
-        'passage of time',
-        'document'
+        'passage of time'
       ]
   end
 

@@ -4,7 +4,6 @@ require 'filemaker/model/types/time'
 require 'filemaker/model/types/big_decimal'
 require 'filemaker/model/types/integer'
 require 'filemaker/model/types/email'
-require 'filemaker/model/types/attachment'
 
 module Filemaker
   module Model
@@ -27,7 +26,6 @@ module Filemaker
       register(:number, Filemaker::Model::Types::BigDecimal)
       register(:integer, Filemaker::Model::Types::Integer)
       register(:email, Filemaker::Model::Types::Email)
-      register(:object, Filemaker::Model::Types::Attachment)
     end
   end
 end

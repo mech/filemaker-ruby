@@ -23,7 +23,9 @@ Configuration for initializing a server:
 * `host` - IP or hostname
 * `account` - Please use `ENV` variable like `ENV['FILEMAKER_ACCOUNT']`
 * `password` - Please use `ENV` variable like `ENV['FILEMAKER_PASSWORD']`
-* `ssl` - Use `{ verify: false }` if you are using FileMaker's unsigned certificate. You can also pass a hash which will be forwarded to Faraday directly like `ssl: { client_cert: '', client_key: '', ca_file: '', ca_path: '/path/to/certs', cert_store: '' }`. See [Setting up SSL certificates on the Faraday wiki](https://github.com/lostisland/faraday/wiki/Setting-up-SSL-certificates)
+* `ssl` - Use `{ verify: false }` if you are using FileMaker's unsigned certificate.
+* `ssl_verifypeer` - Default to `false`
+* `ssl_verifyhost` - Default to `0`
 * `log` - A choice of `simple`, `curl` and `curl_auth`.
 
 ```ruby
@@ -69,15 +71,26 @@ If you want ActiveModel-like access with a decent query DSL like `where`, `find`
 
 The following data type mappings can be used to register the fields:
 
-* `string` - `String`
-* `text` - `String`
-* `integer` - `Integer`
-* `number` - `BigDecimal`
-* `money` - `BigDecimal`
-* `date` - `Date`
-* `datetime` - `DateTime`
+* `string` - `Filemaker::Model::Types::Text`
+* `text` - `Filemaker::Model::Types::Text`
+* `integer` - `Filemaker::Model::Types::Integer`
+* `number` - `Filemaker::Model::Types::BigDecimal`
+* `money` - `Filemaker::Model::Types::BigDecimal`
+* `date` - `Filemaker::Model::Types::Date`
+* `datetime` - `Filemaker::Model::Types::Time`
 * `email` - `Filemaker::Model::Types::Email`
-* `object` - `Filemaker::Model::Types::Attachment`
+
+You can create your own custom type by providing these 3 class methods:
+
+* `__filemaker_cast_to_ruby_object`
+* `__filemaker_serialize_for_update`
+* `__filemaker_serialize_for_query`
+
+And register it with:
+
+```ruby
+Filemaker::Model::Type.register(:fast_string, FastStringType)
+```
 
 If the field name has spaces, you can use `fm_name` to identify the real FileMaker field name.
 
@@ -107,7 +120,6 @@ class Job
   datetime :created_at
   datetime :published_at, fm_name: 'ModifiedDate'
   money    :salary
-  object   :attachment
 
   validates :title, presence: true
 
@@ -125,6 +137,8 @@ development:
     account_name: <%= ENV['FILEMAKER_ACCOUNT_NAME'] %>
     password: <%= ENV['FILEMAKER_PASSWORD'] %>
     ssl: true
+    ssl_verifypeer: false
+    ssl_verifyhost: 0
     log: curl
 
   read_slave:

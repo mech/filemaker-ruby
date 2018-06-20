@@ -73,7 +73,6 @@ class MyModel
   datetime :updated_at, fm_name: 'ModifiedDate'
   money :salary
   integer :age, fm_name: 'passage of time'
-  object :document
 end
 
 class Project
