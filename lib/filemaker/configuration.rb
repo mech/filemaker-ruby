@@ -1,10 +1,15 @@
 module Filemaker
   class Configuration
-    attr_accessor :host, :account_name, :password, :ssl, :endpoint
+    attr_accessor :host, :account_name, :password, :endpoint
+    attr_accessor :ssl_verifypeer, :ssl_verifyhost, :ssl
+    attr_accessor :timeout
     attr_accessor :log
 
     def initialize
       @endpoint = '/fmi/xml/fmresultset.xml'
+      @timeout = 30
+      @ssl_verifypeer = false
+      @ssl_verifyhost = 0
     end
 
     def not_configurable?

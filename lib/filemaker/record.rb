@@ -33,7 +33,7 @@ module Filemaker
                           end
 
         field.xpath('data').each do |data|
-          datum.push(metadata_fields[field_name].coerce(data.inner_text))
+          datum.push(metadata_fields[field_name].raw_cast(data.inner_text))
         end
 
         self[field_name] = normalize_data(datum)

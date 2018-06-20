@@ -68,18 +68,30 @@ module Filemaker
           fields.keys
         end
 
-        TYPE_MAPPINGS.each_key do |type|
+        Filemaker::Model::Type.registry.each_key do |type|
           define_method(type) do |*args|
-            # TODO: It will be good if we can accept lambda also
             options = args.last.is_a?(Hash) ? args.pop : {}
             field_names = args
 
             field_names.each do |name|
-              add_field(name, TYPE_MAPPINGS[type.to_sym], options)
+              add_field(name, Filemaker::Model::Type.registry[type], options)
               create_accessors(name)
             end
           end
         end
+
+        # TYPE_MAPPINGS.each_key do |type|
+        #   define_method(type) do |*args|
+        #     # TODO: It will be good if we can accept lambda also
+        #     options = args.last.is_a?(Hash) ? args.pop : {}
+        #     field_names = args
+
+        #     field_names.each do |name|
+        #       add_field(name, TYPE_MAPPINGS[type.to_sym], options)
+        #       create_accessors(name)
+        #     end
+        #   end
+        # end
 
         def add_field(name, type, options)
           name = name.to_s.freeze
@@ -101,8 +113,13 @@ module Filemaker
           # Writer - We try to map to the correct type, if not we just return
           # original.
           define_method("#{name}=") do |value|
-            new_value = fields[name].coerce_for_assignment(value, self.class)
-            public_send("#{name}_will_change!") if new_value != public_send(name)
+            # new_value = fields[name].coerce_for_assignment(value, self.class)
+
+            new_value = fields[name].serialize_for_update(value)
+
+            public_send("#{name}_will_change!") \
+              if new_value != public_send(name)
+
             instance_variable_set("@#{name}", new_value)
           end
 

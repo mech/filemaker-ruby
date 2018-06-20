@@ -38,7 +38,9 @@ module Filemaker
         value.delete('$,')
       end
 
-      def coerce(value)
+      # Raw XML data `inner_text` into Ruby native object as best we can based
+      # on its built-in metadata's data_type
+      def raw_cast(value)
         value = value.to_s.strip
         return nil if value.empty?
 

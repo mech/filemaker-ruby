@@ -20,6 +20,7 @@ module Filemaker
       @relations = {}
       apply_defaults
       process_attributes(attributes)
+      clear_changes_information
     end
 
     def new_record?
@@ -66,7 +67,7 @@ module Filemaker
       changed.each do |attr_name|
         dirty[attr_name] = attributes[attr_name]
       end
-      self.class.with_model_fields(dirty)
+      self.class.with_model_fields(dirty, use_query: false)
     end
 
     private
@@ -126,7 +127,7 @@ module Filemaker
       # is an array. Without the test and expectation setup, debugging the
       # output will take far longer to realise. This reinforce the belief that
       # TDD is in fact a valuable thing to do.
-      def with_model_fields(criterion, coerce = true)
+      def with_model_fields(criterion, use_query: true)
         accepted_fields = {}
 
         criterion.each_pair do |key, value|
@@ -141,13 +142,16 @@ module Filemaker
           if value.is_a? Array
             temp = []
             value.each do |v|
-              temp << (coerce ? field.coerce(v) : v)
+              temp << (use_query ? field.serialize_for_query(v) : field.serialize_for_update(v))
+              # temp << (coerce ? field.coerce(v) : v)
             end
 
             accepted_fields[field.fm_name] = temp
           else
             accepted_fields[field.fm_name] = \
-              coerce ? field.coerce(value) : value
+              use_query ? field.serialize_for_query(value) : field.serialize_for_update(value)
+
+            # coerce ? field.coerce(value) : value
           end
         end
 

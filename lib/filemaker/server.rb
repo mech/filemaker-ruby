@@ -15,8 +15,9 @@ module Filemaker
     alias database databases
     alias db databases
 
-    def_delegators :@config, :host, :url, :ssl, :endpoint, :log
+    def_delegators :@config, :host, :url, :endpoint, :log
     def_delegators :@config, :account_name, :password
+    def_delegators :@config, :ssl_verifypeer, :ssl_verifyhost, :ssl, :timeout
 
     def initialize(options = {})
       @config = Configuration.new
@@ -24,7 +25,7 @@ module Filemaker
       raise ArgumentError, 'Missing config block' if @config.not_configurable?
 
       @databases = Store::DatabaseStore.new(self)
-      @connection = get_connection(options)
+      # @connection = get_connection(options)
     end
 
     # @api private
@@ -50,9 +51,9 @@ module Filemaker
 
       response = Typhoeus.post(
         "#{url}#{endpoint}",
-        ssl_verifypeer: false,
-        ssl_verifyhost: 0,
-        userpwd: "#{@config.account_name}:#{@config.password}",
+        ssl_verifypeer: ssl_verifypeer,
+        ssl_verifyhost: ssl_verifyhost,
+        userpwd: "#{account_name}:#{password}",
         body: params
       )
 
@@ -109,6 +110,20 @@ module Filemaker
 
     private
 
+    def get_typhoeus_connection(body)
+      request = Typhoeus::Request.new(
+        "#{url}#{endpoint}",
+        method: :post,
+        ssl_verifypeer: ssl_verifypeer,
+        ssl_verifyhost: ssl_verifyhost,
+        userpwd: "#{account_name}:#{password}",
+        body: body,
+        timeout: timeout || 0
+      )
+
+      request.run
+    end
+
     def get_connection(options = {})
       # Additional options can be passed into Faraday that are not specified
       # at configuration
@@ -126,6 +141,7 @@ module Filemaker
     end
 
     # {"-db"=>"mydb", "-lay"=>"mylay", "email"=>"a@b.com", "updated_at": Date}
+    # Take Ruby type and serialize into a form FileMaker can understand
     def serialize_args(args)
       return {} if args.nil?
 
@@ -137,8 +153,6 @@ module Filemaker
           args[key] = value.strftime('%m/%d/%Y')
         when Time
           args[key] = value.strftime('%H:%M')
-        when Filemaker::Model::Types::Email
-          args[key] = value.to_query
         else
           # Especially for range operator (...), we want to output as String
           args[key] = value.to_s

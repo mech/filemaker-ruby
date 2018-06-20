@@ -69,7 +69,7 @@ module Filemaker
           @selector ||= {}
 
           criterion = if operator == 'bw'
-                        klass.with_model_fields(criterion, false)
+                        klass.with_model_fields(criterion, use_query: false)
                       else
                         klass.with_model_fields(criterion)
                       end

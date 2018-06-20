@@ -24,6 +24,11 @@ describe Filemaker::Model::Builder do
     it 'has a modify_date' do
       expect(subject.modify_date).to eq(Date.parse('2014-08-12'))
     end
+
+    it 'is not dirty' do
+      expect(subject.changed?).to eq false
+      expect(subject.changes).to be_empty
+    end
   end
 
   context '.collection' do

@@ -72,15 +72,15 @@ module Filemaker
 
       # If value is nil, we convert to empty string so it will get pick up by
       # `fm_attributes`
-      def assign_attributes(new_attributes)
-        return if new_attributes.blank?
+      # def assign_attributes(new_attributes)
+      #   return if new_attributes.blank?
 
-        new_attributes.each_pair do |key, value|
-          next unless respond_to?("#{key}=")
+      #   new_attributes.each_pair do |key, value|
+      #     next unless respond_to?("#{key}=")
 
-          public_send("#{key}=", (value || ''))
-        end
-      end
+      #     public_send("#{key}=", (value || ''))
+      #   end
+      # end
 
       def reload!
         # reset_changes

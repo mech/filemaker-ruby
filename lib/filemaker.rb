@@ -17,6 +17,7 @@ require 'active_support/core_ext'
 require 'active_model'
 require 'globalid'
 
+require 'filemaker/model/type'
 require 'filemaker/model/criteria'
 require 'filemaker/model'
 
@@ -28,31 +29,22 @@ module Filemaker
   # Based on the environment, register the server so we only ever have one
   # instance of Filemaker::Server per named session. The named session will be
   # defined at the `filemaker.yml` config file.
-  def load!(path, environment = nil)
+  def load!(path, environment = :development)
     file_string = ERB.new(File.new(path).read).result
     sessions = YAML.safe_load(file_string)[environment.to_s]
     raise Errors::ConfigurationError, 'Environment wrong?' if sessions.nil?
 
     sessions.each_pair do |key, value|
-      registry[key] = Filemaker::Server.new do |config|
-        # config.host = value.fetch('host') do
-        #   raise Errors::ConfigurationError, 'Missing config.host'
-        # end
+      registry[key] = Filemaker::Server.new do |c|
+        c.host           = value['host']
+        c.account_name   = value['account_name']
+        c.password       = value['password']
 
-        # config.account_name = value.fetch('account_name') do
-        #   raise Errors::ConfigurationError, 'Missing config.account_name'
-        # end
-
-        # config.password = value.fetch('password') do
-        #   raise Errors::ConfigurationError, 'Missing config.password'
-        # end
-
-        config.host         = value['host']
-        config.account_name = value['account_name']
-        config.password     = value['password']
-        config.ssl          = value['ssl'] if value['ssl']
-        config.log          = value['log'] if value['log']
-        config.endpoint     = value['endpoint'] if value['endpoint']
+        c.ssl            = value['ssl'] if value['ssl']
+        c.ssl_verifypeer = value['ssl_verifypeer'] if value['ssl_verifypeer']
+        c.ssl_verifyhost = value['ssl_verifyhost'] if value['ssl_verifyhost']
+        c.log            = value['log'] if value['log']
+        c.endpoint       = value['endpoint'] if value['endpoint']
       end
     end
   end

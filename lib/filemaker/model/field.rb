@@ -16,6 +16,35 @@ module Filemaker
         @fm_name = (options.fetch(:fm_name) { name }).to_s.downcase.freeze
       end
 
+      # Will delegate to the underlying @type for casting
+      # From raw input to Ruby type
+      def cast(value)
+        return value if skip_modifying_value(value)
+        @type.__filemaker_cast_to_ruby_object(value)
+      end
+
+      # Convert to Ruby type situable for making FileMaker update
+      # For attr_writer
+      def serialize_for_update(value)
+        return value if skip_modifying_value(value)
+        @type.__filemaker_serialize_for_update(value)
+      end
+
+      # Convert to Ruby type situable for making FileMaker query
+      def serialize_for_query(value)
+        return value if skip_modifying_value(value)
+        @type.__filemaker_serialize_for_query(value)
+      end
+
+      # Doc why we skip it!
+      # TODO - we may need to customize it for query and update. For example
+      # query will bypass `==`, but update do not need to care.
+      def skip_modifying_value(value)
+        return true if value.nil?
+        return true if value =~ /^==|=\*/
+        return true if value =~ /(\.\.\.)/
+      end
+
       # From FileMaker to Ruby.
       #
       # If the value is `==` (match empty) or `=*` (match record), then we will

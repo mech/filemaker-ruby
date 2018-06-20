@@ -35,8 +35,13 @@ module Filemaker
           # )
 
           setter = :"#{field.name}="
-          value = field.coerce(record[fm_field_name], object.class)
+          # value = field.coerce(record[fm_field_name], object.class)
+
+          value = field.cast(record[fm_field_name])
           object.public_send(setter, value)
+
+          # So after hydrating, we do not say it was dirty
+          object.clear_changes_information
         end
 
         object
