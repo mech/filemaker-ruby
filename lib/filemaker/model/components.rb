@@ -25,7 +25,9 @@ module Filemaker
       # Provide before/after_validation
       include ActiveModel::Validations::Callbacks
 
+      # A global URI good for background job processing
       include GlobalID::Identification
+
       include Fields
       include Relations
       include Persistable

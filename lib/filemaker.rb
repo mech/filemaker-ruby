@@ -23,6 +23,8 @@ require 'filemaker/model'
 
 require 'yaml'
 
+Typhoeus::Config.user_agent = "filemaker-ruby-#{Filemaker::VERSION}".freeze
+
 module Filemaker
   module_function
 

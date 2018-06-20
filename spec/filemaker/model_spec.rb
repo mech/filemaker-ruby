@@ -141,15 +141,6 @@ describe Filemaker::Model do
     expect(model.cache_key).to eq 'my_models/CA123'
   end
 
-  xit 'has attachment' do
-    model.document = URI.parse('http://host/somefile.pdf')
-    expect(model.document.url).to eq 'http://host/somefile.pdf'
-    expect(model.document.filename).to eq 'somefile.pdf'
-    model.document.body
-    expect(model.document.extension).to eq '.pdf'
-    expect(model.document.content_type).to eq 'application/pdf'
-  end
-
   describe 'process_attributes' do
     it 'accepts a hash of attributes' do
       model = MyModel.new(name: 'Bob', email: 'bob@cern.org')

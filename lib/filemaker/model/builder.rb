@@ -29,14 +29,7 @@ module Filemaker
           # FM's fields
           next unless field
 
-          # object.attributes[field.name] = field.coerce(
-          #   record[fm_field_name],
-          #   object.class
-          # )
-
           setter = :"#{field.name}="
-          # value = field.coerce(record[fm_field_name], object.class)
-
           value = field.cast(record[fm_field_name])
           object.public_send(setter, value)
 

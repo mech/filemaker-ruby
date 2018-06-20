@@ -19,18 +19,6 @@ module Filemaker
     module Fields
       extend ActiveSupport::Concern
 
-      TYPE_MAPPINGS = {
-        string:     String,
-        text:       String,
-        date:       Date,
-        datetime:   DateTime,
-        money:      BigDecimal,
-        number:     BigDecimal,
-        integer:    Integer,
-        email:      Filemaker::Model::Types::Email,
-        object:     Filemaker::Model::Types::Attachment
-      }.freeze
-
       included do
         class_attribute :fields, :identity
         self.fields = {}
@@ -80,19 +68,6 @@ module Filemaker
           end
         end
 
-        # TYPE_MAPPINGS.each_key do |type|
-        #   define_method(type) do |*args|
-        #     # TODO: It will be good if we can accept lambda also
-        #     options = args.last.is_a?(Hash) ? args.pop : {}
-        #     field_names = args
-
-        #     field_names.each do |name|
-        #       add_field(name, TYPE_MAPPINGS[type.to_sym], options)
-        #       create_accessors(name)
-        #     end
-        #   end
-        # end
-
         def add_field(name, type, options)
           name = name.to_s.freeze
           fields[name] = Filemaker::Model::Field.new(name, type, options)
@@ -113,8 +88,6 @@ module Filemaker
           # Writer - We try to map to the correct type, if not we just return
           # original.
           define_method("#{name}=") do |value|
-            # new_value = fields[name].coerce_for_assignment(value, self.class)
-
             new_value = fields[name].serialize_for_update(value)
 
             public_send("#{name}_will_change!") \

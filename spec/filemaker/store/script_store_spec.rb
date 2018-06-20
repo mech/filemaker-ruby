@@ -20,7 +20,6 @@ describe Filemaker::Store::ScriptStore do
         config.password     = 'password'
       end
 
-      # fake_post_response(server, nil, 'scriptnames.xml')
       fake_typhoeus_post('scriptnames.xml')
 
       expect(server.db['candidates'].scripts.all).to eq \

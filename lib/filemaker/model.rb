@@ -67,6 +67,8 @@ module Filemaker
       changed.each do |attr_name|
         dirty[attr_name] = attributes[attr_name]
       end
+
+      # We need to use serialize_for_update instead
       self.class.with_model_fields(dirty, use_query: false)
     end
 
@@ -142,16 +144,20 @@ module Filemaker
           if value.is_a? Array
             temp = []
             value.each do |v|
-              temp << (use_query ? field.serialize_for_query(v) : field.serialize_for_update(v))
-              # temp << (coerce ? field.coerce(v) : v)
+              temp << if use_query
+                        field.serialize_for_query(v)
+                      else
+                        field.serialize_for_update(v)
+                      end
             end
 
             accepted_fields[field.fm_name] = temp
           else
-            accepted_fields[field.fm_name] = \
-              use_query ? field.serialize_for_query(value) : field.serialize_for_update(value)
-
-            # coerce ? field.coerce(value) : value
+            accepted_fields[field.fm_name] = if use_query
+                                               field.serialize_for_query(value)
+                                             else
+                                               field.serialize_for_update(value)
+                                             end
           end
         end
 

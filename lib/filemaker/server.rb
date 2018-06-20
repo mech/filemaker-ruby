@@ -1,14 +1,9 @@
-require 'faraday'
 require 'typhoeus'
-require 'typhoeus/adapters/faraday'
 require 'filemaker/configuration'
 
 module Filemaker
   class Server
     extend Forwardable
-
-    # @return [Faraday::Connection] the HTTP connection
-    attr_reader :connection
 
     # @return [Filemaker::Store::DatabaseStore] the database store
     attr_reader :databases
@@ -19,13 +14,12 @@ module Filemaker
     def_delegators :@config, :account_name, :password
     def_delegators :@config, :ssl_verifypeer, :ssl_verifyhost, :ssl, :timeout
 
-    def initialize(options = {})
+    def initialize
       @config = Configuration.new
       yield @config if block_given?
       raise ArgumentError, 'Missing config block' if @config.not_configurable?
 
       @databases = Store::DatabaseStore.new(self)
-      # @connection = get_connection(options)
     end
 
     # @api private
@@ -35,8 +29,8 @@ module Filemaker
     # Also we want to pass in timeout option so we can ignore timeout for really
     # long requests
     #
-    # @return [Array] Faraday::Response and request params Hash
-    def perform_request(method, action, args, options = {})
+    # @return [Array] response and request params Hash
+    def perform_request(action, args, options = {})
       params = serialize_args(args)
                .merge(expand_options(options))
                .merge({ action => '' })
@@ -47,7 +41,6 @@ module Filemaker
       log_action(params)
 
       # yield params if block_given?
-      # response = @connection.public_send(method, endpoint, params)
 
       response = Typhoeus.post(
         "#{url}#{endpoint}",
@@ -79,29 +72,6 @@ module Filemaker
         msg = "Unknown response code = #{response.response_code}"
         raise Errors::CommunicationError, msg
       end
-
-      # case response.status
-      # when 200
-      #   [response, params]
-      # when 401
-      #   raise Errors::AuthenticationError,
-      #         "[#{response.status}] Authentication failed."
-      # when 0
-      #   raise Errors::CommunicationError,
-      #         "[#{response.status}] Empty response."
-      # when 404
-      #   raise Errors::CommunicationError,
-      #         "[#{response.status}] Not found"
-      # when 302
-      #   raise Errors::CommunicationError,
-      #         "[#{response.status}] Redirect not supported"
-      # when 502
-      #   raise Errors::CommunicationError,
-      #         "[#{response.status}] Bad gateway. Too many records."
-      # else
-      #   msg = "Unknown response status = #{response.status}"
-      #   raise Errors::CommunicationError, msg
-      # end
     end
 
     def handler_names
@@ -122,22 +92,6 @@ module Filemaker
       )
 
       request.run
-    end
-
-    def get_connection(options = {})
-      # Additional options can be passed into Faraday that are not specified
-      # at configuration
-      faraday_options = @config.connection_options.merge(options)
-
-      Faraday.new(@config.url, faraday_options) do |faraday|
-        faraday.request :url_encoded
-        faraday.headers[:user_agent] = \
-          "filemaker-ruby-#{Filemaker::VERSION}".freeze
-        faraday.basic_auth @config.account_name, @config.password
-
-        # The order of the middleware is important, so adapter must be the last
-        faraday.adapter :typhoeus
-      end
     end
 
     # {"-db"=>"mydb", "-lay"=>"mylay", "email"=>"a@b.com", "updated_at": Date}

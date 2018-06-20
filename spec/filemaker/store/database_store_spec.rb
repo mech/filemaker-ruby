@@ -20,7 +20,6 @@ describe Filemaker::Store::DatabaseStore do
         config.password     = 'password'
       end
 
-      # fake_post_response(server, nil, 'dbnames.xml')
       fake_typhoeus_post('dbnames.xml')
 
       expected_result = %w[Billing Candidates Employee Jobs]

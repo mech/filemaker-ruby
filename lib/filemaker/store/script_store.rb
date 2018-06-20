@@ -12,7 +12,7 @@ module Filemaker
 
       def all
         args = { '-db' => @database.name }
-        response, _params = @server.perform_request(:post, '-scriptnames', args)
+        response, _params = @server.perform_request('-scriptnames', args)
         resultset = Filemaker::Resultset.new(@server, response.body)
         resultset.map do |record|
           record['SCRIPT_NAME']
