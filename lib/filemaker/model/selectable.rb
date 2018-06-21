@@ -68,11 +68,7 @@ module Filemaker
           chains.delete(:in)
           @selector ||= {}
 
-          criterion = if operator == 'bw'
-                        klass.with_model_fields(criterion, use_query: false)
-                      else
-                        klass.with_model_fields(criterion)
-                      end
+          criterion = klass.with_model_fields(criterion, use_query: true)
 
           criterion.each_key do |key|
             selector["#{key}.op"] = operator

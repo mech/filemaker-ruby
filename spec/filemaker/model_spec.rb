@@ -103,23 +103,23 @@ describe Filemaker::Model do
   # end
 
   it 'accepts date range as string' do
-    model.created_at = '1/1/2016...1/31/2016'
-    expect(model.created_at).to be_a String
+    c = MyModel.where(created_at: '1/1/2016...1/31/2016')
+    expect(c.selector['created_at']).to be_a String
   end
 
   it 'accepts number range as string' do
-    model.salary = '1000...2000'
-    expect(model.salary).to be_a String
+    c = MyModel.where(salary: '1000...2000')
+    expect(c.selector['salary']).to be_a String
   end
 
   it 'accepts == for any type' do
-    model.salary = '=='
-    expect(model.salary).to eq '=='
+    c = MyModel.where(salary: '==')
+    expect(c.selector['salary']).to eq '=='
   end
 
   it 'accepts =* for any type' do
-    model.age = '=*'
-    expect(model.age).to eq '=*'
+    c = MyModel.where(age: '=*')
+    expect(c.selector['passage of time']).to eq '=*'
   end
 
   it 'check for presence of name and salary' do

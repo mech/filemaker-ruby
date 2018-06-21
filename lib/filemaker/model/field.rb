@@ -16,7 +16,8 @@ module Filemaker
       # Will delegate to the underlying @type for casting
       # From raw input to Ruby type
       def cast(value)
-        return value if skip_modifying_value(value)
+        return value if value.nil?
+
         @type.__filemaker_cast_to_ruby_object(value)
       rescue StandardError => e
         warn "[#{e.message}] Could not cast: #{name}=#{value}"
@@ -26,7 +27,8 @@ module Filemaker
       # Convert to Ruby type situable for making FileMaker update
       # For attr_writer
       def serialize_for_update(value)
-        return value if skip_modifying_value(value)
+        return value if value.nil?
+
         @type.__filemaker_serialize_for_update(value)
       rescue StandardError => e
         warn "[#{e.message}] Could not serialize for update: #{name}=#{value}"
@@ -35,20 +37,14 @@ module Filemaker
 
       # Convert to Ruby type situable for making FileMaker query
       def serialize_for_query(value)
-        return value if skip_modifying_value(value)
+        return value if value.nil?
+        return value if value =~ /^==|=\*/
+        return value if value =~ /(\.\.\.)/
+
         @type.__filemaker_serialize_for_query(value)
       rescue StandardError => e
         warn "[#{e.message}] Could not serialize for query: #{name}=#{value}"
         value
-      end
-
-      # Doc why we skip it!
-      # TODO - we may need to customize it for query and update. For example
-      # query will bypass `==`, but update do not need to care.
-      def skip_modifying_value(value)
-        return true if value.nil?
-        return true if value =~ /^==|=\*/
-        return true if value =~ /(\.\.\.)/
       end
     end
   end
