@@ -83,8 +83,6 @@ module Filemaker
       # end
 
       def reload!
-        # reset_changes
-        clear_changes_information
         resultset = api.find(record_id)
         replace_new_data(resultset)
         self

@@ -7,7 +7,7 @@ module Filemaker
 
     def initialize
       @endpoint = '/fmi/xml/fmresultset.xml'
-      @timeout = 30
+      @timeout = 0
       @ssl_verifypeer = false
       @ssl_verifyhost = 0
     end

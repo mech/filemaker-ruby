@@ -42,34 +42,35 @@ module Filemaker
 
       # yield params if block_given?
 
-      response = Typhoeus.post(
-        "#{url}#{endpoint}",
-        ssl_verifypeer: ssl_verifypeer,
-        ssl_verifyhost: ssl_verifyhost,
-        userpwd: "#{account_name}:#{password}",
-        body: params
-      )
+      response = get_typhoeus_connection(params)
+
+      http_status = "#{response.response_code}:#{response.return_code}"
 
       case response.response_code
       when 200
         [response, params]
       when 401
         raise Errors::AuthenticationError,
-              "[#{response.response_code}] Authentication failed."
+              "[#{http_status}] Authentication failed."
       when 0
-        raise Errors::CommunicationError,
-              "[#{response.response_code}] Empty response."
+        if response.return_code == :operation_timedout
+          raise Errors::HttpTimeoutError,
+                "[#{http_status}] Current timeout value is #{timeout}"
+        else
+          raise Errors::CommunicationError,
+                "[#{http_status}] Empty response."
+        end
       when 404
         raise Errors::CommunicationError,
-              "[#{response.response_code}] Not found"
+              "[#{http_status}] Not found"
       when 302
         raise Errors::CommunicationError,
-              "[#{response.response_code}] Redirect not supported"
+              "[#{http_status}] Redirect not supported"
       when 502
         raise Errors::CommunicationError,
-              "[#{response.response_code}] Bad gateway. Too many records."
+              "[#{http_status}] Bad gateway. Too many records."
       else
-        msg = "Unknown response code = #{response.response_code}"
+        msg = "Unknown response code = #{http_status}"
         raise Errors::CommunicationError, msg
       end
     end
@@ -198,10 +199,9 @@ module Filemaker
       curl_ssl_option = ''
       auth            = ''
 
-      curl_ssl_option = ' -k' if ssl.is_a?(Hash) && !ssl.fetch(:verify) { true }
+      curl_ssl_option = ' -k' unless ssl_verifypeer
 
-      auth = " -H 'Authorization: #{@connection.headers['Authorization']}'" if \
-        has_auth
+      auth = " -u #{account_name}:[FILTERED]" if has_auth
 
       # warn 'Pretty print like so: `curl XXX | xmllint --format -`'
       warn "curl -XGET '#{full_url}'#{curl_ssl_option} -i#{auth}"

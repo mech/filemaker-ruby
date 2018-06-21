@@ -1,3 +1,3 @@
 module Filemaker
-  VERSION = '0.0.19'.freeze
+  VERSION = '1.0.0'.freeze
 end

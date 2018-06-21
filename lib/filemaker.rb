@@ -47,6 +47,7 @@ module Filemaker
         c.ssl_verifyhost = value['ssl_verifyhost'] if value['ssl_verifyhost']
         c.log            = value['log'] if value['log']
         c.endpoint       = value['endpoint'] if value['endpoint']
+        c.timeout        = value['timeout'] if value['timeout']
       end
     end
   end
