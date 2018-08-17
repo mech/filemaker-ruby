@@ -102,7 +102,7 @@ module Filemaker
 
       args.each do |key, value|
         case value
-        when DateTime || Time
+        when DateTime, Time
           args[key] = value.strftime('%m/%d/%Y %H:%M:%S')
         when Date
           args[key] = value.strftime('%m/%d/%Y')
