@@ -39,7 +39,8 @@ module Filemaker
         return where(criterion) if criterion.is_a? Hash
 
         # Find using model ID (may not be the -recid)
-        id = criterion.to_s.gsub(/\A=*/, '=') # Always append '=' for ID
+        # Always append double '=' for ID instead of just one '='
+        id = criterion.to_s.gsub(/\A=*/, '==')
 
         # If we are finding with ID, we just limit to one and return
         # immediately. Last resort is to use the recid to find.

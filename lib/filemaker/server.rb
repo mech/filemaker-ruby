@@ -1,3 +1,4 @@
+require 'forwardable'
 require 'typhoeus'
 require 'filemaker/configuration'
 

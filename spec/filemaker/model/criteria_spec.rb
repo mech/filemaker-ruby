@@ -60,7 +60,7 @@ describe Filemaker::Model::Criteria do
       it 'will use the identity to find' do
         allow(criteria).to receive(:first).and_return([])
         criteria.find(22)
-        expect(criteria.selector).to eq({ 'ca id' => '=22' })
+        expect(criteria.selector).to eq({ 'ca id' => '==22' })
       end
     end
 
