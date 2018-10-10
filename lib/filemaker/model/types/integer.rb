@@ -3,17 +3,23 @@ module Filemaker
     module Types
       class Integer
         def self.__filemaker_cast_to_ruby_object(value)
+          return nil if value.nil?
           return value if value.is_a?(::Integer)
+
           value.to_i
         end
 
         def self.__filemaker_serialize_for_update(value)
+          return nil if value.nil?
           return value if value.is_a?(::Integer)
+
           value.to_i
         end
 
         def self.__filemaker_serialize_for_query(value)
+          return nil if value.nil?
           return value if value.is_a?(::Integer)
+
           value.to_i
         end
       end

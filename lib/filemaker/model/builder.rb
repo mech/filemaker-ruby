@@ -33,6 +33,15 @@ module Filemaker
           value = field.cast(record[fm_field_name])
           object.public_send(setter, value)
 
+          if record[fm_field_name].is_a?(Array) && field.max_repeat > 1
+            field.max_repeat.times do |idx|
+              index = idx + 1
+              repeated_setter = "#{field.name}__#{index}="
+              repeated_value = field.cast(record[fm_field_name][idx])
+              object.public_send(repeated_setter, repeated_value)
+            end
+          end
+
           # So after hydrating, we do not say it was dirty
           object.clear_changes_information
         end

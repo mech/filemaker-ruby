@@ -13,6 +13,7 @@
     <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="experience &amp; qualification" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
     <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="location" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
     <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="Salary" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
+    <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="3" name="Bonus" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
     <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="JD Cat" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
     <field-definition auto-enter="no" four-digit-year="no" global="no" max-repeat="1" name="JobType" not-empty="no" numeric-only="no" result="text" time-of-day="no" type="normal"/>
     <field-definition auto-enter="yes" four-digit-year="no" global="no" max-repeat="1" name="modify date" not-empty="no" numeric-only="no" result="date" time-of-day="no" type="normal"/>
@@ -38,6 +39,11 @@
       </field>
       <field name="Salary">
         <data>Negotiable</data>
+      </field>
+      <field name="Bonus">
+        <data>1000</data>
+        <data>2000</data>
+        <data>3000</data>
       </field>
       <field name="JD Cat">
         <data>IT &amp; Telecommunications</data>
@@ -74,6 +80,11 @@
       <field name="Salary">
         <data>Negotiable</data>
       </field>
+      <field name="Bonus">
+        <data>4000</data>
+        <data>5000</data>
+        <data>6000</data>
+      </field>
       <field name="JD Cat">
         <data>Administrative &amp; Related</data>
       </field>
@@ -108,6 +119,11 @@
       </field>
       <field name="Salary">
         <data>6000 - 7000</data>
+      </field>
+      <field name="Bonus">
+        <data>7000</data>
+        <data>8000</data>
+        <data>9000</data>
       </field>
       <field name="JD Cat">
         <data>IT &amp; Telecommunications</data>
@@ -144,6 +160,11 @@
       <field name="Salary">
         <data>Negotiable</data>
       </field>
+      <field name="Bonus">
+        <data>1000</data>
+        <data></data>
+        <data></data>
+      </field>
       <field name="JD Cat">
         <data>IT &amp; Telecommunications</data>
       </field>
@@ -178,6 +199,11 @@
       </field>
       <field name="Salary">
         <data>3000 - 5500</data>
+      </field>
+      <field name="Bonus">
+        <data></data>
+        <data></data>
+        <data></data>
       </field>
       <field name="JD Cat">
         <data>IT &amp; Telecommunications</data>

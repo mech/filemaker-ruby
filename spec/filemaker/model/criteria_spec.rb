@@ -62,6 +62,12 @@ describe Filemaker::Model::Criteria do
         criteria.find(22)
         expect(criteria.selector).to eq({ 'ca id' => '==22' })
       end
+
+      it 'alias id to find' do
+        allow(criteria).to receive(:first).and_return([])
+        criteria.id(22)
+        expect(criteria.selector).to eq({ 'ca id' => '==22' })
+      end
     end
 
     describe 'or' do

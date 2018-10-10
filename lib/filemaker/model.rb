@@ -41,8 +41,8 @@ module Filemaker
 
     def cache_key
       return "#{model_key}/new" if new_record?
-      return "#{model_key}/#{id}-#{updated_at.to_datetime.utc.to_s(:number)}" \
-        if respond_to?(:updated_at) && send(:updated_at)
+      return "#{model_key}/#{id}-#{updated_at.to_datetime.utc.to_s(:number)}" if respond_to?(:updated_at) && send(:updated_at)
+
       "#{model_key}/#{id}"
     end
 
@@ -59,7 +59,7 @@ module Filemaker
     end
 
     def fm_attributes
-      self.class.with_model_fields(attributes)
+      self.class.with_model_fields_for_query(attributes)
     end
 
     def dirty_attributes
@@ -69,7 +69,7 @@ module Filemaker
       end
 
       # We need to use serialize_for_update instead
-      self.class.with_model_fields(dirty, use_query: false)
+      self.class.with_model_fields_for_update(dirty)
     end
 
     private
@@ -129,7 +129,7 @@ module Filemaker
       # is an array. Without the test and expectation setup, debugging the
       # output will take far longer to realise. This reinforce the belief that
       # TDD is in fact a valuable thing to do.
-      def with_model_fields(criterion, use_query: true)
+      def with_model_fields_for_query(criterion)
         accepted_fields = {}
 
         criterion.each_pair do |key, value|
@@ -141,23 +141,36 @@ module Filemaker
 
           # We do not serialize at this point, as we are still in Ruby-land.
           # Filemaker::Server will help us serialize into FileMaker format.
-          if value.is_a? Array
-            temp = []
-            value.each do |v|
-              temp << if use_query
-                        field.serialize_for_query(v)
-                      else
-                        field.serialize_for_update(v)
-                      end
-            end
-
-            accepted_fields[field.fm_name] = temp
+          if value.is_a?(Array)
+            accepted_fields[field.fm_name] = value.map { |v| field.serialize_for_query(v) }
           else
-            accepted_fields[field.fm_name] = if use_query
-                                               field.serialize_for_query(value)
-                                             else
-                                               field.serialize_for_update(value)
-                                             end
+            accepted_fields[field.fm_name] = field.serialize_for_query(value)
+          end
+        end
+
+        accepted_fields
+      end
+
+      def with_model_fields_for_update(criterion)
+        accepted_fields = {}
+
+        criterion.each_pair do |key, value|
+          field = find_field_by_name(key)
+
+          # Do not process nil value, but empty string is ok in order to reset
+          # some fields.
+          next unless field && value
+
+          # We do not serialize at this point, as we are still in Ruby-land.
+          # Filemaker::Server will help us serialize into FileMaker format.
+          if value.is_a?(Array)
+            field.max_repeat.times do |idx|
+              index = idx + 1
+              repeated_fm_name = "#{field.fm_name}(#{index})"
+              accepted_fields[repeated_fm_name] = field.serialize_for_update(value[idx])
+            end
+          else
+            accepted_fields[field.fm_name] = field.serialize_for_update(value)
           end
         end
 

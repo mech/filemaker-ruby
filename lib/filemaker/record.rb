@@ -22,8 +22,7 @@ module Filemaker
         # `field` is Nokogiri::XML::Element
         field_name = field['name']
         # Right now, I do not want to mess with the field name
-        # field_name.gsub!(Regexp.new(portal_table_name + '::'), '')
-        #   \if portal_table_name
+        # field_name.gsub!(Regexp.new(portal_table_name + '::'), '') if portal_table_name
         datum = []
 
         metadata_fields = if portal_table_name
@@ -45,15 +44,15 @@ module Filemaker
     end
 
     def [](key)
-      raise(Filemaker::Errors::InvalidFieldError, "Invalid field: #{key}") \
-        unless key?(key)
+      raise(Filemaker::Errors::InvalidFieldError, "Invalid field: #{key}") unless key?(key)
+
       super
     end
 
     def []=(key, value)
       if @ready
-        raise(Filemaker::Errors::InvalidFieldError, "Invalid field: #{key}") \
-        unless key?(key)
+        raise(Filemaker::Errors::InvalidFieldError, "Invalid field: #{key}") unless key?(key)
+
         @dirty[key] = value
       else
         super
@@ -80,6 +79,7 @@ module Filemaker
 
     def normalize_data(datum)
       return nil if datum.empty?
+
       datum.size == 1 ? datum.first : datum
     end
 
@@ -87,6 +87,7 @@ module Filemaker
       method = symbol.to_s
       return self[method] if key?(method)
       return @dirty[$`] = args.first if method =~ /(=)$/ && key?($`)
+
       super
     end
 

@@ -16,7 +16,7 @@ module Filemaker
         chains.delete(:in)
 
         @selector ||= {}
-        selector.merge!(klass.with_model_fields(criterion))
+        selector.merge!(klass.with_model_fields_for_query(criterion))
         yield options if block_given?
         self
       end
@@ -46,6 +46,7 @@ module Filemaker
         # immediately. Last resort is to use the recid to find.
         where(klass.identity.name => id).first || recid(criterion)
       end
+      alias id find
 
       # Using FileMaker's internal ID to find the record.
       def recid(id)
@@ -69,7 +70,7 @@ module Filemaker
           chains.delete(:in)
           @selector ||= {}
 
-          criterion = klass.with_model_fields(criterion, use_query: true)
+          criterion = klass.with_model_fields_for_query(criterion)
 
           criterion.each_key do |key|
             selector["#{key}.op"] = operator
@@ -112,7 +113,7 @@ module Filemaker
         @selector ||= []
 
         become_array(criterion).each do |hash|
-          accepted_hash = klass.with_model_fields(hash)
+          accepted_hash = klass.with_model_fields_for_query(hash)
           accepted_hash['-omit'] = true if negating
           @selector << accepted_hash
         end
@@ -150,7 +151,7 @@ module Filemaker
         end
 
         @selector ||= {}
-        selector.merge!(klass.with_model_fields(criterion))
+        selector.merge!(klass.with_model_fields_for_query(criterion))
         options[:lop] = 'or'
         yield options if block_given?
         self

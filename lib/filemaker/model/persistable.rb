@@ -51,6 +51,7 @@ module Filemaker
 
       def update_attributes(attrs = {})
         return self if attrs.blank?
+
         assign_attributes(attrs)
         save
       end

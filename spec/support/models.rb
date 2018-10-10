@@ -32,6 +32,7 @@ class Job
   string :status
   string :jdid, fm_name: 'JDID'
   date   :modify_date, fm_name: 'modify date'
+  money :bonus, max_repeat: 3
 end
 
 class Member
@@ -72,6 +73,7 @@ class MyModel
   date :created_at
   datetime :updated_at, fm_name: 'ModifiedDate'
   money :salary
+  money :bonus, max_repeat: 3
   integer :age, fm_name: 'passage of time'
 end
 

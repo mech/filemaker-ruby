@@ -64,6 +64,24 @@ module Filemaker
             field_names.each do |name|
               add_field(name, Filemaker::Model::Type.registry[type], options)
               create_accessors(name)
+
+              next unless options[:max_repeat] && options[:max_repeat] > 1
+
+              # We have repeating fields
+              # It will create [max_repeat] number of attribute with names like:
+              # xxx__1, xxx__2, xxx__3
+              # Their fm_name will be xxx(1), xxx(2), xxx(3)
+              options[:max_repeat].times do |idx|
+                index = idx + 1
+                repeated_field_name = "#{name}__#{index}"
+                fm_name = (options.fetch(:fm_name) { name }).to_s.downcase.freeze
+                add_field(
+                  repeated_field_name,
+                  Filemaker::Model::Type.registry[type],
+                  options.merge(fm_name: "#{fm_name}(#{index})")
+                )
+                create_accessors(repeated_field_name)
+              end
             end
           end
         end
@@ -105,10 +123,17 @@ module Filemaker
 
         # Find FileMaker's real name given either the attribute name or the real
         # FileMaker name.
+        # FIXME - This may have ordering problem. If fm_name is the same as the
+        # field name.
         def find_field_by_name(name)
           name = name.to_s
           fields.values.find do |f|
             f.name == name || f.fm_name == name
+
+            # Unfortunately can't use this as builder.rb need to find field based
+            # on fm_name
+            # Always find by attribute name for now
+            # f.name == name
           end
         end
       end

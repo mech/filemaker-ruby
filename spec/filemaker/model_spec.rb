@@ -88,6 +88,10 @@ describe Filemaker::Model do
         'created_at',
         'modifieddate',
         'salary',
+        'bonus',
+        'bonus(1)',
+        'bonus(2)',
+        'bonus(3)',
         'passage of time'
       ]
   end
