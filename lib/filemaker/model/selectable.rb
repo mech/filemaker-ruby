@@ -46,7 +46,6 @@ module Filemaker
         # immediately. Last resort is to use the recid to find.
         where(klass.identity.name => id).first || recid(criterion)
       end
-      alias id find
 
       # Using FileMaker's internal ID to find the record.
       def recid(id)
@@ -85,6 +84,7 @@ module Filemaker
         end
       end
 
+      alias id find
       alias equals eq
       alias contains cn
       alias begins_with bw

@@ -6,6 +6,7 @@ module Filemaker
         :skip,
         :order,
         :find,
+        :id,
         :first,
         :recid,
         :in,
