@@ -42,6 +42,7 @@ module Filemaker
         def <<(*args)
           docs = args.flatten
           return concat(docs) if docs.size > 1
+
           if (doc = docs.first)
             create(doc)
           end
@@ -84,7 +85,7 @@ module Filemaker
           @target = [] if reference_value.blank? || final_reference_key.blank?
 
           @target = target_class.where(
-            final_reference_key => "=#{reference_value}"
+            final_reference_key => "==#{reference_value}"
           )
         end
       end

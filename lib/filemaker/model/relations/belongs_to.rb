@@ -39,7 +39,7 @@ module Filemaker
           @target = nil if reference_value.blank? || final_reference_key.blank?
 
           @target = target_class.where(
-            final_reference_key => "=#{reference_value}"
+            final_reference_key => "==#{reference_value}"
           ).first
         end
       end
