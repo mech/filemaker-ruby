@@ -27,7 +27,7 @@ module Filemaker
         run_callbacks :create do
           options = {}
           yield options if block_given?
-          resultset = api.new(fm_attributes, options)
+          resultset = api.new(create_attributes, options)
           changes_applied
           replace_new_data(resultset)
         end

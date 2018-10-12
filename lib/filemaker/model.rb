@@ -62,6 +62,10 @@ module Filemaker
       self.class.with_model_fields_for_query(attributes)
     end
 
+    def create_attributes
+      self.class.with_model_fields_for_update(attributes)
+    end
+
     def dirty_attributes
       dirty = {}
       changed.each do |attr_name|
