@@ -22,7 +22,7 @@ module Filemaker
         end
 
         # Order: source_key first, reference_key next, then identity
-        # all must be findable using `to find_field_by_name`
+        # all must be findable using `find_field_by_name`
         def final_reference_key
           target_class.find_field_by_name(source_key).try(:name) ||
             target_class.find_field_by_name(reference_key).try(:name) ||
@@ -36,11 +36,13 @@ module Filemaker
         # If the field value contains underscore or space like 'FM_notified'
         # or 'FM notified', a single `=` may not match correctly.
         def build_target
-          @target = nil if reference_value.blank? || final_reference_key.blank?
-
-          @target = target_class.where(
-            final_reference_key => "==#{reference_value}"
-          ).first
+          @target = if reference_value.blank? || final_reference_key.blank?
+                      nil
+                    else
+                      target_class.where(
+                        final_reference_key => "==#{reference_value}"
+                      ).first
+                    end
         end
       end
     end

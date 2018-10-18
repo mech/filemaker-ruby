@@ -21,8 +21,15 @@ module Filemaker
           @class_name = options.fetch(:class_name) { name.to_s.classify }
         end
 
+        # Create will not return the instance if target was NilClass
+        def self.create(owner, name, options)
+          new_instance = new(owner, name, options)
+          new_instance.target.nil? ? nil : new_instance
+        end
+
         def target_class
           return @class_name if @class_name.is_a?(Class)
+
           @class_name.constantize
         end
 

@@ -82,11 +82,13 @@ module Filemaker
         protected
 
         def build_target
-          @target = [] if reference_value.blank? || final_reference_key.blank?
-
-          @target = target_class.where(
-            final_reference_key => "==#{reference_value}"
-          )
+          @target = if reference_value.blank? || final_reference_key.blank?
+                      []
+                    else
+                      target_class.where(
+                        final_reference_key => "==#{reference_value}"
+                      )
+                    end
         end
       end
     end
