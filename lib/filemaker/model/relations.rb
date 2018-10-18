@@ -45,9 +45,9 @@ module Filemaker
           #   job.company(true)
           define_method(name) do |force_reload = false|
             if force_reload
-              @relations[name] = type.new(self, name, options)
+              @relations[name] = type.init(self, name, options)
             else
-              @relations[name] ||= type.new(self, name, options)
+              @relations[name] ||= type.init(self, name, options)
             end
           end
 
@@ -58,6 +58,8 @@ module Filemaker
           # save and return the identity ID, then we update the parent's
           # reference_key.
           define_method("#{name}=") do |object|
+            return nil if object.nil?
+
             params = { "#{name}_id" => object.public_send("#{name}_id") }
             update_attributes(params)
           end

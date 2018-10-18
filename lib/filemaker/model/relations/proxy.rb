@@ -6,7 +6,7 @@ module Filemaker
       class Proxy
         instance_methods.each do |method|
           undef_method(method) unless
-            method =~ /(^__|^send|^object_id|^respond_to|^tap|^extend)/
+            method =~ /^(__.*|send|object_id|equal\?|respond_to\?|tap|public_send)$/
         end
 
         attr_accessor :owner, :target, :options
@@ -21,8 +21,8 @@ module Filemaker
           @class_name = options.fetch(:class_name) { name.to_s.classify }
         end
 
-        # Create will not return the instance if target was NilClass
-        def self.create(owner, name, options)
+        # Create will not return the proxy if target was NilClass
+        def self.init(owner, name, options)
           new_instance = new(owner, name, options)
           new_instance.target.nil? ? nil : new_instance
         end
