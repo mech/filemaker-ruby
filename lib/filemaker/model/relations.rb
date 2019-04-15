@@ -60,8 +60,7 @@ module Filemaker
           define_method("#{name}=") do |object|
             return nil if object.nil?
 
-            params = { "#{name}_id" => object.public_send("#{name}_id") }
-            update_attributes(params)
+            @relations[name] = object
           end
 
           # Creator
