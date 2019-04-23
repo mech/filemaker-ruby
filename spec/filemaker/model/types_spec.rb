@@ -35,11 +35,17 @@ describe Filemaker::Model::Types do
     end
   end
 
-  context 'Types::Time' do
+  context 'Types::DateTime' do
     it 'assign as a time' do
       model.updated_at = Time.new(2018, 1, 1, 12, 12, 12)
       expect(model.updated_at).to be_a Time
       expect(model.updated_at).to eq Time.new(2018, 1, 1, 12, 12, 12)
+    end
+
+    it 'assign as a datetime but return as time' do
+      model.updated_at = DateTime.new(2018, 1, 1, 12, 12, 12)
+      expect(model.updated_at).to be_a Time
+      expect(model.updated_at).to eq Time.parse(model.updated_at.to_s)
     end
 
     it 'can query as a string' do
@@ -48,10 +54,23 @@ describe Filemaker::Model::Types do
       expect(c.selector['modifieddate']).to eq '2018'
     end
 
-    it 'can query as a time' do
+    it 'can query as a datetime' do
       c = MyModel.where(updated_at: Time.new(2018, 1, 1, 12, 12, 12))
       expect(c.selector['modifieddate']).to be_a Time
       expect(c.selector['modifieddate']).to eq Time.new(2018, 1, 1, 12, 12, 12)
+    end
+  end
+
+  context 'Types::DateTime' do
+    it 'assign as time' do
+      model.time_in = DateTime.new(2019, 1, 1, 9, 0, 0)
+      expect(model.time_in).to be_a String
+      expect(model.time_in).to eq '09:00'
+    end
+
+    it 'query with HH:MM format' do
+      c = MyModel.where(time_in: Time.new(2019, 1, 1, 15, 45, 0))
+      expect(c.selector['time_in']).to eq '15:45'
     end
   end
 

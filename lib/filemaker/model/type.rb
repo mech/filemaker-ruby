@@ -1,5 +1,6 @@
 require 'filemaker/model/types/text'
 require 'filemaker/model/types/date'
+require 'filemaker/model/types/date_time'
 require 'filemaker/model/types/time'
 require 'filemaker/model/types/big_decimal'
 require 'filemaker/model/types/integer'
@@ -21,7 +22,8 @@ module Filemaker
       register(:string, Filemaker::Model::Types::Text)
       register(:text, Filemaker::Model::Types::Text)
       register(:date, Filemaker::Model::Types::Date)
-      register(:datetime, Filemaker::Model::Types::Time)
+      register(:datetime, Filemaker::Model::Types::DateTime)
+      register(:time, Filemaker::Model::Types::Time)
       register(:money, Filemaker::Model::Types::BigDecimal)
       register(:number, Filemaker::Model::Types::BigDecimal)
       register(:integer, Filemaker::Model::Types::Integer)

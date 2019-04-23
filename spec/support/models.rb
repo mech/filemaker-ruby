@@ -75,6 +75,7 @@ class MyModel
   money :salary
   money :bonus, max_repeat: 3
   integer :age, fm_name: 'passage of time'
+  time :time_in
 end
 
 class Project

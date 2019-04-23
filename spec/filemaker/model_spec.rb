@@ -92,7 +92,8 @@ describe Filemaker::Model do
         'bonus(1)',
         'bonus(2)',
         'bonus(3)',
-        'passage of time'
+        'passage of time',
+        'time_in'
       ]
   end
 
