@@ -107,7 +107,7 @@ describe Filemaker::Model::Relations do
       end
 
       it 'returns criteria instead of an array of model objects' do
-        expect(@model.posts).to be_a Filemaker::Model::Criteria
+        expect(@model.posts.class).to eq Filemaker::Model::Criteria
       end
     end
 
