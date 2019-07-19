@@ -220,23 +220,24 @@ Model.not(name: 'Bob')
 ```ruby
 # (q0);(q1)
 # (Singapore) OR (Malaysia)
-Model.in(nationality: %w(Singapore Malaysia))
+Model.in(nationality: %w[Singapore Malaysia])
 
 # (q0,q1)
+# (nationality AND age)
 # Essentially the same as:
 # Model.where(nationality: 'Singapore', age: 30)
 Model.in(nationality: 'Singapore', age: 30)
 
 # (q0);(q1);(q2);(q3)
-Model.in({ nationality: %w(Singapore Malaysia) }, { age: [20, 30] })
+Model.in({ nationality: %w[Singapore Malaysia] }, { age: [20, 30] })
 
 # (q0,q2);(q1,q2)
 # (Singapore AND male) OR (Malaysia AND male)
-Model.in(nationality: %w(Singapore Malaysia), gender: 'male')
+Model.in(nationality: %w[Singapore Malaysia], gender: 'male')
 
 # !(q0);!(q1)
 # NOT(Singapore) OR NOT(Malaysia)
-Model.not_in(nationality: %w(Singapore Malaysia))
+Model.not_in(nationality: %w[Singapore Malaysia])
 
 # !(q0,q1)
 Model.not_in(name: 'Lee', age: '< 40')
