@@ -161,11 +161,9 @@ module Filemaker
         criterion.each_pair do |key, value|
           field = find_field_by_name(key)
 
-          next unless field
-
           # Do not process nil value, but empty string is ok in order to reset
           # some fields.
-          # value = '' if value.nil?
+          next unless field && value
 
           # We do not serialize at this point, as we are still in Ruby-land.
           # Filemaker::Server will help us serialize into FileMaker format.
