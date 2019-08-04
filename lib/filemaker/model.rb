@@ -63,7 +63,7 @@ module Filemaker
     end
 
     def create_attributes
-      self.class.with_model_fields_for_update(attributes)
+      self.class.with_model_fields_for_creation(attributes)
     end
 
     def dirty_attributes
@@ -155,15 +155,40 @@ module Filemaker
         accepted_fields
       end
 
+      def with_model_fields_for_creation(criterion)
+        accepted_fields = {}
+
+        criterion.each_pair do |key, value|
+          field = find_field_by_name(key)
+
+          # Do not process nil value
+          next unless field && value
+
+          # We do not serialize at this point, as we are still in Ruby-land.
+          # Filemaker::Server will help us serialize into FileMaker format.
+          if value.is_a?(Array)
+            field.max_repeat.times do |idx|
+              index = idx + 1
+              repeated_fm_name = "#{field.fm_name}(#{index})"
+              accepted_fields[repeated_fm_name] = field.serialize_for_update(value[idx])
+            end
+          else
+            accepted_fields[field.fm_name] = field.serialize_for_update(value)
+          end
+        end
+
+        accepted_fields
+      end
+
       def with_model_fields_for_update(criterion)
         accepted_fields = {}
 
         criterion.each_pair do |key, value|
           field = find_field_by_name(key)
 
-          # Do not process nil value, but empty string is ok in order to reset
-          # some fields.
-          next unless field && value
+          next unless field
+
+          # Able to process nil value only for update
 
           # We do not serialize at this point, as we are still in Ruby-land.
           # Filemaker::Server will help us serialize into FileMaker format.
