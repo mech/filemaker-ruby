@@ -1,6 +1,7 @@
 # Filemaker
 
 [![Build Status](https://travis-ci.org/mech/filemaker-ruby.svg?branch=master)](https://travis-ci.org/mech/filemaker-ruby)
+[![security](https://hakiri.io/github/mech/filemaker-ruby/master.svg)](https://hakiri.io/github/mech/filemaker-ruby/master)
 
 A Ruby wrapper to FileMaker XML API.
 
