@@ -10,9 +10,9 @@ module Filemaker
       # Call save! but do not raise error.
       def save
         save!
-      rescue StandardError
-        errors.add(:base) << $! # Does this works?
-        nil
+      rescue StandardError => e
+        errors.add(:base) << e.message # Does this works?
+        false
       end
 
       def save!
@@ -54,6 +54,13 @@ module Filemaker
 
         assign_attributes(attrs)
         save
+      end
+
+      def update_attributes!(attrs = {})
+        return self if attrs.blank?
+
+        assign_attributes(attrs)
+        save!
       end
 
       # Use -delete to remove the record backed by the model.
