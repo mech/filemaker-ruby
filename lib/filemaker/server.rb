@@ -207,7 +207,7 @@ module Filemaker
     end
 
     def log_simple(params)
-      warn colorize('48;2;255;0;0', "#{endpoint}?#{log_params(params)}")
+      warn colorize('48;2;0;0;255', "#{url}#{endpoint}?#{log_params(params)}")
     end
 
     def log_params(params)

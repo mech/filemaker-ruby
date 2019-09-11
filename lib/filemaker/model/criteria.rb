@@ -93,32 +93,42 @@ module Filemaker
       protected
 
       def execute
-        resultset = []
-        paginated = chains.include?(:page)
+        lines = caller
 
-        if chains.include?(:where)
-          # Use -find
-          resultset = klass.api.find(selector, options)
-        elsif chains.include?(:in)
-          # Use -findquery
-          resultset = klass.api.query(selector, options)
-        elsif chains.include?(:custom)
-          # Use -findquery directly
-          resultset = klass.api.findquery(selector, options)
-        else
-          # Use -findall
-          limit(1) unless limit?
-          resultset = klass.api.findall(options)
-        end
+        ActiveSupport::Notifications.instrument(
+          :filemaker,
+          model_name: klass.to_s,
+          selector: selector,
+          options: options,
+          lines: lines
+        ) do
+          resultset = []
+          paginated = chains.include?(:page)
 
-        models = Filemaker::Model::Builder.collection(resultset, klass)
+          if chains.include?(:where)
+            # Use -find
+            resultset = klass.api.find(selector, options)
+          elsif chains.include?(:in)
+            # Use -findquery
+            resultset = klass.api.query(selector, options)
+          elsif chains.include?(:custom)
+            # Use -findquery directly
+            resultset = klass.api.findquery(selector, options)
+          else
+            # Use -findall
+            limit(1) unless limit?
+            resultset = klass.api.findall(options)
+          end
 
-        if defined?(Kaminari) && paginated
-          Kaminari.paginate_array(models, total_count: resultset.count)
-                  .page(@_page)
-                  .per(options[:max])
-        else
-          models
+          models = Filemaker::Model::Builder.collection(resultset, klass)
+
+          if defined?(Kaminari) && paginated
+            Kaminari.paginate_array(models, total_count: resultset.count)
+                    .page(@_page)
+                    .per(options[:max])
+          else
+            models
+          end
         end
       end
     end

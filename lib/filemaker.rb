@@ -14,6 +14,7 @@ require 'filemaker/errors'
 
 require 'active_support'
 require 'active_support/core_ext'
+require 'active_support/notifications'
 require 'active_model'
 require 'globalid'
 
