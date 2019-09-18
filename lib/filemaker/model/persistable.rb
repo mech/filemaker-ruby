@@ -42,7 +42,7 @@ module Filemaker
           # Will raise `RecordModificationIdMismatchError` if does not match
           options = { modid: mod_id } # Always pass in?
           yield options if block_given?
-          fm_attributes = Hash[changes.map{|key, value| [fields[key].fm_name, value[1]] } ]
+          fm_attributes = Hash[ changes.map{ |key, value| [fields[key].fm_name, value[1]] } ]
           resultset = api.edit(record_id, fm_attributes, options)
           changes_applied
           replace_new_data(resultset)
