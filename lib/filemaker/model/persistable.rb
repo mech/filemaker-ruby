@@ -36,13 +36,14 @@ module Filemaker
 
       def update
         return false unless valid?
-        return true if dirty_attributes.empty?
+        return true if changes.empty?
 
         run_callbacks :update do
           # Will raise `RecordModificationIdMismatchError` if does not match
           options = { modid: mod_id } # Always pass in?
           yield options if block_given?
-          resultset = api.edit(record_id, dirty_attributes, options)
+          fm_attributes = Hash[changes.map{|key, value| [fields[key].fm_name, value[1]] } ]
+          resultset = api.edit(record_id, fm_attributes, options)
           changes_applied
           replace_new_data(resultset)
         end
