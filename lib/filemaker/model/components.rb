@@ -31,6 +31,8 @@ module Filemaker
       include Fields
       include Relations
       include Persistable
+
+      include ActiveSupport::NumberHelper
     end
   end
 end
