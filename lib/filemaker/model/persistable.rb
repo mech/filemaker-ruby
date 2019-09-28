@@ -17,11 +17,11 @@ module Filemaker
 
       def save!
         run_callbacks :save do
-          new_record? ? create : update
+          new_record? ? fm_create : fm_update
         end
       end
 
-      def create
+      def fm_create
         return false unless valid?
 
         run_callbacks :create do
@@ -34,7 +34,7 @@ module Filemaker
         self
       end
 
-      def update
+      def fm_update
         return false unless valid?
         return true if dirty_attributes.empty?
 
@@ -49,19 +49,23 @@ module Filemaker
         self
       end
 
-      def update_attributes(attrs = {})
+      def update(attrs = {})
         return self if attrs.blank?
 
         assign_attributes(attrs)
         save
       end
 
-      def update_attributes!(attrs = {})
+      alias update_attributes update
+
+      def update!(attrs = {})
         return self if attrs.blank?
 
         assign_attributes(attrs)
         save!
       end
+
+      alias update_attributes! update!
 
       # Use -delete to remove the record backed by the model.
       # @return [Filemaker::Model] frozen instance
