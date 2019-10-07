@@ -16,6 +16,8 @@ module Filemaker
       end
     end
 
+    class ModelValidationError < StandardError; end
+
     class SystemError < FilemakerError; end
 
     class UnknownError < SystemError; end
