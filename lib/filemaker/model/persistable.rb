@@ -16,6 +16,8 @@ module Filemaker
       end
 
       def save!
+        raise "Validation errors" unless valid?
+
         run_callbacks :save do
           new_record? ? fm_create : fm_update
         end
