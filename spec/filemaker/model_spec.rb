@@ -98,7 +98,7 @@ describe Filemaker::Model do
   end
 
   it 'salary is BigDecimal' do
-    model.salary = 100
+    model.salary = 100.20
     expect(model.salary).to be_a BigDecimal
   end
 

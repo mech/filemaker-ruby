@@ -13,7 +13,15 @@ module Filemaker
           return nil if value.nil?
           return value if value.is_a?(::BigDecimal)
 
-          BigDecimal(value.to_s)
+          value = BigDecimal(value.to_s)
+
+          if value.zero?
+            0
+          elsif value.frac.zero?
+            value.to_i
+          else
+            value
+          end
         end
 
         def self.__filemaker_serialize_for_query(value)

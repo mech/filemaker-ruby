@@ -75,10 +75,16 @@ describe Filemaker::Model::Types do
   end
 
   context 'Types::BigDecimal' do
-    it 'assign as a big decimal' do
-      model.salary = '25'
+    it 'assign as a big decimal if having fractional part' do
+      model.salary = '25.5'
       expect(model.salary).to be_a BigDecimal
-      expect(model.salary).to eq 25.0
+      expect(model.salary).to eq 25.5
+    end
+
+    it 'assign as a integer without having fractional part' do
+      model.salary = '25'
+      expect(model.salary).to be_a Integer
+      expect(model.salary).to eq 25
     end
 
     it 'query as a big decimal' do
