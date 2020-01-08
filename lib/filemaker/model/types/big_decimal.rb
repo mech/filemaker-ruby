@@ -11,8 +11,9 @@ module Filemaker
 
         def self.__filemaker_serialize_for_update(value)
           return nil if value.nil?
-          return value if value.is_a?(::BigDecimal)
+          # return value if value.is_a?(::BigDecimal)
 
+          # Directly convert to BigDecimal using to_s first
           value = BigDecimal(value.to_s)
 
           if value.zero?
