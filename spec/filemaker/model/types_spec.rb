@@ -85,12 +85,22 @@ describe Filemaker::Model::Types do
       model.salary = '25'
       expect(model.salary).to be_a Integer
       expect(model.salary).to eq 25
+
+      model.salary = 25.0
+      expect(model.salary).to be_a Integer
+      expect(model.salary.to_s).to eq "25"
     end
 
     it 'query as a big decimal' do
       c = MyModel.where(salary: 23.7)
       expect(c.selector['salary']).to be_a BigDecimal
       expect(c.selector['salary']).to eq 23.7
+    end
+
+    it 'zero out any big decimal' do
+      model.salary = BigDecimal("0.0")
+      expect(model.salary).to be_a Integer
+      expect(model.salary).to eq 0
     end
   end
 
