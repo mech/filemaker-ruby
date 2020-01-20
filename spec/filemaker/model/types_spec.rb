@@ -81,14 +81,14 @@ describe Filemaker::Model::Types do
       expect(model.salary).to eq 25.5
     end
 
-    it 'assign as a integer without having fractional part' do
+    it 'still assign as a BigDecimal without having fractional part' do
       model.salary = '25'
-      expect(model.salary).to be_a Integer
+      expect(model.salary).to be_a BigDecimal
       expect(model.salary).to eq 25
 
       model.salary = 25.0
-      expect(model.salary).to be_a Integer
-      expect(model.salary.to_s).to eq "25"
+      expect(model.salary).to be_a BigDecimal
+      expect(model.salary.to_s).to eq "25.0"
     end
 
     it 'query as a big decimal' do
@@ -96,11 +96,29 @@ describe Filemaker::Model::Types do
       expect(c.selector['salary']).to be_a BigDecimal
       expect(c.selector['salary']).to eq 23.7
     end
+  end
+
+  context 'Types::FloatWithInteger' do
+    it 'assign as a big decimal if having fractional part' do
+      model.annual_balance = '25.5'
+      expect(model.annual_balance).to be_a BigDecimal
+      expect(model.annual_balance).to eq 25.5
+    end
+
+    it 'assign as a integer without having fractional part' do
+      model.annual_balance = '25'
+      expect(model.annual_balance).to be_a Integer
+      expect(model.annual_balance).to eq 25
+
+      model.annual_balance = 25.0
+      expect(model.annual_balance).to be_a Integer
+      expect(model.annual_balance.to_s).to eq "25"
+    end
 
     it 'zero out any big decimal' do
-      model.salary = BigDecimal("0.0")
-      expect(model.salary).to be_a Integer
-      expect(model.salary).to eq 0
+      model.annual_balance = BigDecimal("0.0")
+      expect(model.annual_balance).to be_a Integer
+      expect(model.annual_balance).to eq 0
     end
   end
 

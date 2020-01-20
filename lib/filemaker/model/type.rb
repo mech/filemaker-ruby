@@ -5,6 +5,7 @@ require 'filemaker/model/types/time'
 require 'filemaker/model/types/big_decimal'
 require 'filemaker/model/types/integer'
 require 'filemaker/model/types/email'
+require 'filemaker/model/types/float_with_integer'
 
 module Filemaker
   module Model
@@ -28,6 +29,7 @@ module Filemaker
       register(:number, Filemaker::Model::Types::BigDecimal)
       register(:integer, Filemaker::Model::Types::Integer)
       register(:email, Filemaker::Model::Types::Email)
+      register(:float_int, Filemaker::Model::Types::FloatWithInteger)
     end
   end
 end
