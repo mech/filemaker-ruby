@@ -6,7 +6,7 @@ module Filemaker
           return nil if value.nil?
           return value if value.is_a?(::BigDecimal)
 
-          BigDecimal(value.to_s)
+          BigDecimal(value.to_s.squish)
         end
 
         def self.__filemaker_serialize_for_update(value)
@@ -14,7 +14,7 @@ module Filemaker
           # return value if value.is_a?(::BigDecimal)
 
           # Directly convert to BigDecimal using to_s first
-          value = BigDecimal(value.to_s)
+          value = BigDecimal(value.to_s.squish)
 
           if value.zero?
             0
@@ -29,7 +29,7 @@ module Filemaker
           return nil if value.nil?
           return value if value.is_a?(::BigDecimal)
 
-          BigDecimal(value.to_s)
+          BigDecimal(value.to_s.squish)
         end
       end
     end

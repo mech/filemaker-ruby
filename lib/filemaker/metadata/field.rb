@@ -41,12 +41,13 @@ module Filemaker
       # Raw XML data `inner_text` into Ruby native object as best we can based
       # on its built-in metadata's data_type
       def raw_cast(value)
+        # We can strip value here but we do not want to squish it unless for number
         value = value.to_s.strip
         return nil if value.empty?
 
         case data_type
         when 'number'
-          BigDecimal(remove_decimal_mark(value))
+          BigDecimal(remove_decimal_mark(value.squish))
         when 'date'
           # date_format likely will be '%m/%d/%Y', but if we got '19/8/2014',
           # then `strptime` will raise invalid date error
