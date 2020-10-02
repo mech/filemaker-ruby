@@ -53,9 +53,10 @@ module Filemaker
       # Convert to Ruby type situable for making FileMaker query
       def serialize_for_query(value)
         return value if value.nil?
-        return value if value =~ /^==|=\*/
-        return value if value =~ /(\.\.\.)/
-        return value if value =~ /\A(<|<=|>|>=)/
+        str_val = value.to_s
+        return value if str_val =~ /^==|=\*/
+        return value if str_val =~ /(\.\.\.)/
+        return value if str_val =~ /\A(<|<=|>|>=)/
 
         @type.__filemaker_serialize_for_query(value)
       rescue StandardError => e
