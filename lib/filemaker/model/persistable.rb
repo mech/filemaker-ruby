@@ -38,7 +38,7 @@ module Filemaker
 
       def fm_update
         return false unless valid?
-        return true if dirty_attributes.empty?
+        return self if dirty_attributes.empty?
 
         run_callbacks :update do
           # Will raise `RecordModificationIdMismatchError` if does not match
