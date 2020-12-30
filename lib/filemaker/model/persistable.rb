@@ -11,7 +11,7 @@ module Filemaker
       def save
         save!
       rescue StandardError => e
-        errors.add(:base) << e.message # Does this works?
+        errors.add(:base, e.message)
         false
       end
 
