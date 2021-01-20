@@ -1,3 +1,4 @@
+require 'uri'
 require 'filemaker'
 require 'pry'
 require_relative 'support/xml_loader'
