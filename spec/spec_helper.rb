@@ -1,3 +1,5 @@
+require 'active_support'
+require 'active_support/core_ext'
 require 'filemaker'
 require 'pry'
 require_relative 'support/xml_loader'
