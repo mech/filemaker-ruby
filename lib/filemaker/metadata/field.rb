@@ -80,7 +80,7 @@ module Filemaker
           value
         end
       rescue StandardError => e
-        warn "Could not coerce #{name}: #{value} due to #{e.message}"
+        warn "Could not coerce #{name}: #{value} due to #{e.message.force_encoding("UTF-8")}"
         value
       end
 
