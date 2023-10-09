@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_runtime_dependency 'typhoeus'
-  spec.add_runtime_dependency 'nokogiri', '~> 1.13.7'
+  spec.add_runtime_dependency 'nokogiri', '~> 1.15.4'
   spec.add_runtime_dependency 'activemodel'
   spec.add_runtime_dependency 'globalid'
 
